@@ -117,9 +117,9 @@ Eugene Wigner's 1960 thesis on the "unreasonable effectiveness of mathematics" i
 ## 4.1 The Machine Epsilon Landmark Identity
 * **Core Identity**:
   $$\boxed{\text{Contraction}^{(8)} = \left(\frac{1}{8}\right)^8 = (2^{-3})^8 = 2^{-24} = \frac{1}{16{,}777{,}216} \approx 5.960464 \times 10^{-7} = \epsilon_{\text{IEEE754 float32}}}$$
-* **Engineering Significance**: In 3D orthogonal fluids, spatial contraction $\kappa = 2^{-3} = 1/8$ saturates the 24-bit mantissa of IEEE 754 float32 hardware in exactly 8 steps. The $5.96 \times 10^{-7}$ residual is the physical ceiling of von Neumann float32 hardware, whereas fixed-point TopoNPU integer sign flow achieves **Exact 0**.
+* **Engineering Significance**: In 3D orthogonal fluids, spatial contraction $\kappa = 2^{-3} = 1/8$ saturates the 24-bit mantissa of IEEE 754 float32 hardware in exactly 8 steps. The $5.96 \times 10^{-7}$ residual is the physical ceiling of von Neumann float32 hardware, whereas fixed-point Discrete Metric Computing Architecture integer sign flow achieves **Exact 0**.
 
-## 4.2 Bourbaki 2.0 & TopoNPU Bidirectional ISA (B-ISA)
+## 4.2 Bourbaki 2.0 & Discrete Metric Computing Architecture Bidirectional ISA (B-ISA)
 * Modernizing Bourbaki's structuralism into dynamic, machine-executable proof networks.
 * B-ISA specifications (`toponpu_b_isa_specification.md`) implement topological state registers (`$S0`–`$S7`) and view registers (`$V0`–`$V7`), providing hardware-accelerated formal verification (`LENS_GET`, `LENS_PUT`, `LENS_CHECK`) with zero floating-point multipliers.
 

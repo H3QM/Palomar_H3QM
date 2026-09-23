@@ -119,7 +119,7 @@ This formal verification suite serves as the mathematical foundation cited in th
 - **Principal Investigator**: Cosmo Chou (`cosmo@h3qm.com`)
 - **Institution**: H3QM Research Foundation
 - **Official Portals**:
-  - Equivalency Mathematics & TopoNPU: [https://h3qm.com/math/](https://h3qm.com/math/)
+  - Equivalency Mathematics & Geometric Computing Platform: [https://h3qm.com/math/](https://h3qm.com/math/)
   - Biomedical & AlphaDock: [https://h3qm.com/bio/](https://h3qm.com/bio/)
   - Unified Geometric Physics: [https://h3qm.com/physics/](https://h3qm.com/physics/)
 - **License**: Apache License 2.0 (Open-Access Academic Research)

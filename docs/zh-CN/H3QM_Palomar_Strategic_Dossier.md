@@ -30,7 +30,7 @@ H3QM（全息流体量子力学与等效几何体系）并非 Lean 4 或 Palomar
 ```
      ┌─────────────────────────────────────────────────────────┐
      │           陶哲轩的符号大树 (Western Linear Tree)          │
-     │      Lean 4 / Palomar: 机械类型检查 (Comparator, O(1))     │
+     │      Lean 4 / Palomar: 机械类型检查 (Kernel Typechecker, O(1))     │
      └────────────────────────────▲────────────────────────────┘
                                   │ 几何引导与等效降维
      ┌────────────────────────────┴────────────────────────────┐
@@ -78,7 +78,7 @@ $$R_8 = \lfloor 2^{24} \cdot S_8 \rfloor - 1 \equiv 0$$
    - 宣告三个核心定理，完全符合人类可读要求。
 2. **`solution.lean`**：
    - 使用 Mathlib 核心策略（`norm_num`, `ring`），无任何 `sorry`。
-   - **完全无引入 `axiom`**：保证 100% 通过 Palomar Comparator 审查。
+   - **完全无引入 `axiom`**：保证 100% 通过 Palomar Kernel Typechecker 审查。
 3. **`formalization.yaml`**：
    - 遵循 `mathlib-initiative/formalization.yaml` 标准。
    - 完整披露关联之 Zenodo DOI（`10.5281/zenodo.22667485`）与 CAP 验证脚本。
