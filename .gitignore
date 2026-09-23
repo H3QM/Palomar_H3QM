@@ -1,0 +1,15 @@
+# Lake build artifacts
+.lake/
+lake-packages/
+*.olean
+*.ilean
+*.c
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+
+# System artifacts
+.DS_Store
+Thumbs.db

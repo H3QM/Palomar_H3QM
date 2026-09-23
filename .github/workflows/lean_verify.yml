@@ -1,0 +1,46 @@
+name: Palomar Lean 4 Verification CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Elan (Lean Version Manager)
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> $GITHUB_PATH
+
+      - name: Verify Lean 4 Toolchain
+        run: |
+          lean --version
+          lake --version
+
+      - name: Build Lake Dependencies & Full H3QM Library
+        run: |
+          lake update
+          lake build
+
+      - name: Typecheck Palomar Solution Module
+        run: |
+          lake env lean solution.lean
+
+      - name: Typecheck Constitutional H3QM Root Library
+        run: |
+          lake env lean H3QM.lean
+
+      - name: Run Constructive CAP Verification
+        run: |
+          python3 cap_verify_contraction.py
+
+      - name: Run Palomar Conformance Test Suite (V2.0)
+        run: |
+          python3 -m pip install pyyaml
+          python3 test_palomar_suite.py
