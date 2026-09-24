@@ -7,8 +7,11 @@ entry_metadata:
   title: "Formal Verification of Core H3QM Geometric Lemmas, Discrete Contraction Identity, and Float32 Machine Epsilon Theorem"
   short_title: "H3QM Palomar Formal Verification Suite"
   category: "Constructive Mathematics / Discrete Dynamical Systems / Topological Physics"
-  date: "2026-09-23"
-  status: "submitted"
+  date: "2026-09-24"
+  status: "published"
+  doi: "10.5281/zenodo.22928921"
+  zenodo_url: "https://doi.org/10.5281/zenodo.22928921"
+  repository_url: "https://github.com/H3QM/Palomar_H3QM"
 
 authors:
   - name: "Cosmo Chou"

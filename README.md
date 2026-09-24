@@ -1,5 +1,6 @@
 # Palomar_H3QM: Lean 4 Formal Verification Suite & Palomar Registry Package
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22928921.svg)](https://doi.org/10.5281/zenodo.22928921)
 [![CI](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml/badge.svg)](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml)
 [![Release](https://img.shields.io/github/v/release/H3QM/Palomar_H3QM?color=blue)](https://github.com/H3QM/Palomar_H3QM/releases)
 [![Lean 4](https://img.shields.io/badge/Lean%204-v4.11.0-blue.svg)](https://github.com/leanprover/lean4)
@@ -113,6 +114,21 @@ This formal verification suite serves as the mathematical foundation cited in th
 - **Foundational QFT**: Feynman Path Integral Non-Perturbative QFT (Paper 14)
 - **Number Theory Breakthroughs**: Goldbach Conjecture (Paper 15), Twin Prime Conjecture (Paper 16), Collatz 3x+1 (Paper 17)
 - **PDEs & Geometric Manifolds**: 3D Euler Singularity (Paper 24), Hopf S^6 Complex Structures (Paper 23), NS Physical Resolution (Paper 39), Generalized Riemann & Birch-Tate (Paper 18)
+
+### Official Software Citation (Zenodo Archive)
+To cite this formal verification repository in academic works:
+```bibtex
+@software{chou2026palomar_h3qm,
+  author       = {Cosmo Chou and Antigravity AI},
+  title        = {{Palomar\_H3QM: Lean 4 Formal Verification Suite for the H3QM Framework}},
+  month        = sep,
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {v2.0.2},
+  doi          = {10.5281/zenodo.22928921},
+  url          = {https://doi.org/10.5281/zenodo.22928921}
+}
+```
 
 ---
 
