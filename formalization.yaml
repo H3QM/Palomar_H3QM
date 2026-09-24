@@ -108,6 +108,30 @@ formalization:
       status: "proved"
       zero_axioms: true
 
+    - name: "H3QM.Math.twin_prime_mod6_residues"
+      informal_statement: "For any twin prime pair (p, p+2) with p >= 5, their modulo 6 residue classes are uniquely fixed to p = 5 (mod 6) and (p + 2) = 1 (mod 6)."
+      proof_tactic: "cases / omega"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Math.twin_prime_gap_two"
+      informal_statement: "The gap between twin prime candidates (p + 2) - p is strictly equal to 2."
+      proof_tactic: "omega"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Math.twin_prime_constant_local_factor_pos"
+      informal_statement: "For any prime factor p >= 3, the Hardy-Littlewood twin prime local Euler factor (1 - 1/(p - 1)^2) is strictly positive in natural arithmetic: (p - 1)^2 > 1."
+      proof_tactic: "nlinarith"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Math.twin_prime_base_cases"
+      informal_statement: "Constructive finite verification of the first six twin prime pairs: (3,5), (5,7), (11,13), (17,19), (29,31), (41,43)."
+      proof_tactic: "dsimp / omega"
+      status: "proved"
+      zero_axioms: true
+
     - name: "H3QM.Math.even_mod6_residues"
       informal_statement: "Every even number 2n has remainder in {0, 2, 4} modulo 6."
       proof_tactic: "omega"
