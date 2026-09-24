@@ -67,6 +67,10 @@ def test_metadata_yaml():
         "h3qm_equivalency_isomorphism",
         "prime_foliation_mod6",
         "twin_prime_axis_mod6",
+        "even_mod6_residues",
+        "goldbach_mod6_coverage",
+        "singular_series_local_factor_ge_one",
+        "goldbach_base_cases",
         "vorticity_finite_under_lattice_cutoff",
         "knot_energy_discrete"
     ]
