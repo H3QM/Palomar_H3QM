@@ -1,5 +1,7 @@
 # Palomar_H3QM: Lean 4 Formal Verification Suite & Palomar Registry Package
 
+[![CI](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml/badge.svg)](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml)
+[![Release](https://img.shields.io/github/v/release/H3QM/Palomar_H3QM?color=blue)](https://github.com/H3QM/Palomar_H3QM/releases)
 [![Lean 4](https://img.shields.io/badge/Lean%204-v4.11.0-blue.svg)](https://github.com/leanprover/lean4)
 [![Mathlib 4](https://img.shields.io/badge/Mathlib%204-v4.11.0-green.svg)](https://github.com/leanprover-community/mathlib4)
 [![Axioms Used](https://img.shields.io/badge/Axioms%20Added-0%20(Strictly%20Zero)-brightgreen.svg)](#zero-axiom-guarantee)
