@@ -25,38 +25,30 @@ If $p \% 6 = 3$, then $3 \mid p$, impossible for prime $p \ge 5$.
 -/
 theorem prime_foliation_mod6 (p : ℕ) (hp_prime : ∀ d : ℕ, d ∣ p → d = 1 ∨ d = p)
     (hp_ge5 : p ≥ 5) : p % 6 = 1 ∨ p % 6 = 5 := by
-  have hrem : p % 6 < 6 := Nat.mod_lt p (by decide)
   have hnot0 : p % 6 ≠ 0 := by
     intro h0
-    have hdvd : 6 ∣ p := Nat.dvd_of_mod_eq_zero h0
-    have h2dvd : 2 ∣ p := dvd_trans (by decide : 2 ∣ 6) hdvd
+    have h2dvd : 2 ∣ p := ⟨3 * (p / 6), by omega⟩
     have hor := hp_prime 2 h2dvd
     cases hor with
     | inl h => contradiction
     | inr h => omega
   have hnot2 : p % 6 ≠ 2 := by
     intro h2
-    have hdvd2 : 2 ∣ (p % 6) := by rw [h2]; decide
-    have h2dvd : 2 ∣ p := (Nat.dvd_add_right (by decide : 2 ∣ (6 * (p / 6)))).mp
-      (by rw [Nat.div_add_mod p 6]; exact Nat.dvd_add (by decide) hdvd2)
+    have h2dvd : 2 ∣ p := ⟨3 * (p / 6) + 1, by omega⟩
     have hor := hp_prime 2 h2dvd
     cases hor with
     | inl h => contradiction
     | inr h => omega
   have hnot3 : p % 6 ≠ 3 := by
     intro h3
-    have hdvd3 : 3 ∣ (p % 6) := by rw [h3]; decide
-    have h3dvd : 3 ∣ p := (Nat.dvd_add_right (by decide : 3 ∣ (6 * (p / 6)))).mp
-      (by rw [Nat.div_add_mod p 6]; exact Nat.dvd_add (by decide) hdvd3)
+    have h3dvd : 3 ∣ p := ⟨2 * (p / 6) + 1, by omega⟩
     have hor := hp_prime 3 h3dvd
     cases hor with
     | inl h => contradiction
     | inr h => omega
   have hnot4 : p % 6 ≠ 4 := by
     intro h4
-    have hdvd2 : 2 ∣ (p % 6) := by rw [h4]; decide
-    have h2dvd : 2 ∣ p := (Nat.dvd_add_right (by decide : 2 ∣ (6 * (p / 6)))).mp
-      (by rw [Nat.div_add_mod p 6]; exact Nat.dvd_add (by decide) hdvd2)
+    have h2dvd : 2 ∣ p := ⟨3 * (p / 6) + 2, by omega⟩
     have hor := hp_prime 2 h2dvd
     cases hor with
     | inl h => contradiction
