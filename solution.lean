@@ -9,7 +9,6 @@ Authors: Cosmo Chou, Antigravity AI
 -/
 
 import Mathlib.Data.Rat.Defs
-import Mathlib.Data.Rat.Basic
 import Mathlib.Algebra.Order.Floor
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring

@@ -8,9 +8,7 @@
 -/
 
 import Mathlib.Data.Rat.Defs
-import Mathlib.Data.Rat.Basic
 import Mathlib.Tactic.NormNum
-import Mathlib.Tactic.Omega
 
 namespace H3QM.Math
 

@@ -32,7 +32,7 @@ the maximum vorticity $\omega_{max} \sim \Gamma / (\pi r_{core}^2)$ is strictly 
 for any finite circulation $\Gamma$. Hence finite-time blowup ($\omega \to \infty$) is impossible.
 -/
 theorem vorticity_finite_under_lattice_cutoff
-    (gamma : ℕ) (r : ℕ) (hr : r ≥ 1) :
+    (gamma : ℕ) (r : ℕ) (_hr : r ≥ 1) :
     vorticity_upper_bound_scaled gamma r ≤ gamma := by
   dsimp [vorticity_upper_bound_scaled]
   have hdiv : gamma / (r * r) ≤ gamma := Nat.div_le_self gamma (r * r)

@@ -8,7 +8,6 @@
 -/
 
 import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Omega
 import Mathlib.Tactic.Ring
 
 namespace H3QM.Physics

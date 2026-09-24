@@ -7,8 +7,6 @@
   Conforms to: Lean FRO / Palomar Verification Standard (Zero Extra Axioms)
 -/
 
-import Mathlib.Tactic.Omega
-
 namespace H3QM.Math
 
 /--
