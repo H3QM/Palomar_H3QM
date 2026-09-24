@@ -23,9 +23,13 @@ jobs:
           lean --version
           lake --version
 
-      - name: Build Lake Dependencies & Full H3QM Library
+      - name: Fetch Mathlib Prebuilt Cache
         run: |
           lake update
+          lake exe cache get || true
+
+      - name: Build Lake Dependencies & Full H3QM Library
+        run: |
           lake build
 
       - name: Typecheck Palomar Solution Module
