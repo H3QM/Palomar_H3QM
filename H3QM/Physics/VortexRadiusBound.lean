@@ -35,7 +35,6 @@ theorem vorticity_finite_under_lattice_cutoff
     (gamma : ℕ) (r : ℕ) (hr : r ≥ 1) :
     vorticity_upper_bound_scaled gamma r ≤ gamma := by
   dsimp [vorticity_upper_bound_scaled]
-  have hr2 : r * r ≥ 1 := by nlinarith
   have hdiv : gamma / (r * r) ≤ gamma := Nat.div_le_self gamma (r * r)
   exact hdiv
 
