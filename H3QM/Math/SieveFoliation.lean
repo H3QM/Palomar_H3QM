@@ -7,6 +7,8 @@
   Conforms to: Lean FRO / Palomar Verification Standard (Zero Extra Axioms)
 -/
 
+import Mathlib.Data.Nat.Defs
+
 namespace H3QM.Math
 
 /--

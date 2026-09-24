@@ -8,6 +8,7 @@
 -/
 
 import Mathlib.Data.Rat.Defs
+import Mathlib.Data.Rat.Floor
 import Mathlib.Algebra.Order.Floor
 import Mathlib.Tactic.NormNum
 
@@ -73,10 +74,7 @@ starting from a unit perturbation $x = 1$ evaluates identically to $2^{-24} = \e
 -/
 theorem h3qm_contraction_step8_eq_float32_eps :
     iterateContraction 8 1 = epsilon_float32 := by
-  unfold iterateContraction
-  unfold contractionMap
-  unfold kappa_rat
-  unfold epsilon_float32
+  dsimp [iterateContraction, contractionMap, kappa_rat, epsilon_float32]
   norm_num
 
 /--

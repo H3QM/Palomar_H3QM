@@ -9,6 +9,7 @@ Authors: Cosmo Chou, Antigravity AI
 -/
 
 import Mathlib.Data.Rat.Defs
+import Mathlib.Data.Rat.Floor
 import Mathlib.Algebra.Order.Floor
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
@@ -42,10 +43,7 @@ Proved constructively using `norm_num` after unfolding definitions.
 -/
 theorem h3qm_contraction_step8_eq_float32_eps :
     iterateContraction 8 1 = epsilon_float32 := by
-  unfold iterateContraction
-  unfold contractionMap
-  unfold kappa
-  unfold epsilon_float32
+  dsimp [iterateContraction, contractionMap, kappa, epsilon_float32]
   norm_num
 
 /--
@@ -121,10 +119,7 @@ starting from a unit perturbation s = 1 evaluates identically to the machine eps
 -/
 theorem h3qm_categorical_contraction_step8_eq_eps :
     iterateOperator 8 (contractionOperator kappa) 1 = epsilon_float32 := by
-  unfold iterateOperator
-  unfold contractionOperator
-  unfold kappa
-  unfold epsilon_float32
+  dsimp [iterateOperator, contractionOperator, kappa, epsilon_float32]
   norm_num
 
 /--
@@ -140,10 +135,7 @@ theorem h3qm_equivalency_isomorphism (n : ℕ) (x : ℚ) :
   | zero =>
     rfl
   | succ k ih =>
-    unfold iterateContraction
-    unfold iterateOperator
-    unfold contractionMap
-    unfold contractionOperator
+    dsimp [iterateContraction, iterateOperator, contractionMap, contractionOperator]
     rw [ih]
 
 end H3QM.Palomar

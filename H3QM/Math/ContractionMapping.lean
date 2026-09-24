@@ -90,8 +90,7 @@ starting from unit perturbation $s = 1$ evaluates identically to machine epsilon
 -/
 theorem h3qm_categorical_contraction_step8_eq_eps :
     iterateOperator 8 (contractionOperator ((1:ℚ)/8)) 1 = ((1:ℚ)/16777216) := by
-  unfold iterateOperator
-  unfold contractionOperator
+  dsimp [iterateOperator, contractionOperator]
   norm_num
 
 /--
@@ -119,10 +118,7 @@ theorem h3qm_equivalency_isomorphism (n : ℕ) (x : ℚ) :
   | zero =>
     rfl
   | succ k ih =>
-    unfold iterateContractionRat
-    unfold iterateOperator
-    unfold contractionMapRat
-    unfold contractionOperator
+    dsimp [iterateContractionRat, iterateOperator, contractionMapRat, contractionOperator]
     rw [ih]
 
 end H3QM.Math
