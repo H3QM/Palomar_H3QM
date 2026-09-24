@@ -25,8 +25,7 @@ jobs:
 
       - name: Fetch Mathlib Prebuilt Cache
         run: |
-          lake update
-          lake exe cache get || true
+          lake exe cache get
 
       - name: Build Lake Dependencies & Full H3QM Library
         run: |
