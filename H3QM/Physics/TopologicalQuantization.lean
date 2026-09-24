@@ -32,18 +32,14 @@ theorem knot_energy_discrete (knot : TopologicalKnot)
     (h_crit : knot.has_critical_tension = true)
     (h_nzero : knot.winding_number ≠ 0) :
     knot.winding_number ^ 2 ≥ 1 := by
-  have hw := knot.winding_number
-  have hne : hw ≠ 0 := h_nzero
-  have hcases : hw ≤ -1 ∨ hw ≥ 1 := by omega
+  have hcases : knot.winding_number ≤ -1 ∨ knot.winding_number ≥ 1 := by omega
   rcases hcases with hneg | hpos
-  · have h1 : -hw ≥ 1 := by omega
-    have h2 : (-hw) * (-hw) ≥ 1 * 1 := by nlinarith
-    have h3 : (-hw) * (-hw) = knot.winding_number ^ 2 := by ring
-    rw [← h3]
-    exact h2
-  · have h2 : hw * hw ≥ 1 * 1 := by nlinarith
-    have h3 : hw * hw = knot.winding_number ^ 2 := by ring
-    rw [← h3]
-    exact h2
+  · have h1 : -knot.winding_number ≥ 1 := by omega
+    have h2 : (-knot.winding_number) * (-knot.winding_number) ≥ 1 * 1 := by nlinarith
+    have h3 : (-knot.winding_number) * (-knot.winding_number) = knot.winding_number ^ 2 := by ring
+    linarith
+  · have h2 : knot.winding_number * knot.winding_number ≥ 1 * 1 := by nlinarith
+    have h3 : knot.winding_number * knot.winding_number = knot.winding_number ^ 2 := by ring
+    linarith
 
 end H3QM.Physics
