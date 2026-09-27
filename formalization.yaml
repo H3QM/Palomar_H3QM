@@ -7,7 +7,7 @@ version: "v0.4"
 # mathlib-initiative v0.4 specification for Palomar Registry
 project:
   name: "palomar_h3qm"
-  description: "Formal verification of core H3QM geometric lemmas, 8-step discrete topological contraction identity, and IEEE 754 float32 machine epsilon saturation theorem."
+  description: "Formal verification of core H3QM geometric lemmas, 8-step discrete topological contraction identity, IEEE 754 float32 machine epsilon saturation theorem, and Poly category lawful lenses."
   authors:
     - name: "Cosmo Chou"
       affiliation: "H3QM Research Foundation"
