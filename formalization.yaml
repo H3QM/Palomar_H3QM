@@ -29,8 +29,7 @@ classification:
 
 automation:
   methods:
-    - "agent"
-    - "Interactive theorem proving in Lean 4 with AI-assisted proof engineering and kernel definitional reduction"
+    - method: "agent"
 
 review:
   status: "agent-reviewed and self-assessed"
