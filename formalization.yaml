@@ -2,7 +2,36 @@
 # Schema: mathlib-initiative/formalization.yaml
 # Registry: Palomar Registry of Lean Verified Mathematics (ICARM & Lean FRO)
 
-schema_version: "1.0.0"
+version: "v0.4"
+
+# mathlib-initiative v0.4 specification for Palomar Registry
+project:
+  name: "palomar_h3qm"
+  description: "Formal verification of core H3QM geometric lemmas, 8-step discrete topological contraction identity, and IEEE 754 float32 machine epsilon saturation theorem."
+  authors:
+    - name: "Cosmo Chou"
+      affiliation: "H3QM Research Foundation"
+      email: "cosmo@h3qm.org"
+      github: "H3QM"
+      orcid: "0009-0006-5048-1406"
+    - name: "Antigravity AI"
+      affiliation: "Google DeepMind"
+  responsible_maintainers:
+    - name: "Cosmo Chou"
+      email: "cosmo@h3qm.org"
+      github: "H3QM"
+      orcid: "0009-0006-5048-1406"
+  license: "Apache-2.0"
+
+sources:
+  - title: "Harmonic Holographic Hydrodynamic Quantum Mechanics (H3QM) & Equivalency Mathematics"
+    authors:
+      - name: "Cosmo Chou"
+    id: "https://doi.org/10.5281/zenodo.22928921"
+    type: "original-proof"
+    relationship: "formalizes"
+    author_endorsement: "participated"
+
 entry_metadata:
   title: "Formal Verification of Core H3QM Geometric Lemmas, Discrete Contraction Identity, and Float32 Machine Epsilon Theorem"
   short_title: "H3QM Palomar Formal Verification Suite"
