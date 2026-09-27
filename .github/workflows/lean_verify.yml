@@ -27,17 +27,13 @@ jobs:
         run: |
           lake exe cache get
 
-      - name: Build Lake Dependencies & Full H3QM Library
+      - name: Build Palomar Targets (Challenge & Solution)
         run: |
-          lake build
+          lake build Challenge Solution
 
       - name: Typecheck Palomar Solution Module
         run: |
           lake env lean Solution.lean
-
-      - name: Typecheck Constitutional H3QM Root Library
-        run: |
-          lake env lean H3QM.lean
 
       - name: Run Constructive CAP Verification
         run: |

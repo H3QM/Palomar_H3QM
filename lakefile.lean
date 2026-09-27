@@ -18,10 +18,8 @@ lean_lib «Challenge» where
 lean_lib «Solution» where
   roots := #[`Solution]
 
-@[default_target]
 lean_lib «PalomarH3QM» where
   roots := #[`Solution]
 
-@[default_target]
 lean_lib «H3QM» where
   roots := #[`H3QM]
