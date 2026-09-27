@@ -76,7 +76,12 @@ def test_metadata_yaml():
         "singular_series_local_factor_ge_one",
         "goldbach_base_cases",
         "vorticity_finite_under_lattice_cutoff",
-        "knot_energy_discrete"
+        "knot_energy_discrete",
+        "pythagorean_harmonic_closure_sample",
+        "integer_metric_gap",
+        "fermat_genus_ge_one",
+        "fractional_winding_not_integer",
+        "fermat_topological_contradiction_law"
     ]
     for thm in theorems_to_check:
         assert thm in content, f"Missing theorem in formalization.yaml: {thm}"

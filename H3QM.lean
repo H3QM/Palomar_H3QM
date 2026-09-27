@@ -8,5 +8,10 @@
 import H3QM.Math.MachineEpsilon
 import H3QM.Math.ContractionMapping
 import H3QM.Math.SieveFoliation
+import H3QM.Math.FermatTopologicalWinding
 import H3QM.Physics.VortexRadiusBound
 import H3QM.Physics.TopologicalQuantization
+import H3QM.Physics.FineStructure
+import H3QM.Palomar.CategoricalIsomorphism
+import H3QM.Palomar.SaddlePointBypass
+import H3QM.Palomar.BanachFixedPointLock

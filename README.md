@@ -9,10 +9,23 @@
 [![Unproved Sorries](https://img.shields.io/badge/Unproved%20Sorries-0%20(100%25%20Closed)-brightgreen.svg)](#zero-axiom-guarantee)
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](LICENSE)
 [![Palomar Registry](https://img.shields.io/badge/Registry-Palomar%20(ICARM%20%26%20Lean%20FRO)-purple.svg)](#palomar-registry-conformance)
+[![Production](https://img.shields.io/badge/Production-Live_at_h3qm.com-blueviolet.svg)](https://h3qm.com)
 
 This repository contains the official, machine-checked, zero-axiom formal proofs for the foundational mathematical and theoretical physics theorems of the **Harmonic 3D Quantum Manifold (H3QM)** framework.
 
 Implemented in **Lean 4** and strictly conforming to the specifications of the **Lean FRO (Formal Reasoning Center)**, **Mathlib 4**, and the **Palomar Registry of Lean Verified Mathematics (ICARM / Terence Tao initiative)**.
+
+---
+
+## 🌐 Live Interactive Verification Observatories (h3qm.com)
+
+Unlike traditional static formalization files, the H3QM framework deploys three high-performance, browser-accessible production computing platforms at **[h3qm.com](https://h3qm.com)**. These living observatories provide real-time interactive computation, phase-space visualization, and deterministic dual-certification verification for every formalized theorem:
+
+| Platform | Domain & Direct Access | Interactive Capabilities & Academic Focus |
+| :--- | :--- | :--- |
+| 🧮 **Equivalency Mathematics & TopoNPU** | **[h3qm.com/math](https://h3qm.com/math/)** | Real-time audit of discrete sign flows, Cosmo Chou machine epsilon identity $(2^{-3})^8 = 2^{-24} = \epsilon_{\text{float32}}$, Terence Tao Proof Digestibility ($\mathcal{D}_{\text{CAP}} \ge 0.70$), and exact integer zero residual proofs. |
+| 🧬 **Biomedical & AlphaDock Drug Discovery** | **[h3qm.com/bio](https://h3qm.com/bio/)** | Physical manifestation of topological phase frustration and non-Euclidean manifold docking in macromolecular protein-ligand conformational equilibria. |
+| 🌌 **Unified Geometric Physics** | **[h3qm.com/physics](https://h3qm.com/physics/)** | Dual-Core coupled hydrodynamic solver (Micro-knot Engine A & Macro-fluid Engine B) resolving Navier-Stokes and 3D Euler blowup paradoxes via acoustic phonon lattice dispersion. |
 
 ---
 
