@@ -9,7 +9,6 @@ Authors: Cosmo Chou, Antigravity AI
 
 import Mathlib.Data.Rat.Defs
 import Mathlib.Data.Rat.Floor
-import Mathlib.Algebra.Order.Floor
 
 namespace H3QM.Palomar
 

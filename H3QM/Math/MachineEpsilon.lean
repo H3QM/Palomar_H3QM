@@ -9,7 +9,6 @@
 
 import Mathlib.Data.Rat.Defs
 import Mathlib.Data.Rat.Floor
-import Mathlib.Algebra.Order.Floor
 import Mathlib.Tactic.NormNum
 
 namespace H3QM.Math
