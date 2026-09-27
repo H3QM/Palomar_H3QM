@@ -23,13 +23,29 @@ project:
       orcid: "0009-0006-5048-1406"
   license: "Apache-2.0"
 
+classification:
+  arxiv: ["math.DS", "math.DG", "math.CT", "math-ph"]
+  msc2020: ["37C25", "53C44", "18B99", "68V15"]
+
+automation:
+  methods:
+    - "agent"
+    - "Interactive theorem proving in Lean 4 with AI-assisted proof engineering and kernel definitional reduction"
+
+review:
+  status: "agent-reviewed and self-assessed"
+  notes: "Formal verification checked by Lean 4 kernel; constructive 8-step convergence verified with exact zero residual on discrete integer lattices."
+
 sources:
   - title: "Harmonic Holographic Hydrodynamic Quantum Mechanics (H3QM) & Equivalency Mathematics"
     authors:
       - name: "Cosmo Chou"
     id: "https://doi.org/10.5281/zenodo.22928921"
     type: "original-proof"
-    relationship: "formalizes"
+    location: "Lean proof in this repository"
+    relationship: "other"
+    note: "This formalization first presents the constructive topological contraction proof and the Cosmo Machine Epsilon Saturation Theorem."
+    license: "Apache-2.0"
     author_endorsement: "participated"
 
 entry_metadata:
