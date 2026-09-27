@@ -15,10 +15,10 @@ lean_lib «H3QM» where
   roots := #[`H3QM]
 
 lean_lib «PalomarH3QM» where
-  roots := #[`solution]
+  roots := #[`Solution]
 
 lean_lib «Challenge» where
-  roots := #[`challenge]
+  roots := #[`Challenge]
 
 lean_lib «Solution» where
-  roots := #[`solution]
+  roots := #[`Solution]

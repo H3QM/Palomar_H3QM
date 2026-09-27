@@ -49,8 +49,8 @@ def test_metadata_yaml():
     assert 'version: "v0.4"' in content or "schema_version" in data or 'schema_version: "1.0.0"' in content, "Missing schema_version"
     assert "title:" in content, "Missing title in metadata"
     assert "Cosmo Chou" in content, "Missing primary author Cosmo Chou"
-    assert "challenge.lean" in content, "Missing challenge_file declaration"
-    assert "solution.lean" in content, "Missing solution_file declaration"
+    assert "Challenge.lean" in content or "challenge.lean" in content, "Missing challenge_file declaration"
+    assert "Solution.lean" in content or "solution.lean" in content, "Missing solution_file declaration"
     assert "axioms_used: []" in content, "Axioms used must be strictly empty (zero cheats)!"
     
     # Check core theorems in metadata
@@ -92,13 +92,13 @@ def test_metadata_yaml():
 
 def test_lean_source_files():
     print("\n[TEST 2/5] Inspecting Lean 4 Source Files (solution.lean & H3QM 5-module library)...")
-    challenge_path = ROOT_DIR / "challenge.lean"
-    solution_path = ROOT_DIR / "solution.lean"
+    challenge_path = ROOT_DIR / "Challenge.lean"
+    solution_path = ROOT_DIR / "Solution.lean"
     h3qm_root = ROOT_DIR / "H3QM.lean"
     h3qm_dir = ROOT_DIR / "H3QM"
     
-    assert challenge_path.exists(), "challenge.lean missing"
-    assert solution_path.exists(), "solution.lean missing"
+    assert challenge_path.exists(), "Challenge.lean missing"
+    assert solution_path.exists(), "Solution.lean missing"
     assert h3qm_root.exists(), "H3QM.lean missing"
     assert h3qm_dir.exists(), "H3QM/ library directory missing"
     

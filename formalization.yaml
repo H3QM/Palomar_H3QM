@@ -75,8 +75,8 @@ authors:
 
 formalization:
   lean_version: "leanprover/lean4:v4.35.0-rc2"
-  challenge_file: "challenge.lean"
-  solution_file: "solution.lean"
+  challenge_file: "Challenge.lean"
+  solution_file: "Solution.lean"
   module_name: "H3QM.Palomar"
   package_name: "palomar_h3qm"
   root_library: "H3QM.lean"
