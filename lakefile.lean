@@ -16,3 +16,9 @@ lean_lib «H3QM» where
 
 lean_lib «PalomarH3QM» where
   roots := #[`solution]
+
+lean_lib «Challenge» where
+  roots := #[`challenge]
+
+lean_lib «Solution» where
+  roots := #[`solution]
