@@ -25,7 +25,7 @@ project:
 
 classification:
   arxiv: ["math.DS", "math.DG", "math.CT", "math-ph"]
-  msc2020: ["37C25", "53C44", "18B99", "68V15"]
+  msc2020: ["37C25", "18B99", "68V15"]
 
 automation:
   methods:
@@ -74,7 +74,7 @@ authors:
     role: "Formalization Assistant, Interactive Prover Engineering"
 
 formalization:
-  lean_version: "leanprover/lean4:v4.11.0"
+  lean_version: "leanprover/lean4:v4.35.0-rc2"
   challenge_file: "challenge.lean"
   solution_file: "solution.lean"
   module_name: "H3QM.Palomar"

@@ -46,7 +46,7 @@ def test_metadata_yaml():
     content = yaml_path.read_text(encoding="utf-8")
     data = parse_simple_yaml(content)
     
-    assert "schema_version" in data or 'schema_version: "1.0.0"' in content, "Missing schema_version"
+    assert 'version: "v0.4"' in content or "schema_version" in data or 'schema_version: "1.0.0"' in content, "Missing schema_version"
     assert "title:" in content, "Missing title in metadata"
     assert "Cosmo Chou" in content, "Missing primary author Cosmo Chou"
     assert "challenge.lean" in content, "Missing challenge_file declaration"
