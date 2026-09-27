@@ -1,5 +1,5 @@
 /-
-Copyright (c) 2026 Cosmo Chou and H3QM Research Foundation. All rights reserved.
+Copyright (c) 2026 Cosmo Chou. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Author: Cosmo Chou
 
@@ -17,9 +17,10 @@ import Mathlib.Tactic.Ring
 namespace H3QM.Palomar
 
 /--
-A pseudo-metric structure on an arbitrary type X with rational distance.
-Quantifies non-negativity, self-distance vanishing, point separation,
-symmetry, and the triangle inequality.
+A rational metric space structure on an arbitrary type X with rational distance.
+Quantifies non-negativity, self-distance vanishing, point separation
+(identity of indiscernibles: dist x y = 0 ↔ x = y), symmetry, and the triangle inequality.
+Represents a separated metric space.
 -/
 structure MetricSpaceQ (X : Type) where
   dist : X → X → ℚ
@@ -89,7 +90,7 @@ theorem scaled_roundoff_normalizes_to_one :
 
 /--
 CHALLENGE THEOREM 3 (General Metric Contraction Decay):
-On an arbitrary metric space (X, dist) and for any contraction mapping T with ratio κ ≥ 0,
+On an arbitrary separated metric space (X, dist) and for any contraction mapping T with ratio κ ≥ 0,
 the distance between the n-th iterates is bounded by:
     dist(T^n(x), T^n(y)) ≤ κ^n * dist(x, y).
 -/
@@ -99,7 +100,7 @@ theorem metric_contraction_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X 
 
 /--
 CHALLENGE THEOREM 4 (8-Step Binary32 Metric Bound):
-On an arbitrary metric space (X, dist) and for any contraction mapping T with ratio κ = 1/8,
+On an arbitrary separated metric space (X, dist) and for any contraction mapping T with ratio κ = 1/8,
 after exactly 8 iterations the distance contracts by at least the binary32 unit roundoff:
     dist(T^8(x), T^8(y)) ≤ u_binary32 * dist(x, y).
 -/
@@ -117,7 +118,7 @@ theorem discrete_grid_gap_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscr
     x = y := by sorry
 
 /--
-CHALLENGE THEOREM 6 (Finite-Time Attractor Collapse on Discrete Grids):
+CHALLENGE THEOREM 6 (Finite-Time Pairwise Orbit Coalescence on Discrete Grids):
 On a discrete grid metric space with contraction ratio κ = 1/8, any two states
 with initial distance strictly bounded by 2^24 = 16,777,216 collapse into the
 exact same state in 8 steps:
@@ -127,5 +128,28 @@ theorem discrete_grid_contraction_collapse {X : Type} (M : MetricSpaceQ X) (hG :
     (T : X → X) (hT : IsContraction M T kappa) (x y : X)
     (h_dist : M.dist x y < 16777216) :
     iterate T 8 x = iterate T 8 y := by sorry
+
+/--
+CHALLENGE THEOREM 7 (Finite-Time Fixed-Point Invariance):
+Under a contraction mapping with ratio κ = 1/8 on a discrete grid,
+any state x whose step distance to T(x) is strictly bounded by 2^24
+collapses into an exact fixed point at step 8:
+    dist(x, T(x)) < 16,777,216 → T (iterate T 8 x) = iterate T 8 x.
+-/
+theorem discrete_grid_contraction_fixed_point {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (hT : IsContraction M T kappa) (x : X)
+    (h_step : M.dist x (T x) < 16777216) :
+    T (iterate T 8 x) = iterate T 8 x := by sorry
+
+/--
+CHALLENGE THEOREM 8 (Fixed-Point Uniqueness on Bounded Basin):
+Any two fixed points z₁ and z₂ in the discrete grid metric space with distance strictly
+less than 2^24 are identically equal: z₁ = z₂.
+-/
+theorem discrete_grid_contraction_unique_fixed_point {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (hT : IsContraction M T kappa) (z₁ z₂ : X)
+    (hz₁ : T z₁ = z₁) (hz₂ : T z₂ = z₂)
+    (h_dist : M.dist z₁ z₂ < 16777216) :
+    z₁ = z₂ := by sorry
 
 end H3QM.Palomar

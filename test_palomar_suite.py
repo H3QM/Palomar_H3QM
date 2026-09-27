@@ -60,7 +60,9 @@ def test_metadata_yaml():
         "metric_contraction_iterate_decay",
         "metric_contraction_step8_bound",
         "discrete_grid_gap_collapse",
-        "discrete_grid_contraction_collapse"
+        "discrete_grid_contraction_collapse",
+        "discrete_grid_contraction_fixed_point",
+        "discrete_grid_contraction_unique_fixed_point"
     ]
     for thm in theorems_to_check:
         assert thm in content, f"Missing theorem in formalization.yaml: {thm}"
@@ -89,7 +91,9 @@ def test_lean_source_files():
         "metric_contraction_iterate_decay",
         "metric_contraction_step8_bound",
         "discrete_grid_gap_collapse",
-        "discrete_grid_contraction_collapse"
+        "discrete_grid_contraction_collapse",
+        "discrete_grid_contraction_fixed_point",
+        "discrete_grid_contraction_unique_fixed_point"
     ]
     for thm_name in palomar_theorems:
         assert f"theorem {thm_name}" in challenge_content, f"Theorem {thm_name} missing in Challenge.lean"

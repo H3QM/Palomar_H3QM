@@ -1,15 +1,14 @@
 # Palomar Formalization Metadata Specification
 # Schema: mathlib-initiative/formalization.yaml v0.4
-# Registry: Palomar Registry of Lean Verified Mathematics (ICARM & Lean FRO)
+# Registry: Palomar Registry of Lean Verified Mathematics
 
 version: "v0.4"
 
 project:
   name: "palomar_h3qm"
-  description: "Formal verification of discrete metric contraction dynamics, IEEE 754 binary32 unit roundoff bound, and finite-time fixed-point attractor collapse on discrete grids."
+  description: "Formal verification of discrete metric contraction dynamics, IEEE 754 binary32 machine unit roundoff bounds, finite-time orbit coalescence, and invariant fixed-point collapse on discrete metric spaces."
   authors:
     - name: "Cosmo Chou"
-      affiliation: "H3QM Research Foundation"
       email: "cosmo@h3qm.org"
       github: "H3QM"
       orcid: "0009-0006-5048-1406"
@@ -32,22 +31,34 @@ automation:
 
 review:
   status: "self-assessed"
-  notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 6 metric contraction theorems constructive with zero added axioms."
+  notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 8 metric contraction theorems constructive with zero added axioms."
 
 sources:
-  - title: "Discrete Metric Contraction Dynamics and IEEE 754 Binary32 Unit Roundoff Bound"
+  - title: "Finite-Time Invariant Attractor Collapse of Discrete Contraction Mappings under IEEE 754 Binary32 Unit Roundoff"
     authors:
       - name: "Cosmo Chou"
     type: "original-proof"
     location: "Lean proof in this repository"
     relationship: "other"
-    note: "Original constructive formalization of discrete metric contraction decay and IEEE 754 binary32 unit roundoff bound on pseudo-metric spaces."
+    note: "Original constructive formalization in Lean 4 connecting discrete Banach contraction decay to IEEE 754 binary32 machine unit roundoff boundaries, finite-time orbit coalescence, and exact fixed-point invariance on discrete metric spaces."
     license: "Apache-2.0"
     author_endorsement: "participated"
+  - title: "Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales"
+    authors:
+      - name: "Stefan Banach"
+    type: "paper"
+    relationship: "background"
+    note: "Foundational contraction mapping principle on metric spaces (Fundamenta Mathematicae, Vol. 3, 1922, pp. 133-181)."
+  - title: "IEEE Standard for Floating-Point Arithmetic"
+    authors:
+      - name: "IEEE Computer Society"
+    type: "paper"
+    relationship: "background"
+    note: "IEEE Std 754-2008 definition of binary32 single-precision unit roundoff u = 2^(-24)."
 
 entry_metadata:
-  title: "Formal Verification of Discrete Metric Contraction Dynamics and Binary32 Unit Roundoff Bound"
-  short_title: "Discrete Metric Contraction Dynamics"
+  title: "Formal Verification of Discrete Metric Contraction Dynamics and IEEE 754 Binary32 Machine Roundoff Collapse"
+  short_title: "Discrete Metric Contraction and Binary32 Roundoff Collapse"
   category: "Discrete Dynamical Systems / Numerical Analysis / Formal Mathematics"
   date: "2026-09-27"
   status: "published"
@@ -57,7 +68,6 @@ entry_metadata:
 
 authors:
   - name: "Cosmo Chou"
-    affiliation: "H3QM Research Foundation"
     email: "cosmo@h3qm.org"
     github: "H3QM"
     orcid: "0009-0006-5048-1406"
@@ -85,13 +95,13 @@ formalization:
       zero_axioms: true
 
     - name: "H3QM.Palomar.metric_contraction_iterate_decay"
-      informal_statement: "On an arbitrary metric space (X, dist) and for any contraction mapping T with ratio kappa >= 0, the distance between n-th iterates satisfies dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y)."
+      informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any contraction mapping T with ratio kappa >= 0, the distance between n-th iterates satisfies dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y)."
       proof_tactic: "induction n / nlinarith"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.metric_contraction_step8_bound"
-      informal_statement: "On an arbitrary metric space (X, dist) and for any contraction mapping T with ratio kappa = 1/8, after 8 iterations the distance contracts by at least the binary32 unit roundoff: dist(T^8(x), T^8(y)) <= u_binary32 * dist(x, y)."
+      informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any contraction mapping T with ratio kappa = 1/8, after 8 iterations the distance contracts by at least the binary32 unit roundoff: dist(T^8(x), T^8(y)) <= u_binary32 * dist(x, y)."
       proof_tactic: "specialization / rw"
       status: "proved"
       zero_axioms: true
@@ -108,14 +118,27 @@ formalization:
       status: "proved"
       zero_axioms: true
 
+    - name: "H3QM.Palomar.discrete_grid_contraction_fixed_point"
+      informal_statement: "Under a contraction mapping with ratio kappa = 1/8 on a discrete grid, any state x whose step distance dist(x, T(x)) is strictly bounded by 2^24 collapses into an exact fixed point at step 8: dist(x, T(x)) < 16,777,216 implies T(T^8(x)) = T^8(x)."
+      proof_tactic: "discrete_grid_contraction_collapse with iterate_comm"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Palomar.discrete_grid_contraction_unique_fixed_point"
+      informal_statement: "Any two fixed points z1 and z2 on a discrete grid metric space with distance strictly less than 2^24 are identically equal: z1 = z2."
+      proof_tactic: "discrete_grid_contraction_collapse with fixed point iterate induction"
+      status: "proved"
+      zero_axioms: true
+
   axioms_used: []  # Strictly zero additional axioms; 100% constructive and standard Lean 4 kernel.
 
 informal_description: |
-  This formalization establishes the discrete Banach metric contraction decay theorem and finite-time discrete grid
-  attractor collapse for dynamical systems on rational pseudo-metric spaces.
+  This formal research note establishes the discrete Banach metric contraction decay theorem, finite-time orbit
+  coalescence, and exact invariant attractor collapse on rational separated metric spaces under IEEE 754 machine precision.
 
-  We formally quantify over an arbitrary state space X, pseudo-metric distance dist : X -> X -> Q, and contraction
-  mapping T : X -> X with contraction ratio kappa = 1/8. By mathematical induction on the iteration step n, we prove:
+  We formally quantify over an arbitrary state space X, separated rational metric distance dist : X -> X -> Q
+  (satisfying dist(x, y) = 0 <-> x = y), and contraction mapping T : X -> X with contraction ratio kappa = 1/8.
+  By mathematical induction on the iteration step n, we prove:
       dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y).
 
   At step n = 8, the compounded contraction factor satisfies:
@@ -126,8 +149,14 @@ informal_description: |
 
   Furthermore, on a discrete grid metric space where distinct states satisfy dist(x, y) >= 1, any two states whose
   initial distance is strictly bounded by 2^24 = 16,777,216 satisfy dist(T^8(x), T^8(y)) < 1, which strictly enforces
-  T^8(x) = T^8(y). This proves that 8 iterations of factor-8 discrete contraction collapse any bounded ball into a
-  single unique invariant attractor.
+  T^8(x) = T^8(y) (finite-time pairwise orbit coalescence).
+
+  Additionally, we prove that for any state x whose step distance satisfies dist(x, T(x)) < 2^24, the 8-th iterate
+  is an exact fixed point: T(T^8(x)) = T^8(x) (attractor invariance). Finally, we prove that any two fixed points
+  within distance 2^24 are identically equal, establishing unique invariant attractor collapse.
+
+  Research audience: Researchers in certified numerical computation, discrete dynamical systems, and formal methods
+  in scientific computing (arXiv: math.DS, math.NA, cs.LO).
 
 disclosures:
   ai_assistance:

@@ -7,7 +7,9 @@
     "H3QM.Palomar.metric_contraction_iterate_decay",
     "H3QM.Palomar.metric_contraction_step8_bound",
     "H3QM.Palomar.discrete_grid_gap_collapse",
-    "H3QM.Palomar.discrete_grid_contraction_collapse"
+    "H3QM.Palomar.discrete_grid_contraction_collapse",
+    "H3QM.Palomar.discrete_grid_contraction_fixed_point",
+    "H3QM.Palomar.discrete_grid_contraction_unique_fixed_point"
   ],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],

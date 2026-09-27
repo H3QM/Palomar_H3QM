@@ -1,5 +1,5 @@
 /-
-Copyright (c) 2026 Cosmo Chou and H3QM Research Foundation. All rights reserved.
+Copyright (c) 2026 Cosmo Chou. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Author: Cosmo Chou
 
@@ -18,9 +18,10 @@ import Mathlib.Tactic.Ring
 namespace H3QM.Palomar
 
 /--
-A pseudo-metric structure on an arbitrary type X with rational distance.
-Quantifies non-negativity, self-distance vanishing, point separation,
-symmetry, and the triangle inequality.
+A rational metric space structure on an arbitrary type X with rational distance.
+Quantifies non-negativity, self-distance vanishing, point separation
+(identity of indiscernibles: dist x y = 0 ↔ x = y), symmetry, and the triangle inequality.
+Represents a separated metric space.
 -/
 structure MetricSpaceQ (X : Type) where
   dist : X → X → ℚ
@@ -44,6 +45,17 @@ Defines the discrete dynamical trajectory starting from initial state x.
 def iterate {X : Type} (T : X → X) : ℕ → X → X
   | 0, x => x
   | n + 1, x => T (iterate T n x)
+
+/--
+Commutation lemma for iterate: iterate T n (T x) = T (iterate T n x).
+-/
+theorem iterate_comm {X : Type} (T : X → X) (n : ℕ) (x : X) :
+    iterate T n (T x) = T (iterate T n x) := by
+  induction n with
+  | zero => rfl
+  | succ k ih =>
+    dsimp [iterate]
+    rw [ih]
 
 /--
 Rational power function κ^n for contraction factor compounding.
@@ -141,7 +153,7 @@ theorem discrete_grid_gap_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscr
   linarith
 
 /--
-THEOREM 6 PROOF (Finite-Time Attractor Collapse on Discrete Grids):
+THEOREM 6 PROOF (Finite-Time Pairwise Orbit Coalescence on Discrete Grids):
 Every state pair in a ball of diameter < 2^24 collapses in exactly 8 steps.
 -/
 theorem discrete_grid_contraction_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
@@ -153,5 +165,52 @@ theorem discrete_grid_contraction_collapse {X : Type} (M : MetricSpaceQ X) (hG :
     dsimp [unit_roundoff_binary32] at h_bound
     linarith
   exact discrete_grid_gap_collapse M hG (iterate T 8 x) (iterate T 8 y) h_lt
+
+/--
+THEOREM 7 PROOF (Finite-Time Fixed-Point Invariance):
+Under a contraction mapping with ratio κ = 1/8 on a discrete grid,
+any state x whose step distance to T(x) is strictly bounded by 2^24
+collapses into an exact fixed point at step 8:
+    dist(x, T(x)) < 16,777,216 → T (iterate T 8 x) = iterate T 8 x.
+-/
+theorem discrete_grid_contraction_fixed_point {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (hT : IsContraction M T kappa) (x : X)
+    (h_step : M.dist x (T x) < 16777216) :
+    T (iterate T 8 x) = iterate T 8 x := by
+  have h_collapse := discrete_grid_contraction_collapse M hG T hT x (T x) h_step
+  rw [iterate_comm] at h_collapse
+  exact h_collapse.symm
+
+/--
+THEOREM 8 PROOF (Fixed-Point Uniqueness on Bounded Basin):
+Any two fixed points z₁ and z₂ in the discrete grid metric space with distance strictly
+less than 2^24 are identically equal: z₁ = z₂.
+-/
+theorem discrete_grid_contraction_unique_fixed_point {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (hT : IsContraction M T kappa) (z₁ z₂ : X)
+    (hz₁ : T z₁ = z₁) (hz₂ : T z₂ = z₂)
+    (h_dist : M.dist z₁ z₂ < 16777216) :
+    z₁ = z₂ := by
+  have h_collapse := discrete_grid_contraction_collapse M hG T hT z₁ z₂ h_dist
+  have h_iter_z₁ : iterate T 8 z₁ = z₁ := by
+    have h_iter : ∀ n, iterate T n z₁ = z₁ := by
+      intro n
+      induction n with
+      | zero => rfl
+      | succ k ih =>
+        dsimp [iterate]
+        rw [ih, hz₁]
+    exact h_iter 8
+  have h_iter_z₂ : iterate T 8 z₂ = z₂ := by
+    have h_iter : ∀ n, iterate T n z₂ = z₂ := by
+      intro n
+      induction n with
+      | zero => rfl
+      | succ k ih =>
+        dsimp [iterate]
+        rw [ih, hz₂]
+    exact h_iter 8
+  rw [h_iter_z₁, h_iter_z₂] at h_collapse
+  exact h_collapse
 
 end H3QM.Palomar
