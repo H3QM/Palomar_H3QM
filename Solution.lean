@@ -58,6 +58,13 @@ The discrete geometric contraction ratio: κ = 2^(-3) = 1/8.
 def kappa : ℚ := (1 : ℚ) / 8
 
 /--
+The discrete geometric contraction ratio κ = 1/8 is non-negative.
+-/
+theorem kappa_nonneg : 0 ≤ kappa := by
+  dsimp [kappa]
+  norm_num
+
+/--
 The IEEE 754 binary32 unit roundoff (half-epsilon, u = 2^(-24))
 represented as an exact rational number:
 u_binary32 = 2^(-24) = 1 / 16777216.
@@ -117,7 +124,7 @@ Specialization of general contraction decay to n = 8 and κ = 1/8.
 theorem metric_contraction_step8_bound {X : Type} (M : MetricSpaceQ X) (T : X → X)
     (hT : IsContraction M T kappa) (x y : X) :
     M.dist (iterate T 8 x) (iterate T 8 y) ≤ unit_roundoff_binary32 * M.dist x y := by
-  have h_decay := metric_contraction_iterate_decay M T kappa (by norm_num) hT 8 x y
+  have h_decay := metric_contraction_iterate_decay M T kappa kappa_nonneg hT 8 x y
   have h_eq : ratPow kappa 8 = unit_roundoff_binary32 := ratPow_kappa_8_eq_unit_roundoff
   rw [h_eq] at h_decay
   exact h_decay
@@ -142,11 +149,9 @@ theorem discrete_grid_contraction_collapse {X : Type} (M : MetricSpaceQ X) (hG :
     (h_dist : M.dist x y < 16777216) :
     iterate T 8 x = iterate T 8 y := by
   have h_bound := metric_contraction_step8_bound M T hT x y
-  have h_unit : unit_roundoff_binary32 = (1 : ℚ) / 16777216 := rfl
-  have h_dist_nonneg : 0 ≤ M.dist x y := M.dist_nonneg x y
   have h_lt : M.dist (iterate T 8 x) (iterate T 8 y) < 1 := by
-    rw [h_unit] at h_bound
-    nlinarith
+    dsimp [unit_roundoff_binary32] at h_bound
+    linarith
   exact discrete_grid_gap_collapse M hG (iterate T 8 x) (iterate T 8 y) h_lt
 
 end H3QM.Palomar
