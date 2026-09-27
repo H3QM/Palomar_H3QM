@@ -3,8 +3,8 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22928921.svg)](https://doi.org/10.5281/zenodo.22928921)
 [![CI](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml/badge.svg)](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml)
 [![Release](https://img.shields.io/github/v/release/H3QM/Palomar_H3QM?color=blue)](https://github.com/H3QM/Palomar_H3QM/releases)
-[![Lean 4](https://img.shields.io/badge/Lean%204-v4.11.0-blue.svg)](https://github.com/leanprover/lean4)
-[![Mathlib 4](https://img.shields.io/badge/Mathlib%204-v4.11.0-green.svg)](https://github.com/leanprover-community/mathlib4)
+[![Lean 4](https://img.shields.io/badge/Lean%204-v4.35.0--rc2-blue.svg)](https://github.com/leanprover/lean4)
+[![Mathlib 4](https://img.shields.io/badge/Mathlib%204-v4.35.0--rc2-green.svg)](https://github.com/leanprover-community/mathlib4)
 [![Axioms Used](https://img.shields.io/badge/Axioms%20Added-0%20(Strictly%20Zero)-brightgreen.svg)](#zero-axiom-guarantee)
 [![Unproved Sorries](https://img.shields.io/badge/Unproved%20Sorries-0%20(100%25%20Closed)-brightgreen.svg)](#zero-axiom-guarantee)
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](LICENSE)
@@ -132,8 +132,8 @@ This formal verification suite serves as the mathematical foundation cited in th
 To cite this formal verification repository in academic works:
 ```bibtex
 @software{chou2026palomar_h3qm,
-  author       = {Cosmo Chou and Antigravity AI},
-  title        = {{Palomar\_H3QM: Lean 4 Formal Verification Suite for the H3QM Framework}},
+  author       = {Cosmo Chou},
+  title        = {{Palomar\_H3QM: Lean 4 Formal Verification Suite for Discrete Metric Contraction and Binary32 Unit Roundoff}},
   month        = sep,
   year         = 2026,
   publisher    = {Zenodo},
@@ -142,6 +142,7 @@ To cite this formal verification repository in academic works:
   url          = {https://doi.org/10.5281/zenodo.22928921}
 }
 ```
+*Formalization and Lake packaging assisted by Antigravity AI.*
 
 ---
 

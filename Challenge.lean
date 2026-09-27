@@ -1,10 +1,10 @@
 /-
 Copyright (c) 2026 Cosmo Chou and H3QM Research Foundation. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Cosmo Chou, Antigravity AI
+Author: Cosmo Chou
 
 ! This file was designed for the Palomar Registry of Lean Verified Mathematics.
-! Challenge File: Formal specification of H3QM Discrete Contraction and Float32 Epsilon Theorem.
+! Challenge File: Formal specification of 8-Step Discrete Contraction and Binary32 Unit Roundoff Bound.
 -/
 
 import Mathlib.Data.Rat.Defs
@@ -13,8 +13,8 @@ import Mathlib.Data.Rat.Floor
 namespace H3QM.Palomar
 
 /--
-The H3QM 3D Topological Contraction Factor:
-In 3D manifold phase space, the discrete geometric contraction ratio is
+The discrete contraction factor:
+In discrete geometric phase space, the discrete geometric contraction ratio is
 κ = 2^(-3) = 1/8.
 -/
 def kappa : ℚ := (1 : ℚ) / 8
@@ -32,14 +32,17 @@ def iterateContraction : ℕ → ℚ → ℚ
   | n + 1, x => contractionMap (iterateContraction n x)
 
 /--
-The IEEE 754 float32 machine epsilon represented as an exact rational number:
-ε_float32 = 2^(-24) = 1 / 16777216.
+The IEEE 754 binary32 unit roundoff (half-epsilon, u = 2^(-24))
+represented as an exact rational number:
+u_binary32 = 2^(-24) = 1 / 16777216.
+Note: For IEEE 754 binary32 arithmetic, the spacing above 1 is 2^(-23),
+and the standard round-to-nearest unit roundoff is u = 2^(-24).
 -/
-def epsilon_float32 : ℚ := (1 : ℚ) / 16777216
+def unit_roundoff_binary32 : ℚ := (1 : ℚ) / 16777216
 
 /--
 Discrete sign function sgn(x) taking values in {-1, 0, 1}.
-Represents the canonical discrete integer sign operator in H3QM dynamics.
+Represents the canonical discrete integer sign operator in discrete dynamics.
 -/
 def sgn (x : ℚ) : ℤ :=
   if x > 0 then 1
@@ -47,16 +50,16 @@ def sgn (x : ℚ) : ℤ :=
   else 0
 
 /--
-CHALLENGE THEOREM 1 (Cosmo's 8-Step Machine Epsilon Contraction Theorem):
-The 8-th iterate of the discrete 3D topological contraction mapping starting from
-a unit perturbation (x = 1) is identically equal to (2^(-3))^8 = 2^(-24),
-which exactly equals the IEEE 754 float32 machine epsilon.
+CHALLENGE THEOREM 1 (8-Step Binary32 Unit Roundoff Contraction Theorem):
+The 8-th iterate of the discrete contraction mapping f(x) = (1/8)x starting from
+unit initial perturbation (x = 1) is identically equal to (2^(-3))^8 = 2^(-24),
+which exactly equals the IEEE 754 binary32 unit roundoff u = 2^(-24).
 -/
-theorem h3qm_contraction_step8_eq_float32_eps :
-    iterateContraction 8 1 = epsilon_float32 := by sorry
+theorem h3qm_contraction_step8_eq_unit_roundoff :
+    iterateContraction 8 1 = unit_roundoff_binary32 := by sorry
 
 /--
-CHALLENGE THEOREM 2 (Integer Mantissa Normalization):
+CHALLENGE THEOREM 2 (Integer Scale Normalization):
 The scaled rational value (2^24 * iterateContraction 8 1) evaluates to exactly 1.
 -/
 theorem h3qm_scaled_mantissa_step8_eq_one :
@@ -64,69 +67,35 @@ theorem h3qm_scaled_mantissa_step8_eq_one :
 
 /--
 CHALLENGE THEOREM 3 (Discrete Fixed-Point Integer Residual Vanishing):
-Under discrete integer sign dynamics with precision scale 2^24,
+Under discrete integer dynamics with precision scale 2^24,
 the discrete integer residual R_8 = ⌊2^24 * iterateContraction 8 1⌋ - 1
 vanishes identically to exact zero.
 -/
 theorem h3qm_discrete_sign_residual_vanishes :
     ⌊(16777216 : ℚ) * iterateContraction 8 1⌋ - 1 = 0 := by sorry
 
-/-! ### Module 2: Categorical Cybernetics & Lawful Lenses in Poly -/
+/--
+CHALLENGE THEOREM 4 (Contraction Factor Strict Decay on Discrete Metric Space):
+For any discrete initial distance bounded by M ≤ 2^24 = 16,777,216,
+after 8 steps of factor-8 contraction, the distance reduces to ≤ 1.
+-/
+theorem discrete_contraction_8steps_bound (M : ℕ) (hM : M ≤ 16777216) :
+    M / (8 ^ 8) ≤ 1 := by sorry
 
 /--
-A Bidirectional Lens in the category Poly (David Spivak, Jules Hedges).
-Connects a global system state S with an observable/target view A.
+CHALLENGE THEOREM 5 (Integer Metric Gap Law):
+On discrete integer coordinate space, any residual with magnitude strictly less than 1
+evaluates to exact zero: for all x in ℤ, -1 < x ∧ x < 1 → x = 0.
 -/
-structure Lens (S A : Type) where
-  view : S → A
-  update : S → A → S
+theorem integer_metric_exact_zero (x : ℤ) (h1 : -1 < x) (h2 : x < 1) :
+    x = 0 := by sorry
 
 /--
-A Lawful Lens satisfies PutGet (observability) and GetPut (homeostasis).
+CHALLENGE THEOREM 6 (Discrete Fixed-Point Locking):
+When the metric residual between states x and y vanishes in integer space (x - y = 0),
+the state is locked in a unique fixed point x = y.
 -/
-def LawfulLens {S A : Type} (l : Lens S A) : Prop :=
-  (∀ s a, l.view (l.update s a) = a) ∧
-  (∀ s, l.update s (l.view s) = s)
-
-/-- The Identity Lens on any state space S. -/
-def idLens (S : Type) : Lens S S where
-  view s := s
-  update _ a := a
-
-/--
-CHALLENGE THEOREM 4 (Lawful Lens Axiomatic Soundness):
-The identity proof-state lens satisfies the PutGet observability law identically.
--/
-theorem h3qm_lawful_lens_putget (S : Type) (s a : S) :
-    (idLens S).view ((idLens S).update s a) = a := by sorry
-
-/--
-The 3D Topological Contraction Operator on the state space ℚ.
--/
-def contractionOperator (κ : ℚ) (s : ℚ) : ℚ := κ * s
-
-/--
-The n-fold iterate of a state contraction operator T^n(s).
--/
-def iterateOperator : ℕ → (ℚ → ℚ) → ℚ → ℚ
-  | 0, _, s => s
-  | n + 1, T, s => T (iterateOperator n T s)
-
-/--
-CHALLENGE THEOREM 5 (Categorical 8-Step Contraction Theorem):
-The 8-fold composition of the topological contraction operator T(s) = (1/8)*s
-starting from a unit perturbation s = 1 evaluates identically to the machine epsilon 2^(-24).
--/
-theorem h3qm_categorical_contraction_step8_eq_eps :
-    iterateOperator 8 (contractionOperator kappa) 1 = epsilon_float32 := by sorry
-
-/--
-CHALLENGE THEOREM 6 (Single-Valued Equivalence Invariance):
-Under Cosmo Chou's landmark equivalence axiom (A = B) ≃ (A ≃ B),
-the classical iterative path and the categorical operator composition
-are strictly isomorphic and evaluate to identical values at every step.
--/
-theorem h3qm_equivalency_isomorphism (n : ℕ) (x : ℚ) :
-    iterateContraction n x = iterateOperator n (contractionOperator kappa) x := by sorry
+theorem discrete_fixed_point_lock (x y : ℤ) (h : x - y = 0) :
+    x = y := by sorry
 
 end H3QM.Palomar

@@ -1,21 +1,18 @@
 # Palomar Formalization Metadata Specification
-# Schema: mathlib-initiative/formalization.yaml
+# Schema: mathlib-initiative/formalization.yaml v0.4
 # Registry: Palomar Registry of Lean Verified Mathematics (ICARM & Lean FRO)
 
 version: "v0.4"
 
-# mathlib-initiative v0.4 specification for Palomar Registry
 project:
   name: "palomar_h3qm"
-  description: "Formal verification of core H3QM geometric lemmas, 8-step discrete topological contraction identity, IEEE 754 float32 machine epsilon saturation theorem, and Poly category lawful lenses."
+  description: "Formal verification of 8-step discrete metric contraction dynamics, IEEE 754 binary32 unit roundoff bound, and discrete integer fixed-point locking on metric spaces."
   authors:
     - name: "Cosmo Chou"
       affiliation: "H3QM Research Foundation"
       email: "cosmo@h3qm.org"
       github: "H3QM"
       orcid: "0009-0006-5048-1406"
-    - name: "Antigravity AI"
-      affiliation: "Google DeepMind"
   responsible_maintainers:
     - name: "Cosmo Chou"
       email: "cosmo@h3qm.org"
@@ -24,43 +21,40 @@ project:
   license: "Apache-2.0"
 
 classification:
-  arxiv: ["math.DS", "math.DG", "math.CT", "math-ph"]
-  msc2020: ["37C25", "18B99", "68V15"]
+  arxiv: ["math.DS", "math.NA", "cs.LO"]
+  msc2020: ["37C25", "65G50", "68V15"]
 
 automation:
   methods:
     - method: "agent"
+      tool: "Antigravity AI"
+      notes: "Interactive formalization and Lake build packaging assistance."
 
 review:
   status: "agent-reviewed and self-assessed"
-  notes: "Formal verification checked by Lean 4 kernel; constructive 8-step convergence verified with exact zero residual on discrete integer lattices."
+  notes: "Formal verification checked by Lean 4 kernel and NanoDa; 8-step contraction and integer fixed-point locking verified with zero axioms."
 
 sources:
   - title: "Harmonic Holographic Hydrodynamic Quantum Mechanics (H3QM) & Equivalency Mathematics"
     authors:
       - name: "Cosmo Chou"
     id: "https://doi.org/10.5281/zenodo.22928921"
-    type: "original-proof"
-    location: "Lean proof in this repository"
-    relationship: "other"
-    note: "This formalization first presents the constructive topological contraction proof and the Cosmo Machine Epsilon Saturation Theorem."
+    type: "paper"
+    location: "Zenodo preprint archive"
+    relationship: "formalizes"
+    note: "Formalizes the 8-step discrete metric contraction bound and IEEE 754 binary32 unit roundoff identity."
     license: "Apache-2.0"
     author_endorsement: "participated"
 
 entry_metadata:
-  title: "Formal Verification of Core H3QM Geometric Lemmas, Discrete Contraction Identity, and Float32 Machine Epsilon Theorem"
-  short_title: "H3QM Palomar Formal Verification Suite"
-  category: "Constructive Mathematics / Discrete Dynamical Systems / Topological Physics"
-  date: "2026-09-24"
+  title: "Formal Verification of 8-Step Discrete Metric Contraction Dynamics and Binary32 Unit Roundoff Bound"
+  short_title: "Discrete Contraction and Binary32 Roundoff Verification"
+  category: "Discrete Dynamical Systems / Numerical Analysis / Formal Mathematics"
+  date: "2026-09-27"
   status: "published"
   doi: "10.5281/zenodo.22928921"
   zenodo_url: "https://doi.org/10.5281/zenodo.22928921"
   repository_url: "https://github.com/H3QM/Palomar_H3QM"
-  homepage_url: "https://h3qm.com/math/"
-  interactive_platforms:
-    math: "https://h3qm.com/math/"
-    bio: "https://h3qm.com/bio/"
-    physics: "https://h3qm.com/physics/"
 
 authors:
   - name: "Cosmo Chou"
@@ -68,10 +62,7 @@ authors:
     email: "cosmo@h3qm.org"
     github: "H3QM"
     orcid: "0009-0006-5048-1406"
-    role: "Principal Investigator, Mathematical Formulation"
-  - name: "Antigravity AI"
-    affiliation: "Google DeepMind"
-    role: "Formalization Assistant, Interactive Prover Engineering"
+    role: "Principal Investigator, Formalization Author"
 
 formalization:
   lean_version: "leanprover/lean4:v4.35.0-rc2"
@@ -82,240 +73,60 @@ formalization:
   root_library: "H3QM.lean"
   
   theorems:
-    # --- Module 1: Machine Epsilon & Precision Bounds (H3QM.Math.MachineEpsilon) ---
-    - name: "H3QM.Math.cosmo_machine_epsilon_saturation"
-      informal_statement: "In exactly 8 topological contraction steps, the 3-bit volume contraction factor (2^(-3))^8 = 2^(-24) saturates the IEEE 754 float32 machine epsilon denominator (16,777,216) identically."
-      proof_tactic: "rfl (Kernel definitional reduction)"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.h3qm_contraction_step8_eq_float32_eps"
-      informal_statement: "The 8-fold composition of the 3D discrete topological contraction map f(x) = (1/8)x starting from x=1 evaluates identically to (2^(-3))^8 = 2^(-24), which is the exact IEEE 754 float32 machine epsilon."
+    - name: "H3QM.Palomar.h3qm_contraction_step8_eq_unit_roundoff"
+      informal_statement: "The 8-fold composition of the discrete contraction mapping f(x) = (1/8)x starting from unit perturbation x=1 evaluates identically to (2^(-3))^8 = 2^(-24), which exactly matches the IEEE 754 binary32 unit roundoff (half-epsilon u = 2^(-24))."
       proof_tactic: "norm_num after unfolding"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.h3qm_scaled_mantissa_step8_eq_one"
-      informal_statement: "The scaled rational value (2^24 * f^(8)(1)) evaluates to exactly 1 in exact rational arithmetic."
+      informal_statement: "The scaled rational value (2^24 * iterateContraction 8 1) evaluates to exactly 1 in exact rational arithmetic."
       proof_tactic: "norm_num"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.h3qm_discrete_sign_residual_vanishes"
-      informal_statement: "Under discrete integer sign dynamics with 24-bit precision, the integer residual floor(2^24 * f^(8)(1)) - 1 vanishes identically to exact zero."
+      informal_statement: "Under discrete integer dynamics with precision scale 2^24, the discrete integer residual floor(2^24 * iterateContraction 8 1) - 1 vanishes identically to exact zero."
       proof_tactic: "norm_num"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Math.integer_metric_exact_zero"
-      informal_statement: "In discrete integer coordinate space, any residual with magnitude strictly less than 1 evaluates to exact zero: for all x in Z, -1 < x < 1 implies x = 0."
+    - name: "H3QM.Palomar.discrete_contraction_8steps_bound"
+      informal_statement: "For any discrete initial distance bounded by M <= 2^24 = 16,777,216 on an integer metric space, after 8 steps of factor-8 contraction, the metric distance reduces to <= 1."
+      proof_tactic: "rfl / omega"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Palomar.integer_metric_exact_zero"
+      informal_statement: "On discrete integer coordinate space, any residual with magnitude strictly less than 1 evaluates to exact zero: for all x in Z, -1 < x and x < 1 implies x = 0."
       proof_tactic: "omega"
       status: "proved"
       zero_axioms: true
 
-    # --- Module 2: Contraction Mapping & Categorical Lenses (H3QM.Math.ContractionMapping) ---
-    - name: "H3QM.Math.discrete_contraction_8steps_bound"
-      informal_statement: "For any discrete initial distance bounded by M <= 2^24, 8 contraction steps reduce the metric distance to <= 1."
+    - name: "H3QM.Palomar.discrete_fixed_point_lock"
+      informal_statement: "When the metric residual between states x and y vanishes in integer space (x - y = 0), the state is uniquely locked in the fixed point x = y."
       proof_tactic: "omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.discrete_fixed_point_lock"
-      informal_statement: "When discrete integer residual vanishes (x - y = 0), the state locks into an invariant unique fixed point."
-      proof_tactic: "omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.h3qm_lawful_lens_putget"
-      informal_statement: "The identity proof-state bidirectional lens in Poly satisfies the PutGet observability law identically by definitional reflexivity."
-      proof_tactic: "rfl"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.h3qm_categorical_contraction_step8_eq_eps"
-      informal_statement: "The 8-fold composition of the topological contraction operator T(s) = (1/8)*s starting from unit perturbation s=1 evaluates identically to machine epsilon 2^(-24)."
-      proof_tactic: "norm_num"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.h3qm_equivalency_isomorphism"
-      informal_statement: "Under Cosmo Chou's single-valued equivalence axiom (A = B) ≃ (A ≃ B), the discrete arithmetic iterative path and the categorical operator composition are strictly isomorphic for all n and x."
-      proof_tactic: "induction n with rfl / rw"
-      status: "proved"
-      zero_axioms: true
-
-    # --- Module 3: Modulo 6 Prime Foliation (H3QM.Math.SieveFoliation) ---
-    - name: "H3QM.Math.prime_foliation_mod6"
-      informal_statement: "Every prime p >= 5 satisfies p = 1 (mod 6) or p = 5 (mod 6), proving that primes foliate along mod 6 helical attractors."
-      proof_tactic: "decide / dvd_trans / omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.twin_prime_axis_mod6"
-      informal_statement: "For any twin prime pair (p, p+2) with p >= 5, their midpoint (p + 1) is divisible by 6, proving symmetric lock along the 6k axis."
-      proof_tactic: "omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.twin_prime_mod6_residues"
-      informal_statement: "For any twin prime pair (p, p+2) with p >= 5, their modulo 6 residue classes are uniquely fixed to p = 5 (mod 6) and (p + 2) = 1 (mod 6)."
-      proof_tactic: "cases / omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.twin_prime_gap_two"
-      informal_statement: "The gap between twin prime candidates (p + 2) - p is strictly equal to 2."
-      proof_tactic: "omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.twin_prime_constant_local_factor_pos"
-      informal_statement: "For any prime factor p >= 3, the Hardy-Littlewood twin prime local Euler factor (1 - 1/(p - 1)^2) is strictly positive in natural arithmetic: (p - 1)^2 > 1."
-      proof_tactic: "nlinarith"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.twin_prime_base_cases"
-      informal_statement: "Constructive finite verification of the first six twin prime pairs: (3,5), (5,7), (11,13), (17,19), (29,31), (41,43)."
-      proof_tactic: "dsimp / omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.even_mod6_residues"
-      informal_statement: "Every even number 2n has remainder in {0, 2, 4} modulo 6."
-      proof_tactic: "omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.goldbach_mod6_coverage"
-      informal_statement: "Every even residue class r in {0, 2, 4} mod 6 is covered by the sum of elements from {1, 5} mod 6: 0 = 1 + 5, 2 = 1 + 1, 4 = 5 + 5."
-      proof_tactic: "cases / omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.singular_series_local_factor_ge_one"
-      informal_statement: "For any odd prime factor p >= 3, the local Euler factor (p - 1) / (p - 2) >= 1 in natural arithmetic, guaranteeing strict positivity of the singular series."
-      proof_tactic: "omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.goldbach_base_cases"
-      informal_statement: "Constructive finite verification that every even integer in [4, 20] is expressed as the sum of two primes, verified by definitional simplification."
-      proof_tactic: "dsimp / omega"
-      status: "proved"
-      zero_axioms: true
-
-    # --- Module 4: Vortex Tube & Navier-Stokes Regularization (H3QM.Physics) ---
-    - name: "H3QM.Physics.vorticity_finite_under_lattice_cutoff"
-      informal_statement: "Under vacuum lattice cutoff r_core >= 1, Kelvin circulation bounds the maximum vorticity from above, guaranteeing global non-explosion."
-      proof_tactic: "nlinarith / Nat.div_le_self"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Physics.knot_energy_discrete"
-      informal_statement: "When critical tension is reached and winding number n != 0, knot energy satisfies n^2 >= 1, binding energy into discrete topological solitons."
-    # --- Module 5: Fermat's Last Theorem & Topological Contradiction (H3QM.Math.FermatTopologicalWinding) ---
-    - name: "H3QM.Math.pythagorean_harmonic_closure_sample"
-      informal_statement: "At exponent n = 2, the Diophantine equation admits exact integer solutions on the flat 2-torus T^2 (3^2 + 4^2 = 5^2), achieving Exact 0 residual tension."
-      proof_tactic: "decide"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.integer_metric_gap"
-      informal_statement: "On the discrete integer lattice Z^3, any non-zero difference between two integers has magnitude at least 1: for all a b in Z, a != b implies |a - b| >= 1."
-      proof_tactic: "omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.fermat_genus_ge_one"
-      informal_statement: "For all n >= 3, the complex projective Fermat curve X^n + Y^n = Z^n has genus g(n) = (n - 1)(n - 2) / 2 >= 1, enforcing hyperbolic uniformization."
-      proof_tactic: "unfold fermat_curve_genus / omega"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.fractional_winding_not_integer"
-      informal_statement: "For any n >= 3 and any coprime phase parameter 1 <= k < n, the fractional winding w = k / n is strictly non-integer: not (is_topological_integer_winding w)."
-      proof_tactic: "div_pos / div_lt_one / linarith"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Math.fermat_topological_contradiction_law"
-      informal_statement: "Topological Integer Invariant Contradiction Law (n >= 3): Any non-trivial integer solution would simultaneously induce an integer topological winding by vacuum phase quantization and a fractional non-integer winding by curve holonomy, producing an impossible logical contradiction False."
-      proof_tactic: "exact h_frust h_quant"
       status: "proved"
       zero_axioms: true
 
   axioms_used: []  # Strictly zero additional axioms; 100% constructive and standard Lean 4 kernel.
 
-
-category_theory_framework:
-  paradigm: "Categorical Cybernetics & Lawful Lenses in Poly (Spivak, Hedges)"
-  equivalence_axiom: "(A = B) ≃ (A ≃ B)"
-  proof_digestibility_metric:
-    score: 1.00
-    grade: "A+"
-    evaluation: "Constructive zero-axiom closure with finite 8-step convergence; strictly eliminates combinatorial search explosion and restores the mathematical difficulty landscape."
-
-fields_medalists_regularization:
-  - medalist: "Terence Tao (2006)"
-    principle: "Dispersive PDE regularities, Wave packet energy bounds, and Proof Digestibility Index"
-  - medalist: "Hong Wang (2026)"
-    principle: "3D Kakeya Fourier Restriction Theorem in R^3 (bounded delta-tube overlap and grid reflection vanishing)"
-  - medalist: "Yu Deng (2026)"
-    principle: "Random Tensor Operator Damping Theorem (exponential damping on non-linear dispersive wave systems)"
-  - medalist: "Grigori Perelman (2006)"
-    principle: "Ricci Flow with Surgery and W-entropy monotonicity functional"
-  - medalist: "Alessio Figalli (2018) & Cédric Villani (2010)"
-    principle: "Monge-Kantorovich Optimal Transport and Wasserstein-1 geodesic metric"
-  - medalist: "Pierre Deligne (1978)"
-    principle: "Weil Conjectures and Frobenius spectral purity on algebraic varieties"
-  - medalist: "Peter Scholze (2018)"
-    principle: "Condensed Mathematics reconciling discrete integer lattices Z^3 with continuous Banach spaces"
-
-physical_applications:
-  unified_theory: "3D Continuous Vacuum Phonon Hydrodynamics & Equivalency Mathematics"
-  standard_model_parameters_eliminated: 19
-  constants_derived:
-    - name: "Fine-Structure Constant"
-      formula: "alpha^-1 = 4pi^3 + pi^2 + pi"
-      value: "137.03599908"
-    - name: "Proton-to-Electron Mass Ratio"
-      formula: "mu = 6pi^5"
-      value: "1836.15267"
-    - name: "Strong CP Phase"
-      formula: "theta_QCD = (1/2pi) oint grad P . dl mod 1"
-      value: "0.000000 (Exact 0)"
-
 informal_description: |
-  This formalization establishes the fundamental discrete contraction theorem and core mathematical-physical lemmas
-  of the H3QM (Harmonic Holographic Hydrodynamic Quantum Mechanics) framework.
-  
-  In 3D geometric manifold dynamics, topological contraction across three orthogonal spatial
-  degrees of freedom exhibits an intrinsic contraction ratio of kappa = 2^(-3) = 1/8 per discrete
-  relaxation step. This repository formally proves that within exactly eight discrete iterations,
-  the cumulative contraction factor contracts the initial unit domain by:
-  
-      Contraction^(8) = (2^(-3))^8 = 2^(-24) = 1 / 16,777,216.
-  
-  This exact rational value is algebraically identical to the 24-bit mantissa floor
-  (2^(-24) = 5.9604644775390625e-8).
-  
-  Consequently, this theorem proves that the residual observed in floating-point implementations
-  of 3D gradient flows at Step 8 is an analytical precision ceiling of IEEE 754 24-bit mantissa arithmetic,
-  rather than a defect of the underlying mathematics. Furthermore, when mapped into canonical
-  discrete integer sign dynamics sgn(·) in {-1, 0, +1}, the residual locks into an exact zero attractor
-  at Step 8, establishing constructive proof of finite-time algebraic convergence.
+  This formalization verifies the discrete contraction dynamics for iterative maps with contraction ratio kappa = 1/8
+  on rational and discrete metric spaces.
+
+  We formally prove that starting from a unit perturbation, eight iterations of the contraction map f(x) = (1/8)x produce:
+      f^(8)(1) = (1/8)^8 = (2^(-3))^8 = 2^(-24) = 1 / 16,777,216.
+
+  This rational value corresponds exactly to the IEEE 754 binary32 (single precision) unit roundoff (half-epsilon u = 2^(-24)).
+  When scaled by the precision factor 2^24, the scaled value equals exactly 1, and the discrete integer residual
+  floor(2^24 * f^(8)(1)) - 1 vanishes identically to exact 0.
+
+  Furthermore, on an integer metric space, for any initial discrete distance bounded by M <= 2^24, eight steps of factor-8
+  contraction reduce the distance to M / 8^8 <= 1. Combined with the integer metric gap property (-1 < x < 1 implies x = 0),
+  this proves that discrete contraction with vanishing residual locks the dynamical system into a unique fixed point.
 
 disclosures:
   ai_assistance:
     used: true
-    details: "Interactive Lean 4 tactic formatting assisted by Antigravity AI (Google DeepMind); all mathematical definitions, theorems, and proofs designed and validated by Cosmo Chou."
-  external_verification:
-    cap_script: "cap_verify_contraction.py"
-    execution_time_ms: 8.5
-    residual_check: "Exact 0"
-  related_zenodo_records:
-    - doi: "10.5281/zenodo.22667485"
-      title: "Restoring the Mathematical Difficulty Landscape: Why Terence Tao's Epistemological Crisis Requires a Topological Compass"
-    - doi: "10.5281/zenodo.22696793"
-      title: "The Five Core Properties of Hilbert Space and Quantum Ontology: Functional Analytic Foundations of the H3QM Vacuum Phonon Continuum"
+    details: "Interactive Lean 4 syntax formatting and Lake packaging assisted by Antigravity AI; all mathematical formulation and proofs by Cosmo Chou."
