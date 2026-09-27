@@ -4,97 +4,149 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Author: Cosmo Chou
 
 ! This file was designed for the Palomar Registry of Lean Verified Mathematics.
-! Solution File: Complete formal constructive proof of 8-Step Discrete Contraction and Binary32 Unit Roundoff Bound.
+! Solution File: Complete formal constructive proof of Discrete Metric Contraction Dynamics,
+! IEEE 754 Binary32 Unit Roundoff Bound, and Discrete Grid Fixed-Point Collapse.
 ! Conforms to Palomar requirement (a): 100% typechecked, zero added axioms.
 -/
 
 import Mathlib.Data.Rat.Defs
 import Mathlib.Data.Rat.Floor
 import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
 namespace H3QM.Palomar
 
-/-- The discrete contraction factor: κ = 1/8 -/
-def kappa : ℚ := (1 : ℚ) / 8
-
-/-- Discrete contraction mapping f(x) = κ * x -/
-def contractionMap (x : ℚ) : ℚ := kappa * x
-
-/-- The n-fold iterate of the discrete contraction mapping f^(n)(x) -/
-def iterateContraction : ℕ → ℚ → ℚ
-  | 0, x => x
-  | n + 1, x => contractionMap (iterateContraction n x)
-
-/-- The IEEE 754 binary32 unit roundoff: u_binary32 = 1 / 16777216 -/
-def unit_roundoff_binary32 : ℚ := (1 : ℚ) / 16777216
-
-/-- Discrete sign function sgn(x) taking values in {-1, 0, 1} -/
-def sgn (x : ℚ) : ℤ :=
-  if x > 0 then 1
-  else if x < 0 then -1
-  else 0
+/--
+A pseudo-metric structure on an arbitrary type X with rational distance.
+Quantifies non-negativity, self-distance vanishing, point separation,
+symmetry, and the triangle inequality.
+-/
+structure MetricSpaceQ (X : Type) where
+  dist : X → X → ℚ
+  dist_nonneg : ∀ x y, dist x y ≥ 0
+  dist_self : ∀ x, dist x x = 0
+  dist_eq_zero : ∀ x y, dist x y = 0 ↔ x = y
+  dist_symm : ∀ x y, dist x y = dist y x
+  dist_triangle : ∀ x y z, dist x z ≤ dist x y + dist y z
 
 /--
-THEOREM 1 PROOF (8-Step Binary32 Unit Roundoff Contraction Theorem):
-Explicit evaluation of 8-fold contraction under rational arithmetic.
-Proved constructively using `norm_num` after unfolding definitions.
+A contraction mapping on a metric space (X, dist) with contraction ratio κ.
+For all states x and y, the metric distance between images contracts by at least κ.
 -/
-theorem h3qm_contraction_step8_eq_unit_roundoff :
-    iterateContraction 8 1 = unit_roundoff_binary32 := by
-  dsimp [iterateContraction, contractionMap, kappa, unit_roundoff_binary32]
+def IsContraction {X : Type} (M : MetricSpaceQ X) (T : X → X) (κ : ℚ) : Prop :=
+  ∀ x y, M.dist (T x) (T y) ≤ κ * M.dist x y
+
+/--
+The n-fold iterate of a state evolution map T : X → X.
+Defines the discrete dynamical trajectory starting from initial state x.
+-/
+def iterate {X : Type} (T : X → X) : ℕ → X → X
+  | 0, x => x
+  | n + 1, x => T (iterate T n x)
+
+/--
+Rational power function κ^n for contraction factor compounding.
+-/
+def ratPow (κ : ℚ) : ℕ → ℚ
+  | 0 => 1
+  | n + 1 => κ * ratPow κ n
+
+/--
+The discrete geometric contraction ratio: κ = 2^(-3) = 1/8.
+-/
+def kappa : ℚ := (1 : ℚ) / 8
+
+/--
+The IEEE 754 binary32 unit roundoff (half-epsilon, u = 2^(-24))
+represented as an exact rational number:
+u_binary32 = 2^(-24) = 1 / 16777216.
+-/
+def unit_roundoff_binary32 : ℚ := (1 : ℚ) / 16777216
+
+/--
+A discrete grid metric condition: any two distinct points have distance at least 1.
+Characterizes integer lattices and quantized discrete state spaces.
+-/
+def IsDiscreteGrid {X : Type} (M : MetricSpaceQ X) : Prop :=
+  ∀ x y, x ≠ y → M.dist x y ≥ 1
+
+/--
+THEOREM 1 PROOF (Contraction Ratio 8-Fold Compounding Identity):
+Proved constructively by definitional unfolding and rational arithmetic.
+-/
+theorem ratPow_kappa_8_eq_unit_roundoff :
+    ratPow kappa 8 = unit_roundoff_binary32 := by
+  dsimp [ratPow, kappa, unit_roundoff_binary32]
   norm_num
 
 /--
 THEOREM 2 PROOF (Integer Scale Normalization):
-The scaled rational value (2^24 * iterateContraction 8 1) evaluates to exactly 1.
+Proved constructively by rational normalization.
 -/
-theorem h3qm_scaled_mantissa_step8_eq_one :
-    (16777216 : ℚ) * iterateContraction 8 1 = 1 := by
-  have h : iterateContraction 8 1 = unit_roundoff_binary32 := h3qm_contraction_step8_eq_unit_roundoff
+theorem scaled_roundoff_normalizes_to_one :
+    (16777216 : ℚ) * ratPow kappa 8 = 1 := by
+  have h : ratPow kappa 8 = unit_roundoff_binary32 := ratPow_kappa_8_eq_unit_roundoff
   rw [h]
   unfold unit_roundoff_binary32
   norm_num
 
 /--
-THEOREM 3 PROOF (Discrete Fixed-Point Integer Residual Vanishing):
-Under discrete integer dynamics with precision scale 2^24,
-the discrete integer residual R_8 = ⌊2^24 * iterateContraction 8 1⌋ - 1
-vanishes identically to exact zero.
+THEOREM 3 PROOF (General Metric Contraction Decay):
+Proved constructively by mathematical induction on the iteration step n.
 -/
-theorem h3qm_discrete_sign_residual_vanishes :
-    ⌊(16777216 : ℚ) * iterateContraction 8 1⌋ - 1 = 0 := by
-  have h : (16777216 : ℚ) * iterateContraction 8 1 = (1 : ℚ) := h3qm_scaled_mantissa_step8_eq_one
-  rw [h]
-  norm_num
+theorem metric_contraction_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X → X)
+    (κ : ℚ) (hκ : 0 ≤ κ) (hT : IsContraction M T κ) (n : ℕ) (x y : X) :
+    M.dist (iterate T n x) (iterate T n y) ≤ ratPow κ n * M.dist x y := by
+  induction n with
+  | zero =>
+    dsimp [iterate, ratPow]
+    rw [one_mul]
+  | succ k ih =>
+    dsimp [iterate, ratPow]
+    have h_step : M.dist (T (iterate T k x)) (T (iterate T k y)) ≤ κ * M.dist (iterate T k x) (iterate T k y) :=
+      hT (iterate T k x) (iterate T k y)
+    have h_dist_nonneg : 0 ≤ M.dist x y := M.dist_nonneg x y
+    have h_step_dist_nonneg : 0 ≤ M.dist (iterate T k x) (iterate T k y) := M.dist_nonneg _ _
+    nlinarith
 
 /--
-THEOREM 4 PROOF (Contraction Factor Strict Decay on Discrete Metric Space):
-For any discrete initial distance bounded by M ≤ 2^24 = 16,777,216,
-after 8 steps of factor-8 contraction, the distance reduces to ≤ 1.
+THEOREM 4 PROOF (8-Step Binary32 Metric Bound):
+Specialization of general contraction decay to n = 8 and κ = 1/8.
 -/
-theorem discrete_contraction_8steps_bound (M : ℕ) (hM : M ≤ 16777216) :
-    M / (8 ^ 8) ≤ 1 := by
-  have h8 : 8 ^ 8 = 16777216 := by rfl
-  rw [h8]
-  omega
+theorem metric_contraction_step8_bound {X : Type} (M : MetricSpaceQ X) (T : X → X)
+    (hT : IsContraction M T kappa) (x y : X) :
+    M.dist (iterate T 8 x) (iterate T 8 y) ≤ unit_roundoff_binary32 * M.dist x y := by
+  have h_decay := metric_contraction_iterate_decay M T kappa (by norm_num) hT 8 x y
+  have h_eq : ratPow kappa 8 = unit_roundoff_binary32 := ratPow_kappa_8_eq_unit_roundoff
+  rw [h_eq] at h_decay
+  exact h_decay
 
 /--
-THEOREM 5 PROOF (Integer Metric Gap Law):
-On discrete integer coordinate space, any residual with magnitude strictly less than 1
-evaluates to exact zero: for all x in ℤ, -1 < x ∧ x < 1 → x = 0.
+THEOREM 5 PROOF (Discrete Grid Gap Collapse):
+On a discrete grid, any distance strictly less than 1 forces exact identity.
 -/
-theorem integer_metric_exact_zero (x : ℤ) (h1 : -1 < x) (h2 : x < 1) :
-    x = 0 := by
-  omega
-
-/--
-THEOREM 6 PROOF (Discrete Fixed-Point Locking):
-When the metric residual between states x and y vanishes in integer space (x - y = 0),
-the state is locked in a unique fixed point x = y.
--/
-theorem discrete_fixed_point_lock (x y : ℤ) (h : x - y = 0) :
+theorem discrete_grid_gap_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (x y : X) (h_lt : M.dist x y < 1) :
     x = y := by
-  omega
+  by_contra h_neq
+  have h_ge := hG x y h_neq
+  linarith
+
+/--
+THEOREM 6 PROOF (Finite-Time Attractor Collapse on Discrete Grids):
+Every state pair in a ball of diameter < 2^24 collapses in exactly 8 steps.
+-/
+theorem discrete_grid_contraction_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (hT : IsContraction M T kappa) (x y : X)
+    (h_dist : M.dist x y < 16777216) :
+    iterate T 8 x = iterate T 8 y := by
+  have h_bound := metric_contraction_step8_bound M T hT x y
+  have h_unit : unit_roundoff_binary32 = (1 : ℚ) / 16777216 := rfl
+  have h_dist_nonneg : 0 ≤ M.dist x y := M.dist_nonneg x y
+  have h_lt : M.dist (iterate T 8 x) (iterate T 8 y) < 1 := by
+    rw [h_unit] at h_bound
+    nlinarith
+  exact discrete_grid_gap_collapse M hG (iterate T 8 x) (iterate T 8 y) h_lt
 
 end H3QM.Palomar

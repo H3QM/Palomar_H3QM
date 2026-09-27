@@ -2,12 +2,12 @@
   "challenge_module": "Challenge",
   "solution_module": "Solution",
   "theorem_names": [
-    "H3QM.Palomar.h3qm_contraction_step8_eq_unit_roundoff",
-    "H3QM.Palomar.h3qm_scaled_mantissa_step8_eq_one",
-    "H3QM.Palomar.h3qm_discrete_sign_residual_vanishes",
-    "H3QM.Palomar.discrete_contraction_8steps_bound",
-    "H3QM.Palomar.integer_metric_exact_zero",
-    "H3QM.Palomar.discrete_fixed_point_lock"
+    "H3QM.Palomar.ratPow_kappa_8_eq_unit_roundoff",
+    "H3QM.Palomar.scaled_roundoff_normalizes_to_one",
+    "H3QM.Palomar.metric_contraction_iterate_decay",
+    "H3QM.Palomar.metric_contraction_step8_bound",
+    "H3QM.Palomar.discrete_grid_gap_collapse",
+    "H3QM.Palomar.discrete_grid_contraction_collapse"
   ],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],

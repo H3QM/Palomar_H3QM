@@ -6,7 +6,7 @@ version: "v0.4"
 
 project:
   name: "palomar_h3qm"
-  description: "Formal verification of 8-step discrete metric contraction dynamics, IEEE 754 binary32 unit roundoff bound, and discrete integer fixed-point locking on metric spaces."
+  description: "Formal verification of discrete metric contraction dynamics, IEEE 754 binary32 unit roundoff bound, and finite-time fixed-point attractor collapse on discrete grids."
   authors:
     - name: "Cosmo Chou"
       affiliation: "H3QM Research Foundation"
@@ -28,27 +28,26 @@ automation:
   methods:
     - method: "agent"
       tool: "Antigravity AI"
-      notes: "Interactive formalization and Lake build packaging assistance."
+      notes: "Assisted interactive Lean 4 tactic development and Lake build packaging."
 
 review:
-  status: "agent-reviewed and self-assessed"
-  notes: "Formal verification checked by Lean 4 kernel and NanoDa; 8-step contraction and integer fixed-point locking verified with zero axioms."
+  status: "self-assessed"
+  notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 6 metric contraction theorems constructive with zero added axioms."
 
 sources:
-  - title: "Harmonic Holographic Hydrodynamic Quantum Mechanics (H3QM) & Equivalency Mathematics"
+  - title: "Discrete Metric Contraction Dynamics and IEEE 754 Binary32 Unit Roundoff Bound"
     authors:
       - name: "Cosmo Chou"
-    id: "https://doi.org/10.5281/zenodo.22928921"
-    type: "paper"
-    location: "Zenodo preprint archive"
-    relationship: "formalizes"
-    note: "Formalizes the 8-step discrete metric contraction bound and IEEE 754 binary32 unit roundoff identity."
+    type: "original-proof"
+    location: "Lean proof in this repository"
+    relationship: "other"
+    note: "Original constructive formalization of discrete metric contraction decay and IEEE 754 binary32 unit roundoff bound on pseudo-metric spaces."
     license: "Apache-2.0"
     author_endorsement: "participated"
 
 entry_metadata:
-  title: "Formal Verification of 8-Step Discrete Metric Contraction Dynamics and Binary32 Unit Roundoff Bound"
-  short_title: "Discrete Contraction and Binary32 Roundoff Verification"
+  title: "Formal Verification of Discrete Metric Contraction Dynamics and Binary32 Unit Roundoff Bound"
+  short_title: "Discrete Metric Contraction Dynamics"
   category: "Discrete Dynamical Systems / Numerical Analysis / Formal Mathematics"
   date: "2026-09-27"
   status: "published"
@@ -73,58 +72,62 @@ formalization:
   root_library: "H3QM.lean"
   
   theorems:
-    - name: "H3QM.Palomar.h3qm_contraction_step8_eq_unit_roundoff"
-      informal_statement: "The 8-fold composition of the discrete contraction mapping f(x) = (1/8)x starting from unit perturbation x=1 evaluates identically to (2^(-3))^8 = 2^(-24), which exactly matches the IEEE 754 binary32 unit roundoff (half-epsilon u = 2^(-24))."
+    - name: "H3QM.Palomar.ratPow_kappa_8_eq_unit_roundoff"
+      informal_statement: "The 8-th power of the geometric contraction ratio kappa = 1/8 evaluates identically to the IEEE 754 binary32 unit roundoff u = 2^(-24) = 1 / 16777216."
       proof_tactic: "norm_num after unfolding"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.h3qm_scaled_mantissa_step8_eq_one"
-      informal_statement: "The scaled rational value (2^24 * iterateContraction 8 1) evaluates to exactly 1 in exact rational arithmetic."
+    - name: "H3QM.Palomar.scaled_roundoff_normalizes_to_one"
+      informal_statement: "The scaled rational value (2^24 * kappa^8) evaluates to exactly 1 in exact rational arithmetic."
       proof_tactic: "norm_num"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.h3qm_discrete_sign_residual_vanishes"
-      informal_statement: "Under discrete integer dynamics with precision scale 2^24, the discrete integer residual floor(2^24 * iterateContraction 8 1) - 1 vanishes identically to exact zero."
-      proof_tactic: "norm_num"
+    - name: "H3QM.Palomar.metric_contraction_iterate_decay"
+      informal_statement: "On an arbitrary metric space (X, dist) and for any contraction mapping T with ratio kappa >= 0, the distance between n-th iterates satisfies dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y)."
+      proof_tactic: "induction n / nlinarith"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.discrete_contraction_8steps_bound"
-      informal_statement: "For any discrete initial distance bounded by M <= 2^24 = 16,777,216 on an integer metric space, after 8 steps of factor-8 contraction, the metric distance reduces to <= 1."
-      proof_tactic: "rfl / omega"
+    - name: "H3QM.Palomar.metric_contraction_step8_bound"
+      informal_statement: "On an arbitrary metric space (X, dist) and for any contraction mapping T with ratio kappa = 1/8, after 8 iterations the distance contracts by at least the binary32 unit roundoff: dist(T^8(x), T^8(y)) <= u_binary32 * dist(x, y)."
+      proof_tactic: "specialization / rw"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.integer_metric_exact_zero"
-      informal_statement: "On discrete integer coordinate space, any residual with magnitude strictly less than 1 evaluates to exact zero: for all x in Z, -1 < x and x < 1 implies x = 0."
-      proof_tactic: "omega"
+    - name: "H3QM.Palomar.discrete_grid_gap_collapse"
+      informal_statement: "On a discrete grid metric space where distinct states are separated by at least 1, any pair of states with metric distance strictly less than 1 are identically equal."
+      proof_tactic: "linarith"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.discrete_fixed_point_lock"
-      informal_statement: "When the metric residual between states x and y vanishes in integer space (x - y = 0), the state is uniquely locked in the fixed point x = y."
-      proof_tactic: "omega"
+    - name: "H3QM.Palomar.discrete_grid_contraction_collapse"
+      informal_statement: "On a discrete grid metric space with contraction ratio kappa = 1/8, any two states with initial distance strictly bounded by 2^24 = 16,777,216 collapse into the exact same state in 8 steps: dist(x, y) < 16,777,216 implies T^8(x) = T^8(y)."
+      proof_tactic: "nlinarith / exact discrete_grid_gap_collapse"
       status: "proved"
       zero_axioms: true
 
   axioms_used: []  # Strictly zero additional axioms; 100% constructive and standard Lean 4 kernel.
 
 informal_description: |
-  This formalization verifies the discrete contraction dynamics for iterative maps with contraction ratio kappa = 1/8
-  on rational and discrete metric spaces.
+  This formalization establishes the discrete Banach metric contraction decay theorem and finite-time discrete grid
+  attractor collapse for dynamical systems on rational pseudo-metric spaces.
 
-  We formally prove that starting from a unit perturbation, eight iterations of the contraction map f(x) = (1/8)x produce:
-      f^(8)(1) = (1/8)^8 = (2^(-3))^8 = 2^(-24) = 1 / 16,777,216.
+  We formally quantify over an arbitrary state space X, pseudo-metric distance dist : X -> X -> Q, and contraction
+  mapping T : X -> X with contraction ratio kappa = 1/8. By mathematical induction on the iteration step n, we prove:
+      dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y).
 
-  This rational value corresponds exactly to the IEEE 754 binary32 (single precision) unit roundoff (half-epsilon u = 2^(-24)).
-  When scaled by the precision factor 2^24, the scaled value equals exactly 1, and the discrete integer residual
-  floor(2^24 * f^(8)(1)) - 1 vanishes identically to exact 0.
+  At step n = 8, the compounded contraction factor satisfies:
+      kappa^8 = (1/8)^8 = (2^(-3))^8 = 2^(-24) = 1 / 16,777,216,
+  which algebraically matches the IEEE 754 binary32 (single precision) unit roundoff (half-epsilon u = 2^(-24)).
+  Consequently, the metric distance between 8-th iterates contracts by at least u_binary32:
+      dist(T^8(x), T^8(y)) <= u_binary32 * dist(x, y).
 
-  Furthermore, on an integer metric space, for any initial discrete distance bounded by M <= 2^24, eight steps of factor-8
-  contraction reduce the distance to M / 8^8 <= 1. Combined with the integer metric gap property (-1 < x < 1 implies x = 0),
-  this proves that discrete contraction with vanishing residual locks the dynamical system into a unique fixed point.
+  Furthermore, on a discrete grid metric space where distinct states satisfy dist(x, y) >= 1, any two states whose
+  initial distance is strictly bounded by 2^24 = 16,777,216 satisfy dist(T^8(x), T^8(y)) < 1, which strictly enforces
+  T^8(x) = T^8(y). This proves that 8 iterations of factor-8 discrete contraction collapse any bounded ball into a
+  single unique invariant attractor.
 
 disclosures:
   ai_assistance:

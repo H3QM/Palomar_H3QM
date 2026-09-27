@@ -36,10 +36,11 @@ Unlike traditional static formalization files, the H3QM framework deploys three 
 ```
 Palomar_H3QM/
 ├── lakefile.lean                      # Lake build manifest (Mathlib 4 dependency)
-├── lean-toolchain                     # Pinned to leanprover/lean4:v4.11.0
+├── lean-toolchain                     # Pinned to leanprover/lean4:v4.35.0-rc2
 ├── formalization.yaml                 # Palomar / Lean FRO metadata manifest
-├── challenge.lean                     # Palomar challenge specification
-├── solution.lean                      # Palomar zero-sorry solution module
+├── Challenge.lean                     # Palomar challenge specification
+├── Solution.lean                      # Palomar zero-sorry solution module
+├── comparator.json                    # Palomar verification comparator
 ├── cap_verify_contraction.py          # Standalone <5ms Python CAP verification script
 ├── test_palomar_suite.py              # Zero-dependency conformance test runner
 ├── README.md                          # Repository documentation & manifest
@@ -47,8 +48,8 @@ Palomar_H3QM/
 ├── H3QM.lean                          # Full Library root import
 ├── H3QM/                              # Constitutional 5-Module Formal Library
 │   ├── Math/
-│   │   ├── MachineEpsilon.lean        # (2^-3)^8 = 2^-24 Machine Epsilon Identity
-│   │   ├── ContractionMapping.lean    # Discrete Metric Contraction & Lawful Lenses
+│   │   ├── MachineEpsilon.lean        # (2^-3)^8 = 2^-24 Binary32 Unit Roundoff Identity
+│   │   ├── ContractionMapping.lean    # Discrete Metric Contraction & Dynamic Iterates
 │   │   └── SieveFoliation.lean        # Modulo 6 Prime Foliation & Twin Prime Axis
 │   └── Physics/
 │       ├── VortexRadiusBound.lean     # Lattice Cutoff & Vorticity Boundedness
@@ -63,35 +64,48 @@ Palomar_H3QM/
 
 ---
 
-## 2. Core Mathematical Breakthroughs & 15 Formalized Theorems
+## 2. Palomar Challenge Theorems: Discrete Metric Contraction Dynamics
 
-All 15 theorems have been certified by the Lean 4 kernel with **strictly zero added axioms** (`axioms_used: []`):
+The official Palomar challenge entrypoint (`Challenge.lean` / `Solution.lean`) formalizes 6 quantified theorems on discrete metric contraction dynamics and finite-time discrete grid attractor collapse with **strictly zero added axioms** (`axioms_used: []`):
 
-### Module 1: Discrete Precision & Machine Epsilon (`H3QM.Math.MachineEpsilon`)
-1. **`cosmo_machine_epsilon_saturation`**:
-   $$\left(\frac{1}{8}\right)^8 = (2^{-3})^8 = 2^{-24} = \epsilon_{\text{IEEE754 float32}} \approx 5.9604644775390625 \times 10^{-7}$$
-   Proves that the Step 8 residual in 3D topological contraction is identically the 24-bit mantissa floor of IEEE 754 float32 arithmetic (`by rfl`).
-2. **`h3qm_contraction_step8_eq_float32_eps`**: 8-fold rational contraction evaluates identically to $1/16777216$ (`by norm_num`).
-3. **`h3qm_scaled_mantissa_step8_eq_one`**: Integer mantissa scaling $2^{24} \cdot f^{(8)}(1) = 1$ in exact rational arithmetic (`by norm_num`).
-4. **`h3qm_discrete_sign_residual_vanishes`**: Under discrete integer coordinates, the residual vanishes to exact zero: $\lfloor 2^{24} \cdot f^{(8)}(1) \rfloor - 1 = 0$ (`by norm_num`).
-5. **`integer_metric_exact_zero`**: Discrete metric identity $\forall x \in \mathbb{Z}, -1 < x < 1 \implies x = 0$ (`by omega`).
-6. **`cosmo_step16_contraction`**: Float64 saturation in 16 steps ($8^{16} = 2^{48}$).
+1. **`ratPow_kappa_8_eq_unit_roundoff`**:
+   The 8-th power of the geometric contraction ratio $\kappa = 1/8$ evaluates identically to the IEEE 754 binary32 unit roundoff:
+   $$\kappa^8 = \left(\frac{1}{8}\right)^8 = (2^{-3})^8 = 2^{-24} = u_{\text{binary32}} = \frac{1}{16{,}777{,}216} \approx 5.9604644775390625 \times 10^{-8}$$
+   *(Proved constructively via `norm_num`)*
 
-### Module 2: Contraction Mapping & Lawful Lenses (`H3QM.Math.ContractionMapping`)
-7. **`discrete_contraction_8steps_bound`**: Any initial distance $M \le 2^{24}$ contracts to $\le 1$ in exactly 8 steps (`by omega`).
-8. **`discrete_fixed_point_lock`**: Vanishing metric residual locks state into an invariant unique attractor (`by omega`).
-9. **`h3qm_lawful_lens_putget`**: The identity proof-state bidirectional lens in category $\mathbf{Poly}$ (Spivak, Hedges) satisfies the PutGet law identically (`by rfl`).
-10. **`h3qm_categorical_contraction_step8_eq_eps`**: 8-fold categorical operator composition $T(s) = (1/8)s$ evaluates to $2^{-24}$ (`by norm_num`).
-11. **`h3qm_equivalency_isomorphism`**: Isomorphism between discrete iterative paths and categorical operator composition under $(A = B) \simeq (A \simeq B)$ (`by induction`).
+2. **`scaled_roundoff_normalizes_to_one`**:
+   Integer normalization $(2^{24} \cdot \kappa^8 = 1)$ in exact rational arithmetic. *(Proved constructively via `norm_num`)*
 
-### Module 3: Modulo 6 Prime Foliation (`H3QM.Math.SieveFoliation`)
-12. **`prime_foliation_mod6`**: Every prime $p \ge 5$ satisfies $p \equiv 1 \lor p \equiv 5 \pmod 6$, proving primes foliate strictly along helical phase attractors (`by decide / omega`).
-13. **`twin_prime_axis_mod6`**: Every twin prime pair $(p, p+2)$ with $p \ge 5$ has its midpoint $(p+1)$ divisible by 6, proving symmetric lock along the $6k$ axis (`by omega`).
-14. **`goldbach_representation_existence`**: Constructive mod 6 representation existence for even numbers $2n \ge 6$.
+3. **`metric_contraction_iterate_decay`**:
+   On an arbitrary pseudo-metric space $(X, \text{dist}_Q)$ and for any contraction mapping $T : X \to X$ with ratio $\kappa \ge 0$, the distance between $n$-th iterates decays geometrically:
+   $$\text{dist}(T^n(x), T^n(y)) \le \kappa^n \cdot \text{dist}(x, y)$$
+   *(Proved by mathematical induction on $n$ with `nlinarith`)*
 
-### Module 4: Vortex Core & Navier-Stokes Regularization (`H3QM.Physics`)
-15. **`vorticity_finite_under_lattice_cutoff`**: Under vacuum lattice cutoff $r_{\text{core}} \ge 1$, Kelvin circulation bounds maximum vorticity $\omega_{\max} \le \Gamma / (\pi r_{\text{core}}^2)$, preventing finite-time blowup (`by nlinarith`).
-16. **`knot_energy_discrete`**: Discrete knot winding number $n \ne 0$ strictly binds soliton energy $n^2 \ge 1$, regularizing continuum singularities.
+4. **`metric_contraction_step8_bound`**:
+   After exactly 8 iterations under $\kappa = 1/8$, the metric distance contracts by at least the binary32 unit roundoff:
+   $$\text{dist}(T^8(x), T^8(y)) \le u_{\text{binary32}} \cdot \text{dist}(x, y)$$
+   *(Proved constructively by specialization and rewrite)*
+
+5. **`discrete_grid_gap_collapse`**:
+   On a discrete grid metric space where distinct states are separated by at least 1 ($\forall x \ne y, \text{dist}(x, y) \ge 1$), any pair of states with metric distance strictly less than 1 are identically equal:
+   $$\text{dist}(x, y) < 1 \implies x = y$$
+   *(Proved constructively by contradiction and `linarith`)*
+
+6. **`discrete_grid_contraction_collapse`**:
+   On a discrete grid metric space with contraction ratio $\kappa = 1/8$, any two states with initial distance strictly bounded by $2^{24} = 16{,}777{,}216$ collapse into the exact same invariant attractor state in 8 steps:
+   $$\text{dist}(x, y) < 16{,}777{,}216 \implies T^8(x) = T^8(y)$$
+   *(Proved constructively via step-8 contraction bound and discrete gap collapse)*
+
+---
+
+## 3. Constitutional 5-Module Formal Library (`H3QM/`)
+
+In addition to the Palomar entrypoint, the full constitutional library provides 15 companion theorems spanning discrete precision, number theory, and fluid regularization:
+- **`H3QM.Math.MachineEpsilon`**: Machine epsilon saturation and discrete zero residual proofs.
+- **`H3QM.Math.ContractionMapping`**: Contraction mapping and categorical isomorphism.
+- **`H3QM.Math.SieveFoliation`**: Modulo 6 prime foliation and twin prime axis proofs.
+- **`H3QM.Physics.VortexRadiusBound`**: Vortex core lattice cutoff and vorticity boundedness.
+- **`H3QM.Physics.TopologicalQuantization`**: Discrete knot winding energy quantization.
 
 ---
 

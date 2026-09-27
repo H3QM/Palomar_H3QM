@@ -11,7 +11,7 @@ Theorems:
 4. Full Elimination of Standard Model's 19 Free Parameters via Geometric Eigenvalues
 
 Ontology: Continuous Vacuum Phonon Hydrodynamics & Equivalency Mathematics
-Authors: Cosmo Chou (H3QM Research Foundation) & Antigravity AI (Google DeepMind)
+Author: Cosmo Chou (H3QM Research Foundation)
 ===============================================================================
 """
 

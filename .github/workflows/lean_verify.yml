@@ -33,7 +33,7 @@ jobs:
 
       - name: Typecheck Palomar Solution Module
         run: |
-          lake env lean solution.lean
+          lake env lean Solution.lean
 
       - name: Typecheck Constitutional H3QM Root Library
         run: |

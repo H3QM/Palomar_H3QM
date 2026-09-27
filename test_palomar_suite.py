@@ -55,12 +55,12 @@ def test_metadata_yaml():
     
     # Check core theorems in metadata
     theorems_to_check = [
-        "h3qm_contraction_step8_eq_unit_roundoff",
-        "h3qm_scaled_mantissa_step8_eq_one",
-        "h3qm_discrete_sign_residual_vanishes",
-        "discrete_contraction_8steps_bound",
-        "integer_metric_exact_zero",
-        "discrete_fixed_point_lock"
+        "ratPow_kappa_8_eq_unit_roundoff",
+        "scaled_roundoff_normalizes_to_one",
+        "metric_contraction_iterate_decay",
+        "metric_contraction_step8_bound",
+        "discrete_grid_gap_collapse",
+        "discrete_grid_contraction_collapse"
     ]
     for thm in theorems_to_check:
         assert thm in content, f"Missing theorem in formalization.yaml: {thm}"
@@ -68,7 +68,7 @@ def test_metadata_yaml():
     print("  --> formalization.yaml is 100% valid and compliant with Palomar & Lean FRO schema.")
 
 def test_lean_source_files():
-    print("\n[TEST 2/5] Inspecting Lean 4 Source Files (solution.lean & H3QM 5-module library)...")
+    print("\n[TEST 2/5] Inspecting Lean 4 Source Files (Solution.lean & H3QM 5-module library)...")
     challenge_path = ROOT_DIR / "Challenge.lean"
     solution_path = ROOT_DIR / "Solution.lean"
     h3qm_root = ROOT_DIR / "H3QM.lean"
@@ -84,16 +84,16 @@ def test_lean_source_files():
     
     # 1. Check Palomar challenge/solution theorems
     palomar_theorems = [
-        "h3qm_contraction_step8_eq_unit_roundoff",
-        "h3qm_scaled_mantissa_step8_eq_one",
-        "h3qm_discrete_sign_residual_vanishes",
-        "discrete_contraction_8steps_bound",
-        "integer_metric_exact_zero",
-        "discrete_fixed_point_lock"
+        "ratPow_kappa_8_eq_unit_roundoff",
+        "scaled_roundoff_normalizes_to_one",
+        "metric_contraction_iterate_decay",
+        "metric_contraction_step8_bound",
+        "discrete_grid_gap_collapse",
+        "discrete_grid_contraction_collapse"
     ]
     for thm_name in palomar_theorems:
-        assert f"theorem {thm_name}" in challenge_content, f"Theorem {thm_name} missing in challenge.lean"
-        assert f"theorem {thm_name}" in solution_content, f"Theorem {thm_name} missing in solution.lean"
+        assert f"theorem {thm_name}" in challenge_content, f"Theorem {thm_name} missing in Challenge.lean"
+        assert f"theorem {thm_name}" in solution_content, f"Theorem {thm_name} missing in Solution.lean"
     
     # 2. Check all Lean files in H3QM/ library
     all_lean_files = list(h3qm_dir.rglob("*.lean")) + [h3qm_root, solution_path]
@@ -146,7 +146,7 @@ def test_constructive_cap_bridge():
     assert "CAP STATUS: ALL THEOREMS, PHYSICAL CONSTANTS & 19 PARAMETERS VERIFIED" in res.stdout
     print("  --> CAP Engine validated algebraic identity, exact zero residual, physical constants, and 19 parameters successfully.")
 
-def test_categorical_cybernetics_lens():
+def test_discrete_metric_contraction_and_collapse():
     print("\n[TEST 5/5] Verifying 8-Step Discrete Metric Contraction & Fixed-Point Locking...")
     from fractions import Fraction
     
@@ -185,7 +185,7 @@ def main():
     test_lean_source_files()
     test_lake_and_toolchain()
     test_constructive_cap_bridge()
-    test_categorical_cybernetics_lens()
+    test_discrete_metric_contraction_and_collapse()
     
     print("\n" + "=" * 80)
     print("  ALL 5/5 SUITE TESTS PASSED: PALOMAR FULL-MERGE PACKAGE 100% VERIFIED")
