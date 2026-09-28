@@ -1,3 +1,9 @@
+module
+
+public import Mathlib.Data.Nat.Defs
+
+public section
+
 /-
   Copyright (c) 2026 Cosmo Chou and H3QM Research Foundation. All rights reserved.
   Released under Apache 2.0 license as described in the file LICENSE.
@@ -7,7 +13,7 @@
   Conforms to: Lean FRO / Palomar Verification Standard (Zero Extra Axioms)
 -/
 
-import Mathlib.Data.Nat.Defs
+
 
 namespace H3QM.Math
 
@@ -194,3 +200,5 @@ theorem twin_prime_base_cases :
 
 end H3QM.Math
 
+
+end

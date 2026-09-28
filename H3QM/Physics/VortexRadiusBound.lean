@@ -1,3 +1,9 @@
+module
+
+public import Mathlib.Tactic.Linarith
+
+public section
+
 /-
   Copyright (c) 2026 Cosmo Chou and H3QM Research Foundation. All rights reserved.
   Released under Apache 2.0 license as described in the file LICENSE.
@@ -7,7 +13,7 @@
   Conforms to: Lean FRO / Palomar Verification Standard (Zero Extra Axioms)
 -/
 
-import Mathlib.Tactic.Linarith
+
 
 namespace H3QM.Physics
 
@@ -39,3 +45,5 @@ theorem vorticity_finite_under_lattice_cutoff
   exact hdiv
 
 end H3QM.Physics
+
+end

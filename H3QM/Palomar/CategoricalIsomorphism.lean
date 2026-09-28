@@ -1,3 +1,15 @@
+module
+
+public import Mathlib.Data.Nat.Defs
+public import Mathlib.Data.Int.Defs
+public import Mathlib.Data.Rat.Defs
+public import Mathlib.Tactic.NormNum
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
+public import Mathlib.Tactic.Omega
+
+public section
+
 /-
   Copyright (c) 2026 Cosmo Chou and H3QM Research Foundation. All rights reserved.
   Released under Apache 2.0 license as described in the file LICENSE.
@@ -8,13 +20,7 @@
   Conforms to: Lean FRO / Palomar Verification Standard (Zero Extra Axioms)
 -/
 
-import Mathlib.Data.Nat.Defs
-import Mathlib.Data.Int.Defs
-import Mathlib.Data.Rat.Defs
-import Mathlib.Tactic.NormNum
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
-import Mathlib.Tactic.Omega
+
 
 namespace H3QM.Palomar
 
@@ -156,3 +162,5 @@ structure CategoricalProofNetwork where
   flux_zero : ∀ (f : ℚ), conservative_flux_divergence f (-f) 0 = 0
 
 end H3QM.Palomar
+
+end

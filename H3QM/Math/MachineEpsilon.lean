@@ -1,3 +1,11 @@
+module
+
+public import Mathlib.Data.Rat.Defs
+public import Mathlib.Data.Rat.Floor
+public import Mathlib.Tactic.NormNum
+
+public section
+
 /-
   Copyright (c) 2026 Cosmo Chou and H3QM Research Foundation. All rights reserved.
   Released under Apache 2.0 license as described in the file LICENSE.
@@ -7,9 +15,7 @@
   Conforms to: Lean FRO / Palomar Verification Standard (Zero Extra Axioms)
 -/
 
-import Mathlib.Data.Rat.Defs
-import Mathlib.Data.Rat.Floor
-import Mathlib.Tactic.NormNum
+
 
 namespace H3QM.Math
 
@@ -100,3 +106,5 @@ theorem h3qm_discrete_sign_residual_vanishes :
   norm_num
 
 end H3QM.Math
+
+end

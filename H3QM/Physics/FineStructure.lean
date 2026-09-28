@@ -1,3 +1,10 @@
+module
+
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
+
+public section
+
 /-
   Copyright (c) 2026 Cosmo Chou and H3QM Research Foundation. All rights reserved.
   Released under Apache 2.0 license as described in the file LICENSE.
@@ -7,8 +14,7 @@
   Conforms to: Lean FRO / Palomar Verification Standard (Zero Extra Axioms)
 -/
 
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
+
 
 namespace H3QM.Physics
 
@@ -61,3 +67,5 @@ structure FineStructureAlgebraicClosure where
   discrete_8step_saturation : (contraction_modulus : ℚ) ^ 8 = (1 : ℚ) / 16777216
 
 end H3QM.Physics
+
+end

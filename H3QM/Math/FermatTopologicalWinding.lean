@@ -1,3 +1,14 @@
+module
+
+public import Mathlib.Data.Nat.Defs
+public import Mathlib.Data.Int.Defs
+public import Mathlib.Data.Rat.Defs
+public import Mathlib.Tactic.NormNum
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
+
+public section
+
 /-
   Copyright (c) 2026 Cosmo Chou and H3QM Research Foundation. All rights reserved.
   Released under Apache 2.0 license as described in the file LICENSE.
@@ -8,12 +19,7 @@
   Conforms to: Lean FRO / Palomar Verification Standard (Zero Extra Axioms)
 -/
 
-import Mathlib.Data.Nat.Defs
-import Mathlib.Data.Int.Defs
-import Mathlib.Data.Rat.Defs
-import Mathlib.Tactic.NormNum
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
+
 
 namespace H3QM.Math
 
@@ -142,3 +148,5 @@ structure FermatTopologicalWinding where
   contradiction_closed : ∀ (w : ℚ), is_topological_integer_winding w → ¬ is_topological_integer_winding w → False
 
 end H3QM.Math
+
+end

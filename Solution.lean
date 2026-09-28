@@ -1,3 +1,13 @@
+module
+
+public import Mathlib.Data.Rat.Defs
+public import Mathlib.Data.Rat.Floor
+public import Mathlib.Tactic.NormNum
+public import Mathlib.Tactic.Linarith
+public import Mathlib.Tactic.Ring
+
+public section
+
 /-
 Copyright (c) 2026 Cosmo Chou. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
@@ -9,11 +19,7 @@ Author: Cosmo Chou
 ! Conforms to Palomar requirement (a): 100% typechecked, zero added axioms.
 -/
 
-import Mathlib.Data.Rat.Defs
-import Mathlib.Data.Rat.Floor
-import Mathlib.Tactic.NormNum
-import Mathlib.Tactic.Linarith
-import Mathlib.Tactic.Ring
+
 
 namespace H3QM.Palomar
 
@@ -217,3 +223,5 @@ theorem discrete_grid_contraction_unique_fixed_point {X : Type} (M : MetricSpace
   exact h_collapse
 
 end H3QM.Palomar
+
+end
