@@ -10,23 +10,26 @@
 
 **Author**: Cosmo Chou (Independent Researcher, `cosmo@h3qm.org`, ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406))  
 **Classification**: Mathematics / Dynamical Systems (`math.DS`), Numerical Analysis (`math.NA`), Logic in Computer Science (`cs.LO`)  
-**MSC 2020**: `37C25` (Fixed points and periodic points), `65G50` (Roundoff error), `68V15` (Theorem proving and formal verification)
+**MSC 2020**: `37C25` (Fixed points and periodic points), `65G50` (Roundoff error), `68V15` (Theorem proving and formal verification)  
+**Primary Formalized Source**: Cosmo Chou, *Discrete Metric Contraction Dynamics and IEEE 754 Binary32 Machine Roundoff Bounds*, Zenodo (2026), [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921).
 
 ---
 
 ## 1. Overview & Research Scope
 
-This repository provides a machine-checked, constructive formalization in **Lean 4** of discrete metric contraction dynamics, machine-precision roundoff thresholds, finite-time orbit coalescence, and invariant attractor collapse on separated rational metric spaces.
+This repository provides a machine-checked, constructive formalization in **Lean 4** of the discrete metric contraction dynamics, machine roundoff saturation bounds, finite-time orbit coalescence, and invariant attractor collapse published in Chou (2026, [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921)).
 
 All 8 core theorems evaluated by the Palomar Comparator are proved constructively with **strictly zero added axioms** (`axioms_used: []`) and zero `sorry` placeholders, verified by both the Lean 4 kernel and the independent NanoDa checker.
 
 ### Literature Foundations
-1. **Stefan Banach (1922)**: *Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales*, Fundamenta Mathematicae, Vol. 3, pp. 133–181. (Classical continuous contraction mapping principle).
-2. **IEEE Computer Society (2008)**: *IEEE Standard for Floating-Point Arithmetic*, IEEE Std 754-2008. (Definition of binary32 single-precision unit roundoff $u = 2^{-24} = 1/16{,}777{,}216$).
-3. **Nicholas J. Higham (2002)**: *Accuracy and Stability of Numerical Algorithms*, SIAM. (Discretization and roundoff error analysis).
+1. **Primary Source**: Cosmo Chou (2026), *Discrete Metric Contraction Dynamics and IEEE 754 Binary32 Machine Roundoff Bounds*, Zenodo, [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921).
+2. **Stefan Banach (1922)**: *Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales*, Fundamenta Mathematicae, Vol. 3, pp. 133–181. (Classical continuous contraction mapping principle).
+3. **IEEE Computer Society (2008)**: *IEEE Standard for Floating-Point Arithmetic*, IEEE Std 754-2008. (Definition of binary32 single-precision unit roundoff $u = 2^{-24} = 1/16{,}777{,}216$).
+4. **Nicholas J. Higham (2002)**: *Accuracy and Stability of Numerical Algorithms*, SIAM. (Discretization and roundoff error analysis).
 
-### Research Audience
-This research note targets researchers in **Certified Numerical Computation, Discrete Dynamical Systems, and Formal Verification**. It addresses the transition where infinite-time asymptotic exponential contraction on continuous metric spaces collapses into exact finite-time invariant attractors under machine precision boundaries and lattice quantization.
+### Limitations and Mathematical Model
+- **Rational Metric Space Formulation**: This formalization operates on exact rational numbers ($\mathbb{Q}$) and separated metric spaces with an assumed discrete lattice gap ($\text{dist}(x, y) \ge 1$ for $x \ne y$).
+- **Machine Roundoff Relationship**: It establishes the exact algebraic saturation identity matching the IEEE 754 binary32 unit roundoff ($u = 2^{-24} = 1/16{,}777{,}216$), but does not model low-level hardware floating-point mantissa rounding modes, denormals, or machine overflows in Lean.
 
 ---
 
@@ -42,10 +45,10 @@ The 8 quantified theorems selected and verified by `comparator.json` establish t
 2. **`scaled_roundoff_normalizes_to_one`**:
    Exact rational normalization $(2^{24} \cdot \kappa^8 = 1)$. *(Proved via `norm_num`)*
 
-3. **`metric_contraction_iterate_decay`**:
-   On an arbitrary separated rational metric space $(X, \text{dist}_Q)$ and for any contraction mapping $T : X \to X$ with ratio $\kappa \ge 0$, the distance between $n$-th iterates decays geometrically:
+3. **`metric_contraction_iterate_decay` (General Geometric Iterate Bound)**:
+   On an arbitrary separated rational metric space $(X, \text{dist}_Q)$ and for any mapping $T : X \to X$ with contraction ratio $\kappa \ge 0$, the distance between $n$-th iterates satisfies the geometric bound:
    $$\text{dist}(T^n(x), T^n(y)) \le \kappa^n \cdot \text{dist}(x, y)$$
-   *(Proved by mathematical induction on $n$ with non-linear rational arithmetic)*
+   *(Proved by mathematical induction on $n$ with non-linear rational arithmetic; exhibits contraction decay when $\kappa < 1$)*
 
 4. **`metric_contraction_step8_bound`**:
    After exactly 8 iterations under $\kappa = 1/8$, the metric distance contracts by at least the binary32 unit roundoff:
@@ -101,9 +104,9 @@ python3 test_palomar_suite.py
 
 ---
 
-## 4. Broader Application Context: Interactive Observatories
+## 4. Downstream Computational Applications (Observatories)
 
-*Note: The 8 theorems verified above by the Palomar Comparator form the foundational constructive metric contraction layer. The broader physical, biological, and hardware systems represent downstream computational applications of these geometric contraction principles:*
+*Note: The 8 theorems verified above by the Palomar Comparator formalize the foundational constructive metric contraction layer of Chou (2026). The multi-scale physical, biological, and hardware systems represent downstream computational applications:*
 
 - **Equivalency Mathematics & TopoNPU Observatory**: [https://h3qm.com/math/](https://h3qm.com/math/)
 - **Biomedical & Macromolecular Conformational Platform**: [https://h3qm.com/bio/](https://h3qm.com/bio/)

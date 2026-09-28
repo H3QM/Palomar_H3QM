@@ -111,7 +111,10 @@ theorem scaled_roundoff_normalizes_to_one :
   norm_num
 
 /--
-THEOREM 3 PROOF (General Metric Contraction Decay):
+THEOREM 3 PROOF (General Metric Contraction Iterate Bound):
+On an arbitrary separated rational metric space, for any contraction mapping with ratio κ ≥ 0,
+the distance between n-th iterates satisfies the geometric bound κ^n * dist(x, y)
+(exhibiting geometric contraction decay when κ < 1, such as κ = 1/8).
 Proved constructively by mathematical induction on the iteration step n.
 -/
 theorem metric_contraction_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X → X)

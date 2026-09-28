@@ -6,7 +6,7 @@ version: "v0.4"
 
 project:
   name: "palomar_h3qm"
-  description: "Formal verification of discrete metric contraction dynamics, IEEE 754 binary32 machine unit roundoff bounds, finite-time orbit coalescence, and invariant fixed-point collapse on discrete metric spaces."
+  description: "Formal verification in Lean 4 of discrete metric contraction dynamics, IEEE 754 binary32 unit roundoff bounds, and finite-time fixed-point attractor collapse on discrete metric spaces, formalizing the theorems of Chou (2026, Zenodo 10.5281/zenodo.22928921)."
   authors:
     - name: "Cosmo Chou"
       email: "cosmo@h3qm.org"
@@ -27,22 +27,22 @@ automation:
   methods:
     - method: "agent"
       tool: "Antigravity AI"
-      notes: "Assisted interactive Lean 4 tactic development and Lake build packaging."
+      notes: "Antigravity AI assisted with Lean 4 tactic development, proof script formatting, and Lake packaging; mathematical conceptualization, specification, and authorial responsibility by Cosmo Chou."
 
 review:
   status: "self-assessed"
   notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 8 metric contraction theorems constructive with zero added axioms."
 
 sources:
-  - title: "Finite-Time Invariant Attractor Collapse of Discrete Contraction Mappings under IEEE 754 Binary32 Unit Roundoff"
+  - title: "Discrete Metric Contraction Dynamics and IEEE 754 Binary32 Machine Roundoff Bounds"
     authors:
       - name: "Cosmo Chou"
-    type: "original-proof"
-    location: "Lean proof in this repository"
-    relationship: "other"
-    note: "Original constructive formalization in Lean 4 connecting discrete Banach contraction decay to IEEE 754 binary32 machine unit roundoff boundaries, finite-time orbit coalescence, and exact fixed-point invariance on discrete metric spaces."
+    type: "paper"
+    relationship: "formalizes"
+    doi: "10.5281/zenodo.22928921"
+    url: "https://doi.org/10.5281/zenodo.22928921"
+    note: "Primary research publication establishing discrete metric contraction bounds, machine epsilon saturation, and finite-time fixed-point attractor collapse on discrete grids."
     license: "Apache-2.0"
-    author_endorsement: "participated"
   - title: "Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales"
     authors:
       - name: "Stefan Banach"
@@ -55,6 +55,16 @@ sources:
     type: "paper"
     relationship: "background"
     note: "IEEE Std 754-2008 definition of binary32 single-precision unit roundoff u = 2^(-24)."
+  - title: "Accuracy and Stability of Numerical Algorithms"
+    authors:
+      - name: "Nicholas J. Higham"
+    type: "book"
+    relationship: "background"
+    note: "SIAM, 2002. Reference for numerical rounding error bounds and precision limits."
+
+limitations:
+  - "This formalization operates on exact rational numbers (Q) and separated metric spaces with an assumed discrete grid separation gap (dist(x, y) >= 1 for x != y). It proves the exact algebraic saturation identity matching the IEEE 754 binary32 unit roundoff (u = 2^(-24) = 1/16777216), but does not model low-level hardware floating-point mantissa rounding modes, denormals, or machine overflows in Lean."
+  - "The general iterate bound theorem holds for any contraction ratio kappa >= 0 (providing a geometric bound, with contraction decay specifically when kappa < 1)."
 
 entry_metadata:
   title: "Formal Verification of Discrete Metric Contraction Dynamics and IEEE 754 Binary32 Machine Roundoff Collapse"
@@ -95,7 +105,7 @@ formalization:
       zero_axioms: true
 
     - name: "H3QM.Palomar.metric_contraction_iterate_decay"
-      informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any contraction mapping T with ratio kappa >= 0, the distance between n-th iterates satisfies dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y)."
+      informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio kappa >= 0, the distance between n-th iterates satisfies the geometric bound dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y) (exhibiting contraction decay when kappa < 1)."
       proof_tactic: "induction n / nlinarith"
       status: "proved"
       zero_axioms: true
@@ -133,11 +143,14 @@ formalization:
   axioms_used: []  # Strictly zero additional axioms; 100% constructive and standard Lean 4 kernel.
 
 informal_description: |
-  This formal research note establishes the discrete Banach metric contraction decay theorem, finite-time orbit
-  coalescence, and exact invariant attractor collapse on rational separated metric spaces under IEEE 754 machine precision.
+  This formalization provides a machine-checked proof in Lean 4 of the metric contraction theorems published in
+  Chou (2026, Zenodo 10.5281/zenodo.22928921).
+
+  The development establishes the discrete Banach metric contraction iterate bound, finite-time orbit coalescence,
+  and exact invariant attractor collapse on rational separated metric spaces.
 
   We formally quantify over an arbitrary state space X, separated rational metric distance dist : X -> X -> Q
-  (satisfying dist(x, y) = 0 <-> x = y), and contraction mapping T : X -> X with contraction ratio kappa = 1/8.
+  (satisfying dist(x, y) = 0 <-> x = y), and mapping T : X -> X with contraction ratio kappa = 1/8.
   By mathematical induction on the iteration step n, we prove:
       dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y).
 
@@ -155,10 +168,10 @@ informal_description: |
   is an exact fixed point: T(T^8(x)) = T^8(x) (attractor invariance). Finally, we prove that any two fixed points
   within distance 2^24 are identically equal, establishing unique invariant attractor collapse.
 
-  Research audience: Researchers in certified numerical computation, discrete dynamical systems, and formal methods
-  in scientific computing (arXiv: math.DS, math.NA, cs.LO).
+  Scope note: Distances are modeled as exact rational numbers, and the result establishes an exact numerical bound
+  matching the binary32 unit roundoff without modeling IEEE 754 floating-point hardware mantissa behavior.
 
 disclosures:
   ai_assistance:
     used: true
-    details: "Interactive Lean 4 syntax formatting and Lake packaging assisted by Antigravity AI; all mathematical formulation and proofs by Cosmo Chou."
+    details: "Antigravity AI assisted with Lean 4 tactic development, proof script formatting, and Lake packaging; mathematical conceptualization, specification, and authorial responsibility by Cosmo Chou."

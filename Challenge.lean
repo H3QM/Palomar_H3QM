@@ -89,10 +89,11 @@ theorem scaled_roundoff_normalizes_to_one :
     (16777216 : ℚ) * ratPow kappa 8 = 1 := by sorry
 
 /--
-CHALLENGE THEOREM 3 (General Metric Contraction Decay):
-On an arbitrary separated metric space (X, dist) and for any contraction mapping T with ratio κ ≥ 0,
-the distance between the n-th iterates is bounded by:
-    dist(T^n(x), T^n(y)) ≤ κ^n * dist(x, y).
+CHALLENGE THEOREM 3 (General Metric Contraction Iterate Bound):
+On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio κ ≥ 0,
+the distance between the n-th iterates satisfies the geometric bound:
+    dist(T^n(x), T^n(y)) ≤ κ^n * dist(x, y)
+(exhibiting contraction decay when κ < 1, such as κ = 1/8).
 -/
 theorem metric_contraction_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X → X)
     (κ : ℚ) (hκ : 0 ≤ κ) (hT : IsContraction M T κ) (n : ℕ) (x y : X) :
