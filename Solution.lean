@@ -2,6 +2,7 @@ module
 
 public import Mathlib.Data.Rat.Defs
 public import Mathlib.Data.Rat.Floor
+public import Mathlib.Logic.Function.Iterate
 public import Mathlib.Tactic.NormNum
 public import Mathlib.Tactic.Linarith
 public import Mathlib.Tactic.Ring
@@ -18,8 +19,6 @@ Author: Cosmo Chou
 ! IEEE 754 Binary32 Unit Roundoff Bound, and Discrete Grid Fixed-Point Collapse.
 ! Conforms to Palomar requirement (a): 100% typechecked, zero added axioms.
 -/
-
-
 
 namespace H3QM.Palomar
 
@@ -48,27 +47,29 @@ def IsContraction {X : Type} (M : MetricSpaceQ X) (T : X → X) (κ : ℚ) : Pro
 The n-fold iterate of a state evolution map T : X → X.
 Defines the discrete dynamical trajectory starting from initial state x.
 -/
-def iterate {X : Type} (T : X → X) : ℕ → X → X
-  | 0, x => x
-  | n + 1, x => T (iterate T n x)
+def iterate {X : Type} (T : X → X) (n : ℕ) (x : X) : X :=
+  T^[n] x
 
 /--
 Commutation lemma for iterate: iterate T n (T x) = T (iterate T n x).
 -/
 theorem iterate_comm {X : Type} (T : X → X) (n : ℕ) (x : X) :
-    iterate T n (T x) = T (iterate T n x) := by
-  induction n with
-  | zero => rfl
-  | succ k ih =>
-    dsimp [iterate]
-    rw [ih]
+    iterate T n (T x) = T (iterate T n x) :=
+  ((Function.Commute.refl T).iterate_right n x).symm
+
+/--
+Successor step lemma for iterate: iterate T (n + 1) x = T (iterate T n x).
+-/
+theorem iterate_succ {X : Type} (T : X → X) (n : ℕ) (x : X) :
+    iterate T (n + 1) x = T (iterate T n x) := by
+  change iterate T n (T x) = T (iterate T n x)
+  exact iterate_comm T n x
 
 /--
 Rational power function κ^n for contraction factor compounding.
 -/
-def ratPow (κ : ℚ) : ℕ → ℚ
-  | 0 => 1
-  | n + 1 => κ * ratPow κ n
+def ratPow (κ : ℚ) (n : ℕ) : ℚ :=
+  κ ^ n
 
 /--
 The discrete geometric contraction ratio: κ = 2^(-3) = 1/8.
@@ -129,13 +130,16 @@ theorem metric_contraction_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X 
   induction n with
   | zero =>
     dsimp [iterate, ratPow]
-    rw [one_mul]
+    rw [pow_zero, one_mul]
   | succ k ih =>
-    dsimp [iterate, ratPow]
+    rw [iterate_succ, iterate_succ]
     have h_step : M.dist (T (iterate T k x)) (T (iterate T k y)) ≤ κ * M.dist (iterate T k x) (iterate T k y) :=
       hT (iterate T k x) (iterate T k y)
     have h_dist_nonneg : 0 ≤ M.dist x y := M.dist_nonneg x y
     have h_step_dist_nonneg : 0 ≤ M.dist (iterate T k x) (iterate T k y) := M.dist_nonneg _ _
+    dsimp [ratPow] at ih ⊢
+    rw [pow_succ]
+    have h_mul : κ * (κ ^ k * M.dist x y) = κ ^ k * κ * M.dist x y := by ring
     nlinarith
 
 /--
@@ -152,13 +156,13 @@ theorem metric_contraction_step8_bound {X : Type} (M : MetricSpaceQ X) (T : X �
 
 /--
 THEOREM 5 PROOF (Discrete Grid Gap Collapse):
-On a discrete grid, any distance strictly less than 1 forces exact identity.
+Any pair of distinct points on a grid with minimum separation 1 cannot have distance < 1.
 -/
 theorem discrete_grid_gap_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
     (x y : X) (h_lt : M.dist x y < 1) :
     x = y := by
-  by_contra h_neq
-  have h_ge := hG x y h_neq
+  by_contra h_ne
+  have h_ge : M.dist x y ≥ 1 := hG x y h_ne
   linarith
 
 /--
@@ -202,23 +206,11 @@ theorem discrete_grid_contraction_unique_fixed_point {X : Type} (M : MetricSpace
     z₁ = z₂ := by
   have h_collapse := discrete_grid_contraction_collapse M hG T hT z₁ z₂ h_dist
   have h_iter_z₁ : iterate T 8 z₁ = z₁ := by
-    have h_iter : ∀ n, iterate T n z₁ = z₁ := by
-      intro n
-      induction n with
-      | zero => rfl
-      | succ k ih =>
-        dsimp [iterate]
-        rw [ih, hz₁]
-    exact h_iter 8
+    dsimp [iterate]
+    exact Function.iterate_fixed hz₁ 8
   have h_iter_z₂ : iterate T 8 z₂ = z₂ := by
-    have h_iter : ∀ n, iterate T n z₂ = z₂ := by
-      intro n
-      induction n with
-      | zero => rfl
-      | succ k ih =>
-        dsimp [iterate]
-        rw [ih, hz₂]
-    exact h_iter 8
+    dsimp [iterate]
+    exact Function.iterate_fixed hz₂ 8
   rw [h_iter_z₁, h_iter_z₂] at h_collapse
   exact h_collapse
 

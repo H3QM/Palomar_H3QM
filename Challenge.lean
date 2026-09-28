@@ -2,6 +2,7 @@ module
 
 public import Mathlib.Data.Rat.Defs
 public import Mathlib.Data.Rat.Floor
+public import Mathlib.Logic.Function.Iterate
 public import Mathlib.Tactic.NormNum
 public import Mathlib.Tactic.Linarith
 public import Mathlib.Tactic.Ring
@@ -17,8 +18,6 @@ Author: Cosmo Chou
 ! Challenge File: Formal specification of Discrete Metric Contraction Dynamics,
 ! IEEE 754 Binary32 Unit Roundoff Bound, and Discrete Grid Fixed-Point Collapse.
 -/
-
-
 
 namespace H3QM.Palomar
 
@@ -47,16 +46,14 @@ def IsContraction {X : Type} (M : MetricSpaceQ X) (T : X → X) (κ : ℚ) : Pro
 The n-fold iterate of a state evolution map T : X → X.
 Defines the discrete dynamical trajectory starting from initial state x.
 -/
-def iterate {X : Type} (T : X → X) : ℕ → X → X
-  | 0, x => x
-  | n + 1, x => T (iterate T n x)
+def iterate {X : Type} (T : X → X) (n : ℕ) (x : X) : X :=
+  T^[n] x
 
 /--
 Rational power function κ^n for contraction factor compounding.
 -/
-def ratPow (κ : ℚ) : ℕ → ℚ
-  | 0 => 1
-  | n + 1 => κ * ratPow κ n
+def ratPow (κ : ℚ) (n : ℕ) : ℚ :=
+  κ ^ n
 
 /--
 The discrete geometric contraction ratio: κ = 2^(-3) = 1/8.
