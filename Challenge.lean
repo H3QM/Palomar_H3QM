@@ -15,8 +15,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Author: Cosmo Chou
 
 ! This file was designed for the Palomar Registry of Lean Verified Mathematics.
-! Challenge File: Formal specification of Discrete Metric Contraction Dynamics,
-! IEEE 754 Binary32 Unit Roundoff Bound, and Discrete Grid Fixed-Point Collapse.
+! Challenge File: Formal specification of Discrete Lyapunov Stability, Product Metric Contraction,
+! Ground-State Energy Dissipation, and Infinite-Horizon Attractor Freezing.
 -/
 
 namespace H3QM.Palomar
@@ -36,6 +36,13 @@ structure MetricSpaceQ (X : Type) where
   dist_triangle : ∀ x y z, dist x z ≤ dist x y + dist y z
 
 /--
+A discrete grid metric condition: any two distinct points have distance at least 1.
+Characterizes integer lattices and quantized discrete state spaces.
+-/
+def IsDiscreteGrid {X : Type} (M : MetricSpaceQ X) : Prop :=
+  ∀ x y, x ≠ y → M.dist x y ≥ 1
+
+/--
 A contraction mapping on a metric space (X, dist) with contraction ratio κ.
 For all states x and y, the metric distance between images contracts by at least κ.
 -/
@@ -50,70 +57,32 @@ def iterate {X : Type} (T : X → X) (n : ℕ) (x : X) : X :=
   T^[n] x
 
 /--
-Rational power function κ^n for contraction factor compounding.
+The discrete orbital displacement Lyapunov functional V(x) = dist(x, T(x)).
+Measures the non-equilibrium deviation of state x from stationarity.
 -/
-def ratPow (κ : ℚ) (n : ℕ) : ℚ :=
-  κ ^ n
+def lyapunov {X : Type} (M : MetricSpaceQ X) (T : X → X) (x : X) : ℚ :=
+  M.dist x (T x)
 
 /--
-The discrete geometric contraction ratio: κ = 2^(-3) = 1/8.
+The canonical ℓ₁ product metric distance on X × Y: dist_X(p1.1, p2.1) + dist_Y(p1.2, p2.2).
+Combines two metric spaces under product distance.
 -/
-def kappa : ℚ := (1 : ℚ) / 8
+def product_dist {X Y : Type} (MX : MetricSpaceQ X) (MY : MetricSpaceQ Y)
+    (p1 p2 : X × Y) : ℚ :=
+  MX.dist p1.1 p2.1 + MY.dist p1.2 p2.2
 
 /--
-The IEEE 754 binary32 unit roundoff (half-epsilon, u = 2^(-24))
-represented as an exact rational number:
-u_binary32 = 2^(-24) = 1 / 16777216.
-Note: In IEEE 754 binary32 arithmetic, the spacing above 1 is 2^(-23),
-and the standard round-to-nearest unit roundoff is u = 2^(-24).
+CHALLENGE THEOREM 1 (Strict Lyapunov Functional Dissipation):
+For any contraction mapping T with ratio κ on metric space (X, M),
+the Lyapunov energy dissipates strictly along trajectories:
+    V(T(x)) ≤ κ * V(x).
 -/
-def unit_roundoff_binary32 : ℚ := (1 : ℚ) / 16777216
+theorem lyapunov_strict_dissipation {X : Type} (M : MetricSpaceQ X) (T : X → X)
+    (κ : ℚ) (hT : IsContraction M T κ) (x : X) :
+    lyapunov M T (T x) ≤ κ * lyapunov M T x := by sorry
 
 /--
-A discrete grid metric condition: any two distinct points have distance at least 1.
-Characterizes integer lattices and quantized discrete state spaces.
--/
-def IsDiscreteGrid {X : Type} (M : MetricSpaceQ X) : Prop :=
-  ∀ x y, x ≠ y → M.dist x y ≥ 1
-
-/--
-CHALLENGE THEOREM 1 (Contraction Ratio 8-Fold Compounding Identity):
-The 8-th power of the geometric contraction ratio κ = 1/8 evaluates identically
-to the IEEE 754 binary32 unit roundoff u = 2^(-24) = 1 / 16777216.
--/
-theorem ratPow_kappa_8_eq_unit_roundoff :
-    ratPow kappa 8 = unit_roundoff_binary32 := by sorry
-
-/--
-CHALLENGE THEOREM 2 (Integer Scale Normalization):
-The scaled rational value (2^24 * ratPow kappa 8) evaluates to exactly 1.
--/
-theorem scaled_roundoff_normalizes_to_one :
-    (16777216 : ℚ) * ratPow kappa 8 = 1 := by sorry
-
-/--
-CHALLENGE THEOREM 3 (General Metric Contraction Iterate Bound):
-On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio κ ≥ 0,
-the distance between the n-th iterates satisfies the geometric bound:
-    dist(T^n(x), T^n(y)) ≤ κ^n * dist(x, y)
-(exhibiting contraction decay when κ < 1, such as κ = 1/8).
--/
-theorem metric_contraction_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X → X)
-    (κ : ℚ) (hκ : 0 ≤ κ) (hT : IsContraction M T κ) (n : ℕ) (x y : X) :
-    M.dist (iterate T n x) (iterate T n y) ≤ ratPow κ n * M.dist x y := by sorry
-
-/--
-CHALLENGE THEOREM 4 (8-Step Binary32 Metric Bound):
-On an arbitrary separated metric space (X, dist) and for any contraction mapping T with ratio κ = 1/8,
-after exactly 8 iterations the distance contracts by at least the binary32 unit roundoff:
-    dist(T^8(x), T^8(y)) ≤ u_binary32 * dist(x, y).
--/
-theorem metric_contraction_step8_bound {X : Type} (M : MetricSpaceQ X) (T : X → X)
-    (hT : IsContraction M T kappa) (x y : X) :
-    M.dist (iterate T 8 x) (iterate T 8 y) ≤ unit_roundoff_binary32 * M.dist x y := by sorry
-
-/--
-CHALLENGE THEOREM 5 (Discrete Grid Gap Collapse):
+CHALLENGE THEOREM 2 (Discrete Grid Gap Collapse):
 On a discrete grid metric space where distinct states are separated by at least 1,
 any pair of states with metric distance strictly less than 1 are identically equal.
 -/
@@ -122,38 +91,66 @@ theorem discrete_grid_gap_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscr
     x = y := by sorry
 
 /--
-CHALLENGE THEOREM 6 (Finite-Time Pairwise Orbit Coalescence on Discrete Grids):
-On a discrete grid metric space with contraction ratio κ = 1/8, any two states
-with initial distance strictly bounded by 2^24 = 16,777,216 collapse into the
-exact same state in 8 steps:
-    dist(x, y) < 16,777,216 → T^8(x) = T^8(y).
+CHALLENGE THEOREM 3 (Discrete Lyapunov Ground State Exact Zero):
+On a discrete grid metric space, whenever the Lyapunov energy drops strictly below 1,
+it must vanish identically to exact zero (V(x) = 0), forcing x into an exact fixed point (T(x) = x).
 -/
-theorem discrete_grid_contraction_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (T : X → X) (hT : IsContraction M T kappa) (x y : X)
-    (h_dist : M.dist x y < 16777216) :
-    iterate T 8 x = iterate T 8 y := by sorry
+theorem lyapunov_ground_state_exact_zero {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (x : X) (h_sub : lyapunov M T x < 1) :
+    lyapunov M T x = 0 ∧ T x = x := by sorry
 
 /--
-CHALLENGE THEOREM 7 (Finite-Time Fixed-Point Invariance):
-Under a contraction mapping with ratio κ = 1/8 on a discrete grid,
-any state x whose step distance to T(x) is strictly bounded by 2^24
-collapses into an exact fixed point at step 8:
-    dist(x, T(x)) < 16,777,216 → T (iterate T 8 x) = iterate T 8 x.
+CHALLENGE THEOREM 4 (General Metric Contraction Iterate Bound):
+On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio κ ≥ 0,
+the distance between n-th iterates satisfies the geometric bound:
+    dist(T^n(x), T^n(y)) ≤ κ^n * dist(x, y).
 -/
-theorem discrete_grid_contraction_fixed_point {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (T : X → X) (hT : IsContraction M T kappa) (x : X)
-    (h_step : M.dist x (T x) < 16777216) :
-    T (iterate T 8 x) = iterate T 8 x := by sorry
+theorem metric_contraction_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X → X)
+    (κ : ℚ) (hκ : 0 ≤ κ) (hT : IsContraction M T κ) (n : ℕ) (x y : X) :
+    M.dist (iterate T n x) (iterate T n y) ≤ κ ^ n * M.dist x y := by sorry
 
 /--
-CHALLENGE THEOREM 8 (Fixed-Point Uniqueness on Bounded Basin):
-Any two fixed points z₁ and z₂ in the discrete grid metric space with distance strictly
-less than 2^24 are identically equal: z₁ = z₂.
+CHALLENGE THEOREM 5 (Lyapunov Energy n-Step Exponential Decay):
+Under a contraction mapping with ratio κ ≥ 0, the Lyapunov functional decays exponentially:
+    V(T^n(x)) ≤ κ^n * V(x).
 -/
-theorem discrete_grid_contraction_unique_fixed_point {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (T : X → X) (hT : IsContraction M T kappa) (z₁ z₂ : X)
-    (hz₁ : T z₁ = z₁) (hz₂ : T z₂ = z₂)
-    (h_dist : M.dist z₁ z₂ < 16777216) :
+theorem lyapunov_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X → X)
+    (κ : ℚ) (hκ : 0 ≤ κ) (hT : IsContraction M T κ) (n : ℕ) (x : X) :
+    lyapunov M T (iterate T n x) ≤ κ ^ n * lyapunov M T x := by sorry
+
+/--
+CHALLENGE THEOREM 6 (Coupled Product Metric Space Contraction):
+Given two metric spaces (X, MX) and (Y, MY) and contraction mappings TX and TY with ratio κ,
+the joint parallel product map (TX × TY) on the ℓ₁ product space is strictly a contraction with ratio κ:
+    product_dist MX MY (TX p1.1, TY p1.2) (TX p2.1, TY p2.2) ≤ κ * product_dist MX MY p1 p2.
+-/
+theorem product_metric_contraction {X Y : Type}
+    (MX : MetricSpaceQ X) (MY : MetricSpaceQ Y)
+    (TX : X → X) (TY : Y → Y) (κ : ℚ)
+    (hTX : IsContraction MX TX κ) (hTY : IsContraction MY TY κ) (p1 p2 : X × Y) :
+    product_dist MX MY (TX p1.1, TY p1.2) (TX p2.1, TY p2.2) ≤ κ * product_dist MX MY p1 p2 := by sorry
+
+/--
+CHALLENGE THEOREM 7 (Infinite-Horizon Invariant Attractor Freezing):
+Once a discrete dynamical state reaches a fixed point at step 8 (T(T^8(x)) = T^8(x)),
+its entire infinite forward orbit freezes into the exact same static state for all future steps:
+    ∀ m : ℕ, T^(8 + m)(x) = T^8(x).
+-/
+theorem discrete_infinite_horizon_freezing {X : Type}
+    (T : X → X) (x : X)
+    (h_fp : T (iterate T 8 x) = iterate T 8 x) (m : ℕ) :
+    iterate T (8 + m) x = iterate T 8 x := by sorry
+
+/--
+CHALLENGE THEOREM 8 (Basin-Wide Fixed-Point Uniqueness):
+Any two fixed points z₁ and z₂ in a separated rational metric space whose distance contracts
+below the discrete grid separation threshold are identically equal: z₁ = z₂.
+-/
+theorem discrete_grid_contraction_unique_fixed_point {X : Type}
+    (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (κ : ℚ) (hκ : 0 ≤ κ) (hT : IsContraction M T κ)
+    (z₁ z₂ : X) (hz₁ : T z₁ = z₁) (hz₂ : T z₂ = z₂)
+    (n : ℕ) (h_bound : κ ^ n * M.dist z₁ z₂ < 1) :
     z₁ = z₂ := by sorry
 
 end H3QM.Palomar

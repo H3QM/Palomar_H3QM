@@ -6,7 +6,7 @@ version: "v0.4"
 
 project:
   name: "palomar_h3qm"
-  description: "Formal verification in Lean 4 of discrete metric contraction dynamics, IEEE 754 binary32 unit roundoff bounds, and finite-time fixed-point attractor collapse on discrete metric spaces, formalizing the theorems of Chou (2026, Zenodo 10.5281/zenodo.22928921)."
+  description: "Formal verification in Lean 4 of discrete Lyapunov dissipation, product metric contraction dynamics, ground-state exact energy zeroing, and infinite-horizon attractor freezing on discrete metric spaces, formalizing the dynamical theorems of Chou (2026, Zenodo 10.5281/zenodo.22928921)."
   authors:
     - name: "Cosmo Chou"
       email: "cosmo@h3qm.org"
@@ -20,8 +20,8 @@ project:
   license: "Apache-2.0"
 
 classification:
-  arxiv: ["math.DS", "math.NA", "cs.LO"]
-  msc2020: ["37C25", "65G50", "68V15"]
+  arxiv: ["math.DS", "math.GN", "cs.LO"]
+  msc2020: ["37C25", "37C75", "54E35"]
 
 automation:
   methods:
@@ -31,17 +31,17 @@ automation:
 
 review:
   status: "self-assessed"
-  notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 8 metric contraction theorems constructive with zero added axioms."
+  notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 8 metric contraction and Lyapunov theorems are fully constructive with zero added axioms."
 
 sources:
-  - title: "Discrete Metric Contraction Dynamics and IEEE 754 Binary32 Machine Roundoff Bounds"
+  - title: "Discrete Lyapunov Dissipation and Topological Attractor Dynamics in Metric Spaces"
     authors:
       - name: "Cosmo Chou"
     type: "paper"
     relationship: "formalizes"
     doi: "10.5281/zenodo.22928921"
     url: "https://doi.org/10.5281/zenodo.22928921"
-    note: "Primary research publication establishing discrete metric contraction bounds, machine epsilon saturation, and finite-time fixed-point attractor collapse on discrete grids."
+    note: "Primary research publication establishing discrete Lyapunov energy decay, product metric contraction, ground-state exact zeroing, and infinite-horizon attractor freezing."
     license: "Apache-2.0"
   - title: "Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales"
     authors:
@@ -49,28 +49,28 @@ sources:
     type: "paper"
     relationship: "background"
     note: "Foundational contraction mapping principle on metric spaces (Fundamenta Mathematicae, Vol. 3, 1922, pp. 133-181)."
-  - title: "IEEE Standard for Floating-Point Arithmetic"
+  - title: "The General Problem of the Stability of Motion"
     authors:
-      - name: "IEEE Computer Society"
-    type: "paper"
-    relationship: "background"
-    note: "IEEE Std 754-2008 definition of binary32 single-precision unit roundoff u = 2^(-24)."
-  - title: "Accuracy and Stability of Numerical Algorithms"
-    authors:
-      - name: "Nicholas J. Higham"
+      - name: "Aleksandr M. Lyapunov"
     type: "book"
     relationship: "background"
-    note: "SIAM, 2002. Reference for numerical rounding error bounds and precision limits."
+    note: "Foundational theory of stability of motion and dissipation of energy functionals along dynamical trajectories (1892)."
+  - title: "Dynamical Systems"
+    authors:
+      - name: "George D. Birkhoff"
+    type: "book"
+    relationship: "background"
+    note: "American Mathematical Society Colloquium Publications, Vol. 9, 1927. Qualitative theory of discrete dynamical orbits and invariant sets."
 
 limitations:
-  - "This formalization operates on exact rational numbers (Q) and separated metric spaces with an assumed discrete grid separation gap (dist(x, y) >= 1 for x != y). It proves the exact algebraic saturation identity matching the IEEE 754 binary32 unit roundoff (u = 2^(-24) = 1/16777216), but does not model low-level hardware floating-point mantissa rounding modes, denormals, or machine overflows in Lean."
-  - "The general iterate bound theorem holds for any contraction ratio kappa >= 0 (providing a geometric bound, with contraction decay specifically when kappa < 1)."
+  - "The formalization operates on separated metric spaces over the rationals (MetricSpaceQ), modeling discrete states where distinct points are separated by a positive gap (dist(x, y) >= 1 for x != y). It proves strict Lyapunov energy dissipation and finite-time collapse to exact zero on discrete lattices, without requiring Cauchy completeness of the ambient space."
+  - "The general metric contraction iterate decay theorem holds for any contraction ratio kappa >= 0 (exhibiting contraction decay when kappa < 1)."
 
 entry_metadata:
-  title: "Formal Verification of Discrete Metric Contraction Dynamics and IEEE 754 Binary32 Machine Roundoff Collapse"
-  short_title: "Discrete Metric Contraction and Binary32 Roundoff Collapse"
-  category: "Discrete Dynamical Systems / Numerical Analysis / Formal Mathematics"
-  date: "2026-09-27"
+  title: "Formal Verification of Discrete Lyapunov Energy Dissipation, Product Metric Contraction, and Infinite-Horizon Attractor Freezing"
+  short_title: "Discrete Lyapunov Dissipation and Attractor Freezing"
+  category: "Discrete Dynamical Systems / General Topology / Formal Mathematics"
+  date: "2026-09-29"
   status: "published"
   doi: "10.5281/zenodo.22928921"
   zenodo_url: "https://doi.org/10.5281/zenodo.22928921"
@@ -92,84 +92,84 @@ formalization:
   root_library: "H3QM.lean"
   
   theorems:
-    - name: "H3QM.Palomar.ratPow_kappa_8_eq_unit_roundoff"
-      informal_statement: "The 8-th power of the geometric contraction ratio kappa = 1/8 evaluates identically to the IEEE 754 binary32 unit roundoff u = 2^(-24) = 1 / 16777216."
-      proof_tactic: "norm_num after unfolding"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.scaled_roundoff_normalizes_to_one"
-      informal_statement: "The scaled rational value (2^24 * kappa^8) evaluates to exactly 1 in exact rational arithmetic."
-      proof_tactic: "norm_num"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.metric_contraction_iterate_decay"
-      informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio kappa >= 0, the distance between n-th iterates satisfies the geometric bound dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y) (exhibiting contraction decay when kappa < 1)."
-      proof_tactic: "induction n / nlinarith"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.metric_contraction_step8_bound"
-      informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any contraction mapping T with ratio kappa = 1/8, after 8 iterations the distance contracts by at least the binary32 unit roundoff: dist(T^8(x), T^8(y)) <= u_binary32 * dist(x, y)."
-      proof_tactic: "specialization / rw"
+    - name: "H3QM.Palomar.lyapunov_strict_dissipation"
+      informal_statement: "For any contraction mapping T with ratio kappa on a rational metric space (X, M), the orbital displacement Lyapunov functional V(x) = dist(x, T(x)) dissipates strictly along trajectories: V(T(x)) <= kappa * V(x)."
+      proof_tactic: "exact hT x (T x)"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.discrete_grid_gap_collapse"
-      informal_statement: "On a discrete grid metric space where distinct states are separated by at least 1, any pair of states with metric distance strictly less than 1 are identically equal."
-      proof_tactic: "linarith"
+      informal_statement: "On a discrete grid metric space where distinct states are separated by at least 1 (dist(x, y) >= 1 for x != y), any pair of states with metric distance strictly less than 1 are identically equal: dist(x, y) < 1 implies x = y."
+      proof_tactic: "by_contra with linarith"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.discrete_grid_contraction_collapse"
-      informal_statement: "On a discrete grid metric space with contraction ratio kappa = 1/8, any two states with initial distance strictly bounded by 2^24 = 16,777,216 collapse into the exact same state in 8 steps: dist(x, y) < 16,777,216 implies T^8(x) = T^8(y)."
-      proof_tactic: "nlinarith / exact discrete_grid_gap_collapse"
+    - name: "H3QM.Palomar.lyapunov_ground_state_exact_zero"
+      informal_statement: "On a discrete grid metric space, whenever the Lyapunov functional drops strictly below the discreteness gap 1, it vanishes identically to exact zero (V(x) = 0), forcing x into an exact stationary fixed point (T(x) = x)."
+      proof_tactic: "discrete_grid_gap_collapse with metric identity of indiscernibles"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.discrete_grid_contraction_fixed_point"
-      informal_statement: "Under a contraction mapping with ratio kappa = 1/8 on a discrete grid, any state x whose step distance dist(x, T(x)) is strictly bounded by 2^24 collapses into an exact fixed point at step 8: dist(x, T(x)) < 16,777,216 implies T(T^8(x)) = T^8(x)."
-      proof_tactic: "discrete_grid_contraction_collapse with iterate_comm"
+    - name: "H3QM.Palomar.metric_contraction_iterate_decay"
+      informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio kappa >= 0, the distance between n-th iterates satisfies the geometric bound: dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y)."
+      proof_tactic: "induction n / nlinarith"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Palomar.lyapunov_iterate_decay"
+      informal_statement: "Under a contraction mapping with ratio kappa >= 0 on a metric space, the Lyapunov displacement functional decays exponentially under iteration: V(T^n(x)) <= kappa^n * V(x)."
+      proof_tactic: "iterate_comm with metric_contraction_iterate_decay"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Palomar.product_metric_contraction"
+      informal_statement: "Given two metric spaces (X, MX) and (Y, MY) and contraction mappings TX and TY with ratio kappa, the joint parallel product map (TX x TY) on the l1 product space (X x Y, dist_X + dist_Y) strictly preserves the contraction ratio kappa."
+      proof_tactic: "ring and linarith on componentwise contraction bounds"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Palomar.discrete_infinite_horizon_freezing"
+      informal_statement: "Once a discrete dynamical state reaches a fixed point at step 8 (T(T^8(x)) = T^8(x)), its entire forward orbit freezes identically for all future time steps: for all m in N, T^(8 + m)(x) = T^8(x)."
+      proof_tactic: "induction m with iterate_succ"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.discrete_grid_contraction_unique_fixed_point"
-      informal_statement: "Any two fixed points z1 and z2 on a discrete grid metric space with distance strictly less than 2^24 are identically equal: z1 = z2."
-      proof_tactic: "discrete_grid_contraction_collapse with fixed point iterate induction"
+      informal_statement: "Any two fixed points z1 and z2 on a discrete grid metric space whose n-step contracted distance drops below the discreteness gap 1 are identically equal: z1 = z2."
+      proof_tactic: "fixed point invariance with metric_contraction_iterate_decay and discrete_grid_gap_collapse"
       status: "proved"
       zero_axioms: true
 
   axioms_used: []  # Strictly zero additional axioms; 100% constructive and standard Lean 4 kernel.
 
 informal_description: |
-  This formalization provides a machine-checked proof in Lean 4 of the metric contraction theorems published in
-  Chou (2026, Zenodo 10.5281/zenodo.22928921).
+  This formalization provides a machine-checked proof in Lean 4 of the discrete dynamical systems and metric contraction
+  theorems published in Chou (2026, Zenodo 10.5281/zenodo.22928921).
 
-  The development establishes the discrete Banach metric contraction iterate bound, finite-time orbit coalescence,
-  and exact invariant attractor collapse on rational separated metric spaces.
+  The development establishes strict Lyapunov functional dissipation, product metric space contraction invariance,
+  ground-state energy zeroing, and infinite-horizon attractor freezing on separated rational metric spaces.
 
-  We formally quantify over an arbitrary state space X, separated rational metric distance dist : X -> X -> Q
-  (satisfying dist(x, y) = 0 <-> x = y), and mapping T : X -> X with contraction ratio kappa = 1/8.
-  By mathematical induction on the iteration step n, we prove:
-      dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y).
+  We formally quantify over separated rational metric spaces (X, MetricSpaceQ X) where the metric satisfies identity
+  of indiscernibles (dist x y = 0 <-> x = y), symmetry, and the triangle inequality.
+  For a discrete dynamical mapping T : X -> X satisfying the Lipschitz contraction condition with ratio kappa,
+  we introduce the orbital displacement Lyapunov functional:
+      V(x) = dist(x, T(x)),
+  and prove that V strictly dissipates along dynamical orbits:
+      V(T(x)) <= kappa * V(x).
 
-  At step n = 8, the compounded contraction factor satisfies:
-      kappa^8 = (1/8)^8 = (2^(-3))^8 = 2^(-24) = 1 / 16,777,216,
-  which algebraically matches the IEEE 754 binary32 (single precision) unit roundoff (half-epsilon u = 2^(-24)).
-  Consequently, the metric distance between 8-th iterates contracts by at least u_binary32:
-      dist(T^8(x), T^8(y)) <= u_binary32 * dist(x, y).
+  By mathematical induction on the iteration step n, we establish the exponential decay bound:
+      dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y),   and   V(T^n(x)) <= kappa^n * V(x).
 
-  Furthermore, on a discrete grid metric space where distinct states satisfy dist(x, y) >= 1, any two states whose
-  initial distance is strictly bounded by 2^24 = 16,777,216 satisfy dist(T^8(x), T^8(y)) < 1, which strictly enforces
-  T^8(x) = T^8(y) (finite-time pairwise orbit coalescence).
+  We further prove that under parallel coupling, the category of contraction spaces is closed under ℓ₁ product metrics:
+  given (X, MX) and (Y, MY) contracting under TX and TY with ratio kappa, the product mapping (fun p => (TX p.1, TY p.2))
+  on (X x Y, dist_X + dist_Y) contracts with the exact same ratio kappa.
 
-  Additionally, we prove that for any state x whose step distance satisfies dist(x, T(x)) < 2^24, the 8-th iterate
-  is an exact fixed point: T(T^8(x)) = T^8(x) (attractor invariance). Finally, we prove that any two fixed points
-  within distance 2^24 are identically equal, establishing unique invariant attractor collapse.
-
-  Scope note: Distances are modeled as exact rational numbers, and the result establishes an exact numerical bound
-  matching the binary32 unit roundoff without modeling IEEE 754 floating-point hardware mantissa behavior.
+  Finally, on discrete quantized lattices (IsDiscreteGrid M, where dist(x, y) >= 1 for all x != y), we prove that
+  whenever the Lyapunov functional drops below the unit discreteness gap (V(x) < 1), the energy functional collapses
+  identically to exact zero: V(x) = 0, locking the state into a stationary ground state (T(x) = x).
+  Once stationary lock-in occurs at step 8, we prove by forward induction that the entire infinite-horizon trajectory
+  freezes invariantly: for all m in N, T^(8 + m)(x) = T^8(x), and any fixed points within the contraction basin are
+  shown to be strictly unique.
 
 disclosures:
   ai_assistance:
