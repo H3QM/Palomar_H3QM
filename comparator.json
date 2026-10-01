@@ -3,13 +3,13 @@
   "solution_module": "Solution",
   "theorem_names": [
     "H3QM.Palomar.metric_contraction_iterate_decay",
-    "H3QM.Palomar.lyapunov_iterate_decay",
     "H3QM.Palomar.product_metric_contraction",
     "H3QM.Palomar.discrete_grid_contraction_basin_coalescence",
     "H3QM.Palomar.discrete_contraction_eventual_ground_state_collapse",
-    "H3QM.Palomar.discrete_contraction_eventual_infinite_freezing",
-    "H3QM.Palomar.discrete_grid_contraction_unique_fixed_point",
-    "H3QM.Palomar.discrete_contraction_master_stabilization"
+    "H3QM.Palomar.discrete_contraction_master_stabilization",
+    "H3QM.Palomar.wilson_loop_nontrivial_winding_ge_one",
+    "H3QM.Palomar.discrete_wilson_loop_mass_gap",
+    "H3QM.Palomar.borromean_glueball_factor_exact"
   ],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
