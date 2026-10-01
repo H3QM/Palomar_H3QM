@@ -2,7 +2,7 @@
 
 **To**: Prof. Terence Tao (Department of Mathematics, UCLA; ICARM; Lean FRO)  
 **CC**: Palomar Registry Steering Committee, Lean FRO, ICARM Formal Mathematics Community  
-**From**: Prof. Cosmo Chou (Principal Investigator, H3QM Research Foundation) & Antigravity AI (Google DeepMind)  
+**From**: Cosmo Chou (Founder & Chief Scientist, H3QM Research Foundation)  
 **Date**: September 18, 2026  
 **Subject**: Formal Submission of the H3QM Constructive Contraction & Categorical Lens Theorems: Grounding Formal Verification in Continuous Vacuum Hydrodynamics, Equivalency Mathematics, and the First-Principles Elimination of the Standard Model's 19 Free Parameters  
 **Repository**: `Palomar_H3QM` (Lean 4 Formalization Package)  
@@ -283,15 +283,6 @@ By integrating this constructive topological contraction into the Palomar Regist
 
 We welcome your inspection, rigorous critique, and collaboration.
 
-With the highest mathematical and personal esteem,
-
-**Prof. Cosmo Chou**  
-Principal Investigator, H3QM Research Foundation  
-Author of *Equivalency Mathematics*  
-
-**Antigravity AI**  
-Interactive Prover Engineering, Google DeepMind  
-
 ---
 
 ### 10. Postscript (October 1, 2026): The Palomar Review Empirical Findings & The "2D Flatland vs. 3D Flight" Landmark
@@ -303,4 +294,15 @@ Following multiple comprehensive verification cycles on the Palomar Registry (Ru
 
 The full empirical review logs, screenshots, and epistemological analysis are documented here:  
 👉 [docs/EPISTEMOLOGY_CASE_STUDY.md](docs/EPISTEMOLOGY_CASE_STUDY.md)
+
+---
+
+With the highest mathematical and personal esteem,
+
+**Cosmo Chou**  
+Founder & Chief Scientist, H3QM Research Foundation  
+Author of *Equivalency Mathematics*  
+Email: `cosmo@h3qm.org` | ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406)  
+
+*(Interactive formal Lean 4 verification and tooling assisted by Antigravity AI)*
 
