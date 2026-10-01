@@ -15,8 +15,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Author: Cosmo Chou
 
 ! This file was designed for the Palomar Registry of Lean Verified Mathematics.
-! Challenge File: Formal specification of Discrete Lyapunov Stability, Product Metric Contraction,
-! Ground-State Energy Dissipation, and Infinite-Horizon Attractor Freezing.
+! Challenge File: Formal specification of Discrete Metric Contraction, Finite-Time Basin Coalescence,
+! Eventual Ground-State Collapse, and Infinite-Horizon Attractor Stabilization on Discrete Grids.
 -/
 
 namespace H3QM.Palomar
@@ -72,35 +72,12 @@ def product_dist {X Y : Type} (MX : MetricSpaceQ X) (MY : MetricSpaceQ Y)
   MX.dist p1.1 p2.1 + MY.dist p1.2 p2.2
 
 /--
-CHALLENGE THEOREM 1 (Strict Lyapunov Functional Dissipation):
-For any contraction mapping T with ratio κ on metric space (X, M),
-the Lyapunov energy dissipates strictly along trajectories:
-    V(T(x)) ≤ κ * V(x).
+The geometric contraction ratio: κ = 2^(-3) = 1/8.
 -/
-theorem lyapunov_strict_dissipation {X : Type} (M : MetricSpaceQ X) (T : X → X)
-    (κ : ℚ) (hT : IsContraction M T κ) (x : X) :
-    lyapunov M T (T x) ≤ κ * lyapunov M T x := by sorry
+def kappa : ℚ := (1 : ℚ) / 8
 
 /--
-CHALLENGE THEOREM 2 (Discrete Grid Gap Collapse):
-On a discrete grid metric space where distinct states are separated by at least 1,
-any pair of states with metric distance strictly less than 1 are identically equal.
--/
-theorem discrete_grid_gap_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (x y : X) (h_lt : M.dist x y < 1) :
-    x = y := by sorry
-
-/--
-CHALLENGE THEOREM 3 (Discrete Lyapunov Ground State Exact Zero):
-On a discrete grid metric space, whenever the Lyapunov energy drops strictly below 1,
-it must vanish identically to exact zero (V(x) = 0), forcing x into an exact fixed point (T(x) = x).
--/
-theorem lyapunov_ground_state_exact_zero {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (T : X → X) (x : X) (h_sub : lyapunov M T x < 1) :
-    lyapunov M T x = 0 ∧ T x = x := by sorry
-
-/--
-CHALLENGE THEOREM 4 (General Metric Contraction Iterate Bound):
+CHALLENGE THEOREM 1 (General Metric Contraction Iterate Bound):
 On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio κ ≥ 0,
 the distance between n-th iterates satisfies the geometric bound:
     dist(T^n(x), T^n(y)) ≤ κ^n * dist(x, y).
@@ -110,8 +87,8 @@ theorem metric_contraction_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X 
     M.dist (iterate T n x) (iterate T n y) ≤ κ ^ n * M.dist x y := by sorry
 
 /--
-CHALLENGE THEOREM 5 (Lyapunov Energy n-Step Exponential Decay):
-Under a contraction mapping with ratio κ ≥ 0, the Lyapunov functional decays exponentially:
+CHALLENGE THEOREM 2 (Lyapunov Energy n-Step Exponential Decay):
+Under a contraction mapping with ratio κ ≥ 0, the orbital displacement Lyapunov functional decays exponentially:
     V(T^n(x)) ≤ κ^n * V(x).
 -/
 theorem lyapunov_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X → X)
@@ -119,7 +96,7 @@ theorem lyapunov_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X → X)
     lyapunov M T (iterate T n x) ≤ κ ^ n * lyapunov M T x := by sorry
 
 /--
-CHALLENGE THEOREM 6 (Coupled Product Metric Space Contraction):
+CHALLENGE THEOREM 3 (Coupled Product Metric Space Contraction):
 Given two metric spaces (X, MX) and (Y, MY) and contraction mappings TX and TY with ratio κ,
 the joint parallel product map (TX × TY) on the ℓ₁ product space is strictly a contraction with ratio κ:
     product_dist MX MY (TX p1.1, TY p1.2) (TX p2.1, TY p2.2) ≤ κ * product_dist MX MY p1 p2.
@@ -131,27 +108,70 @@ theorem product_metric_contraction {X Y : Type}
     product_dist MX MY (TX p1.1, TY p1.2) (TX p2.1, TY p2.2) ≤ κ * product_dist MX MY p1 p2 := by sorry
 
 /--
-CHALLENGE THEOREM 7 (Infinite-Horizon Invariant Attractor Freezing):
-Once a discrete dynamical state reaches a fixed point at step 8 (T(T^8(x)) = T^8(x)),
-its entire infinite forward orbit freezes into the exact same static state for all future steps:
-    ∀ m : ℕ, T^(8 + m)(x) = T^8(x).
+CHALLENGE THEOREM 4 (Finite-Time Basin Coalescence under Sufficient Hypotheses):
+On a discrete grid metric space with minimum point separation 1, under contraction ratio κ = 1/8,
+any two distinct initial states x, y with separation dist(x, y) < 16,777,216 eventually coalesce
+into the exact same dynamical state at step 8:
+    dist(x, y) < 16,777,216 → T^8(x) = T^8(y).
 -/
-theorem discrete_infinite_horizon_freezing {X : Type}
-    (T : X → X) (x : X)
-    (h_fp : T (iterate T 8 x) = iterate T 8 x) (m : ℕ) :
+theorem discrete_grid_contraction_basin_coalescence {X : Type}
+    (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (hT : IsContraction M T kappa)
+    (x y : X) (h_dist : M.dist x y < 16777216) :
+    iterate T 8 x = iterate T 8 y := by sorry
+
+/--
+CHALLENGE THEOREM 5 (Eventual Ground-State Collapse and Stationary Fixed-Point Lock-In):
+On a discrete grid metric space under contraction ratio κ = 1/8, any initial state x with
+initial displacement V(x) < 16,777,216 eventually collapses to an exact stationary fixed point at step 8,
+with its Lyapunov energy vanishing identically to exact zero:
+    V(x) < 16,777,216 → T(T^8(x)) = T^8(x) ∧ V(T^8(x)) = 0.
+-/
+theorem discrete_contraction_eventual_ground_state_collapse {X : Type}
+    (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (hT : IsContraction M T kappa)
+    (x : X) (h_init : lyapunov M T x < 16777216) :
+    T (iterate T 8 x) = iterate T 8 x ∧ lyapunov M T (iterate T 8 x) = 0 := by sorry
+
+/--
+CHALLENGE THEOREM 6 (Eventual Infinite-Horizon Freezing from Initial Conditions):
+Under the sufficient initial displacement bound V(x) < 16,777,216 on a discrete grid with κ = 1/8,
+the entire forward infinite trajectory freezes identically for all future time steps:
+    V(x) < 16,777,216 → ∀ m : ℕ, T^(8 + m)(x) = T^8(x).
+-/
+theorem discrete_contraction_eventual_infinite_freezing {X : Type}
+    (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (hT : IsContraction M T kappa)
+    (x : X) (h_init : lyapunov M T x < 16777216) (m : ℕ) :
     iterate T (8 + m) x = iterate T 8 x := by sorry
 
 /--
-CHALLENGE THEOREM 8 (Basin-Wide Fixed-Point Uniqueness):
-Any two fixed points z₁ and z₂ in a separated rational metric space whose distance contracts
-below the discrete grid separation threshold are identically equal: z₁ = z₂.
+CHALLENGE THEOREM 7 (Basin-Wide Fixed-Point Uniqueness):
+Any two fixed points z₁ and z₂ in the discrete grid metric space with distance strictly less
+than 16,777,216 are identically equal: z₁ = z₂.
 -/
 theorem discrete_grid_contraction_unique_fixed_point {X : Type}
     (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (T : X → X) (κ : ℚ) (hκ : 0 ≤ κ) (hT : IsContraction M T κ)
+    (T : X → X) (hT : IsContraction M T kappa)
     (z₁ z₂ : X) (hz₁ : T z₁ = z₁) (hz₂ : T z₂ = z₂)
-    (n : ℕ) (h_bound : κ ^ n * M.dist z₁ z₂ < 1) :
+    (h_dist : M.dist z₁ z₂ < 16777216) :
     z₁ = z₂ := by sorry
+
+/--
+CHALLENGE THEOREM 8 (Master Stabilization Theorem):
+Unifies the complete dynamical evolution under sufficient hypotheses:
+For any initial state x with V(x) < 16,777,216 in a discrete grid under contraction ratio κ = 1/8,
+the system reaches an exact stationary fixed point at step 8, its Lyapunov energy vanishes to exact zero,
+and its forward orbit freezes for all infinite future iterations:
+    T(T^8(x)) = T^8(x) ∧ V(T^8(x)) = 0 ∧ (∀ m, T^(8 + m)(x) = T^8(x)).
+-/
+theorem discrete_contraction_master_stabilization {X : Type}
+    (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (T : X → X) (hT : IsContraction M T kappa)
+    (x : X) (h_init : lyapunov M T x < 16777216) :
+    T (iterate T 8 x) = iterate T 8 x ∧
+    lyapunov M T (iterate T 8 x) = 0 ∧
+    ∀ m : ℕ, iterate T (8 + m) x = iterate T 8 x := by sorry
 
 end H3QM.Palomar
 

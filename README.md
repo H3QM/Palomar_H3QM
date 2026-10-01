@@ -1,4 +1,4 @@
-# Palomar_H3QM: Discrete Lyapunov Dissipation, Product Contraction & Attractor Freezing
+# Palomar_H3QM: Discrete Metric Contraction, Finite-Time Coalescence & Master Stabilization
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22928921.svg)](https://doi.org/10.5281/zenodo.22928921)
 [![CI](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml/badge.svg)](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml)
@@ -17,7 +17,9 @@
 
 ## 1. Overview & Research Scope
 
-This repository provides a machine-checked, constructive formalization in **Lean 4** of discrete Lyapunov energy dissipation, product metric contraction dynamics, ground-state exact energy zeroing, and infinite-horizon attractor freezing, formalizing the dynamical theorems of Chou (2026, [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921)).
+This repository provides a machine-checked, constructive formalization in **Lean 4** of discrete metric contraction dynamics, finite-time basin coalescence, eventual ground-state collapse, and infinite-horizon attractor stabilization on discrete metric grids, formalizing the dynamical theorems of Chou (2026, [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921)).
+
+The development addresses the qualitative transition between continuous and discrete dynamical systems: whereas Banach contraction on continuous spaces yields only asymptotic convergence ($t \to \infty$) with strictly positive residual for all finite steps, a discrete separation gap ($\delta \ge 1$) enforces **exact finite-time collapse** to zero residual ($V(x) = 0$) and **infinite-horizon orbit freezing**.
 
 All 8 core theorems evaluated by the Palomar Comparator are proved constructively with **strictly zero added axioms** (`axioms_used: []`) and zero `sorry` placeholders, verified by both the Lean 4 kernel and the independent NanoDa checker.
 
@@ -27,55 +29,52 @@ All 8 core theorems evaluated by the Palomar Comparator are proved constructivel
 3. **Aleksandr M. Lyapunov (1892)**: *The General Problem of the Stability of Motion*, Kharkov Mathematical Society. (Theory of motion stability and dissipation functionals along dynamical trajectories).
 4. **George D. Birkhoff (1927)**: *Dynamical Systems*, American Mathematical Society Colloquium Publications, Vol. 9. (Qualitative structure of discrete dynamical orbits and invariant attractor sets).
 
-### Mathematical Model & Scope
-- **Separated Rational Metric Spaces**: The development formalizes separated metric spaces over the rationals (`MetricSpaceQ X`) satisfying identity of indiscernibles ($\text{dist}(x, y) = 0 \iff x = y$), symmetry, and the triangle inequality.
-- **Quantized Discrete State Spaces**: Under the discrete grid hypothesis (`IsDiscreteGrid M`, $\forall x \ne y, \text{dist}(x, y) \ge 1$), continuous asymptotic convergence is upgraded to finite-time exact collapse to zero residual ($V(x) = 0$).
-
 ---
 
 ## 2. Formalized Theorems (`Challenge.lean` / `Solution.lean`)
 
 The 8 quantified theorems selected and verified by `comparator.json` establish the following mathematical progression:
 
-1. **`lyapunov_strict_dissipation` (Orbital Energy Dissipation)**:
-   For any contraction mapping $T$ with ratio $\kappa$ on a metric space $(X, M)$, the displacement Lyapunov functional $V(x) = \text{dist}(x, T(x))$ dissipates strictly along dynamical orbits:
-   $$V(T(x)) \le \kappa \cdot V(x)$$
-   *(Proved constructively via the metric contraction condition on $(x, T(x))$)*
-
-2. **`discrete_grid_gap_collapse` (Discreteness Gap Separation)**:
-   On a discrete grid metric space where distinct states are separated by at least 1, any pair of states with distance strictly less than 1 are identically equal:
-   $$\text{dist}(x, y) < 1 \implies x = y$$
-   *(Proved by contradiction and linear arithmetic)*
-
-3. **`lyapunov_ground_state_exact_zero` (Ground-State Energy Zeroing)**:
-   Whenever the Lyapunov functional drops strictly below the discreteness gap 1, the energy collapses identically to exact zero ($V(x) = 0$), forcing $x$ into an exact stationary fixed point ($T(x) = x$):
-   $$V(x) < 1 \implies V(x) = 0 \;\land\; T(x) = x$$
-   *(Proved via discrete gap collapse and the metric identity of indiscernibles)*
-
-4. **`metric_contraction_iterate_decay` (General Geometric Iterate Bound)**:
+1. **`metric_contraction_iterate_decay` (General Geometric Iterate Bound)**:
    On an arbitrary separated rational metric space $(X, \text{dist})$ and for any mapping $T$ with contraction ratio $\kappa \ge 0$, the distance between $n$-th iterates satisfies:
    $$\text{dist}(T^n(x), T^n(y)) \le \kappa^n \cdot \text{dist}(x, y)$$
-   *(Proved by mathematical induction on $n$ with non-linear arithmetic)*
+   *(Proved by induction on $n$ with non-linear arithmetic)*
 
-5. **`lyapunov_iterate_decay` (Exponential Lyapunov Energy Decay)**:
-   Under a contraction mapping with ratio $\kappa \ge 0$, the Lyapunov displacement functional decays exponentially under iteration:
+2. **`lyapunov_iterate_decay` (Exponential Lyapunov Energy Decay)**:
+   Under a contraction mapping with ratio $\kappa \ge 0$, the orbital displacement Lyapunov functional $V(x) = \text{dist}(x, T(x))$ decays exponentially:
    $$V(T^n(x)) \le \kappa^n \cdot V(x)$$
-   *(Proved by combining orbit iterate commutation with metric iterate decay)*
+   *(Proved by combining iterate commutation with metric iterate decay)*
 
-6. **`product_metric_contraction` (Coupled Product Metric Space Contraction)**:
+3. **`product_metric_contraction` (Coupled Product Metric Space Contraction)**:
    Given two metric spaces $(X, M_X)$ and $(Y, M_Y)$ and contraction mappings $T_X$ and $T_Y$ with ratio $\kappa$, the parallel product map $(T_X \times T_Y)$ on the $\ell_1$ product space strictly preserves the contraction ratio $\kappa$:
    $$\text{product\_dist}((T_X(x), T_Y(y)), (T_X(x'), T_Y(y'))) \le \kappa \cdot \text{product\_dist}((x, y), (x', y'))$$
    *(Proved constructively by componentwise linearity and ring arithmetic)*
 
-7. **`discrete_infinite_horizon_freezing` (Infinite-Horizon Attractor Invariance)**:
-   Once a discrete dynamical state reaches a stationary fixed point at step 8 ($T(T^8(x)) = T^8(x)$), its entire forward infinite trajectory freezes identically:
-   $$\forall m \in \mathbb{N}, \quad T^{8+m}(x) = T^8(x)$$
-   *(Proved by induction on $m$ using the iterate successor lemma)*
+4. **`discrete_grid_contraction_basin_coalescence` (Finite-Time Basin Coalescence)**:
+   On a discrete grid metric space with point separation $\ge 1$ and contraction ratio $\kappa = 1/8$, any two distinct initial states $x, y$ with initial distance strictly bounded by $16{,}777{,}216$ eventually coalesce into the exact same dynamical state at step 8:
+   $$\text{dist}(x, y) < 16{,}777{,}216 \implies T^8(x) = T^8(y)$$
+   *(Proved under explicit sufficient hypotheses by 8-step contraction and discrete gap collapse)*
 
-8. **`discrete_grid_contraction_unique_fixed_point` (Basin-Wide Fixed-Point Uniqueness)**:
-   Any two fixed points $z_1, z_2$ in the discrete grid metric space whose $n$-step contracted distance drops below 1 are identically equal:
-   $$\kappa^n \cdot \text{dist}(z_1, z_2) < 1 \implies z_1 = z_2$$
-   *(Proved by fixed-point invariance, iterate decay, and discrete gap collapse)*
+5. **`discrete_contraction_eventual_ground_state_collapse` (Eventual Ground-State Collapse)**:
+   On a discrete grid with $\kappa = 1/8$, any initial state $x$ with initial displacement bounded by $16{,}777{,}216$ eventually reaches an exact stationary fixed point at step 8, with its Lyapunov energy vanishing identically to exact zero:
+   $$V(x) < 16{,}777{,}216 \implies T(T^8(x)) = T^8(x) \;\land\; V(T^8(x)) = 0$$
+   *(Proved by applying basin coalescence to $(x, T(x))$ combined with the metric identity of indiscernibles)*
+
+6. **`discrete_contraction_eventual_infinite_freezing` (Infinite-Horizon Freezing from Initial Conditions)**:
+   Under the sufficient initial displacement bound $V(x) < 16{,}777{,}216$ on a discrete grid with $\kappa = 1/8$, the entire forward infinite trajectory freezes identically for all future time steps:
+   $$V(x) < 16{,}777{,}216 \implies \forall m \in \mathbb{N}, \quad T^{8+m}(x) = T^8(x)$$
+   *(Proved constructively from initial conditions without assuming an a priori fixed point)*
+
+7. **`discrete_grid_contraction_unique_fixed_point` (Basin-Wide Fixed-Point Uniqueness)**:
+   Any two fixed points $z_1, z_2$ in the discrete grid metric space whose distance is strictly bounded by $16{,}777{,}216$ are identically equal:
+   $$\text{dist}(z_1, z_2) < 16{,}777{,}216 \implies z_1 = z_2$$
+   *(Proved by fixed-point invariance and 8-step basin coalescence)*
+
+8. **`discrete_contraction_master_stabilization` (Master Stabilization Theorem)**:
+   Unifies the complete dynamical evolution under sufficient hypotheses:
+   For any initial state $x$ with $V(x) < 16{,}777{,}216$ in a discrete grid under $\kappa = 1/8$, the system reaches an exact stationary fixed point at step 8, its Lyapunov energy vanishes to exact zero, and its forward orbit freezes for all infinite future iterations:
+   $$T(T^8(x)) = T^8(x) \;\land\; V(T^8(x)) = 0 \;\land\; (\forall m \in \mathbb{N}, T^{8+m}(x) = T^8(x))$$
+   *(Proved constructively via the simultaneous conjunction of eventual ground-state collapse and infinite freezing)*
 
 ---
 

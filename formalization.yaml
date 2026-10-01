@@ -6,7 +6,7 @@ version: "v0.4"
 
 project:
   name: "palomar_h3qm"
-  description: "Formal verification in Lean 4 of discrete Lyapunov dissipation, product metric contraction dynamics, ground-state exact energy zeroing, and infinite-horizon attractor freezing on discrete metric spaces, formalizing the dynamical theorems of Chou (2026, Zenodo 10.5281/zenodo.22928921)."
+  description: "Formal verification in Lean 4 of discrete metric contraction dynamics, finite-time basin coalescence, eventual ground-state collapse, and infinite-horizon attractor stabilization on discrete grids, formalizing the dynamical theorems of Chou (2026, Zenodo 10.5281/zenodo.22928921)."
   authors:
     - name: "Cosmo Chou"
       email: "cosmo@h3qm.org"
@@ -31,7 +31,7 @@ automation:
 
 review:
   status: "self-assessed"
-  notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 8 metric contraction and Lyapunov theorems are fully constructive with zero added axioms."
+  notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 8 metric contraction and eventual collapse theorems are fully constructive with zero added axioms."
 
 sources:
   - title: "Discrete Lyapunov Dissipation and Topological Attractor Dynamics in Metric Spaces"
@@ -41,7 +41,7 @@ sources:
     relationship: "formalizes"
     doi: "10.5281/zenodo.22928921"
     url: "https://doi.org/10.5281/zenodo.22928921"
-    note: "Primary research publication establishing discrete Lyapunov energy decay, product metric contraction, ground-state exact zeroing, and infinite-horizon attractor freezing."
+    note: "Primary research publication establishing discrete Lyapunov energy decay, product metric contraction, finite-time basin coalescence, eventual ground-state collapse, and infinite-horizon attractor freezing."
     license: "Apache-2.0"
   - title: "Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales"
     authors:
@@ -63,14 +63,14 @@ sources:
     note: "American Mathematical Society Colloquium Publications, Vol. 9, 1927. Qualitative theory of discrete dynamical orbits and invariant sets."
 
 limitations:
-  - "The formalization operates on separated metric spaces over the rationals (MetricSpaceQ), modeling discrete states where distinct points are separated by a positive gap (dist(x, y) >= 1 for x != y). It proves strict Lyapunov energy dissipation and finite-time collapse to exact zero on discrete lattices, without requiring Cauchy completeness of the ambient space."
-  - "The general metric contraction iterate decay theorem holds for any contraction ratio kappa >= 0 (exhibiting contraction decay when kappa < 1)."
+  - "The formalization operates on separated metric spaces over the rationals (MetricSpaceQ), modeling discrete states where distinct points are separated by a positive gap (dist(x, y) >= 1 for x != y). Eventual collapse, fixed-point lock-in, and infinite-horizon freezing are proved conditionally under the explicit sufficient hypotheses of contraction ratio kappa = 1/8 and initial displacement bound dist(x, Tx) < 16,777,216."
+  - "The general metric contraction iterate decay theorem holds conditionally for any non-negative contraction ratio kappa >= 0 (exhibiting contraction decay when kappa < 1)."
 
 entry_metadata:
-  title: "Formal Verification of Discrete Lyapunov Energy Dissipation, Product Metric Contraction, and Infinite-Horizon Attractor Freezing"
-  short_title: "Discrete Lyapunov Dissipation and Attractor Freezing"
+  title: "Formal Verification of Discrete Metric Contraction, Eventual Ground-State Collapse, and Infinite-Horizon Attractor Stabilization"
+  short_title: "Discrete Contraction and Eventual Attractor Stabilization"
   category: "Discrete Dynamical Systems / General Topology / Formal Mathematics"
-  date: "2026-09-29"
+  date: "2026-10-01"
   status: "published"
   doi: "10.5281/zenodo.22928921"
   zenodo_url: "https://doi.org/10.5281/zenodo.22928921"
@@ -92,32 +92,14 @@ formalization:
   root_library: "H3QM.lean"
   
   theorems:
-    - name: "H3QM.Palomar.lyapunov_strict_dissipation"
-      informal_statement: "For any contraction mapping T with ratio kappa on a rational metric space (X, M), the orbital displacement Lyapunov functional V(x) = dist(x, T(x)) dissipates strictly along trajectories: V(T(x)) <= kappa * V(x)."
-      proof_tactic: "exact hT x (T x)"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.discrete_grid_gap_collapse"
-      informal_statement: "On a discrete grid metric space where distinct states are separated by at least 1 (dist(x, y) >= 1 for x != y), any pair of states with metric distance strictly less than 1 are identically equal: dist(x, y) < 1 implies x = y."
-      proof_tactic: "by_contra with linarith"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.lyapunov_ground_state_exact_zero"
-      informal_statement: "On a discrete grid metric space, whenever the Lyapunov functional drops strictly below the discreteness gap 1, it vanishes identically to exact zero (V(x) = 0), forcing x into an exact stationary fixed point (T(x) = x)."
-      proof_tactic: "discrete_grid_gap_collapse with metric identity of indiscernibles"
-      status: "proved"
-      zero_axioms: true
-
     - name: "H3QM.Palomar.metric_contraction_iterate_decay"
       informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio kappa >= 0, the distance between n-th iterates satisfies the geometric bound: dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y)."
-      proof_tactic: "induction n / nlinarith"
+      proof_tactic: "induction n with nlinarith"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.lyapunov_iterate_decay"
-      informal_statement: "Under a contraction mapping with ratio kappa >= 0 on a metric space, the Lyapunov displacement functional decays exponentially under iteration: V(T^n(x)) <= kappa^n * V(x)."
+      informal_statement: "Under a contraction mapping with ratio kappa >= 0 on a metric space, the orbital displacement Lyapunov functional V(x) = dist(x, T(x)) decays exponentially under iteration: V(T^n(x)) <= kappa^n * V(x)."
       proof_tactic: "iterate_comm with metric_contraction_iterate_decay"
       status: "proved"
       zero_axioms: true
@@ -128,15 +110,33 @@ formalization:
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.discrete_infinite_horizon_freezing"
-      informal_statement: "Once a discrete dynamical state reaches a fixed point at step 8 (T(T^8(x)) = T^8(x)), its entire forward orbit freezes identically for all future time steps: for all m in N, T^(8 + m)(x) = T^8(x)."
-      proof_tactic: "induction m with iterate_succ"
+    - name: "H3QM.Palomar.discrete_grid_contraction_basin_coalescence"
+      informal_statement: "On a discrete grid metric space with point separation >= 1 and contraction ratio kappa = 1/8, any two initial states x and y with initial distance strictly bounded by 16,777,216 eventually coalesce into the exact same dynamical state at step 8: dist(x, y) < 16,777,216 implies T^8(x) = T^8(y)."
+      proof_tactic: "metric_contraction_iterate_decay at step 8 combined with discrete grid gap collapse"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Palomar.discrete_contraction_eventual_ground_state_collapse"
+      informal_statement: "On a discrete grid metric space with point separation >= 1 and contraction ratio kappa = 1/8, any initial state x with initial displacement V(x) < 16,777,216 eventually collapses to an exact stationary fixed point at step 8, with its Lyapunov energy vanishing identically to exact zero: T(T^8(x)) = T^8(x) and V(T^8(x)) = 0."
+      proof_tactic: "orbit coalescence applied to (x, T(x)) with iterate commutation and metric identity of indiscernibles"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Palomar.discrete_contraction_eventual_infinite_freezing"
+      informal_statement: "Under the sufficient initial displacement bound V(x) < 16,777,216 on a discrete grid with kappa = 1/8, the entire forward trajectory from step 8 onward freezes identically for all future time steps: for all m in N, T^(8 + m)(x) = T^8(x)."
+      proof_tactic: "induction m on the established step-8 fixed point using iterate_succ"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.discrete_grid_contraction_unique_fixed_point"
-      informal_statement: "Any two fixed points z1 and z2 on a discrete grid metric space whose n-step contracted distance drops below the discreteness gap 1 are identically equal: z1 = z2."
-      proof_tactic: "fixed point invariance with metric_contraction_iterate_decay and discrete_grid_gap_collapse"
+      informal_statement: "Any two fixed points z1 and z2 on a discrete grid metric space with distance strictly less than 16,777,216 are identically equal: z1 = z2."
+      proof_tactic: "fixed point invariance with 8-step basin coalescence"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Palomar.discrete_contraction_master_stabilization"
+      informal_statement: "Master theorem unifying the dynamical evolution under sufficient hypotheses: for any initial state x with V(x) < 16,777,216 in a discrete grid under contraction ratio kappa = 1/8, the system reaches an exact stationary fixed point at step 8, its Lyapunov energy vanishes to exact zero, and its forward orbit freezes for all infinite future iterations: T(T^8(x)) = T^8(x), V(T^8(x)) = 0, and for all m, T^(8 + m)(x) = T^8(x)."
+      proof_tactic: "conjunction of eventual ground-state collapse and infinite-horizon freezing"
       status: "proved"
       zero_axioms: true
 
@@ -146,30 +146,30 @@ informal_description: |
   This formalization provides a machine-checked proof in Lean 4 of the discrete dynamical systems and metric contraction
   theorems published in Chou (2026, Zenodo 10.5281/zenodo.22928921).
 
-  The development establishes strict Lyapunov functional dissipation, product metric space contraction invariance,
-  ground-state energy zeroing, and infinite-horizon attractor freezing on separated rational metric spaces.
+  The research addresses the foundational question of finite-time stabilization versus asymptotic convergence in discrete
+  state spaces. In classical continuous metric spaces, Banach's fixed-point theorem ensures asymptotic convergence (as t -> infinity)
+  under contraction, but the distance to the attractor remains strictly positive for all finite iteration steps.
+  In this formalization, we prove that introducing a positive discreteness separation gap (delta >= 1) fundamentally alters
+  the qualitative dynamics: asymptotic Cauchy contraction is upgraded to exact finite-time collapse and stationary attractor lock-in.
 
   We formally quantify over separated rational metric spaces (X, MetricSpaceQ X) where the metric satisfies identity
   of indiscernibles (dist x y = 0 <-> x = y), symmetry, and the triangle inequality.
-  For a discrete dynamical mapping T : X -> X satisfying the Lipschitz contraction condition with ratio kappa,
-  we introduce the orbital displacement Lyapunov functional:
-      V(x) = dist(x, T(x)),
-  and prove that V strictly dissipates along dynamical orbits:
-      V(T(x)) <= kappa * V(x).
+  For a mapping T : X -> X satisfying the Lipschitz contraction condition with ratio kappa >= 0, we establish the general
+  iterate decay bound dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y) and the exponential decay of the orbital displacement
+  Lyapunov functional V(x) = dist(x, T(x)):
+      V(T^n(x)) <= kappa^n * V(x).
+  We further show that under parallel coupling, the category of contraction spaces is closed under componentwise ℓ₁ product metrics.
 
-  By mathematical induction on the iteration step n, we establish the exponential decay bound:
-      dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y),   and   V(T^n(x)) <= kappa^n * V(x).
-
-  We further prove that under parallel coupling, the category of contraction spaces is closed under ℓ₁ product metrics:
-  given (X, MX) and (Y, MY) contracting under TX and TY with ratio kappa, the product mapping (fun p => (TX p.1, TY p.2))
-  on (X x Y, dist_X + dist_Y) contracts with the exact same ratio kappa.
-
-  Finally, on discrete quantized lattices (IsDiscreteGrid M, where dist(x, y) >= 1 for all x != y), we prove that
-  whenever the Lyapunov functional drops below the unit discreteness gap (V(x) < 1), the energy functional collapses
-  identically to exact zero: V(x) = 0, locking the state into a stationary ground state (T(x) = x).
-  Once stationary lock-in occurs at step 8, we prove by forward induction that the entire infinite-horizon trajectory
-  freezes invariantly: for all m in N, T^(8 + m)(x) = T^8(x), and any fixed points within the contraction basin are
-  shown to be strictly unique.
+  Crucially, under the explicit sufficient hypotheses of a discrete grid (IsDiscreteGrid M, where dist(x, y) >= 1 for all x != y),
+  contraction ratio kappa = 1/8, and an initial displacement bound V(x) < 16,777,216 (corresponding to 2^24), we prove that:
+  1. Eventual Basin Coalescence: Any two distinct initial states within distance 16,777,216 collapse to the exact same state at step 8:
+     T^8(x) = T^8(y).
+  2. Eventual Ground-State Collapse: The 8-th iterate reaches an exact stationary fixed point T(T^8(x)) = T^8(x), and the Lyapunov energy
+     vanishes identically to exact zero: V(T^8(x)) = 0.
+  3. Infinite-Horizon Freezing: Proven constructively from the initial displacement bound without assuming an a priori fixed point,
+     the entire infinite forward orbit freezes into the exact same static state: for all m in N, T^(8 + m)(x) = T^8(x).
+  4. Basin Uniqueness: Any two fixed points within distance 16,777,216 are identically equal: z1 = z2.
+  5. Master Stabilization: The entire dynamical closure is established simultaneously in a single constructive conjunction.
 
 disclosures:
   ai_assistance:

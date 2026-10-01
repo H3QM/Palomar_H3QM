@@ -2,14 +2,14 @@
   "challenge_module": "Challenge",
   "solution_module": "Solution",
   "theorem_names": [
-    "H3QM.Palomar.lyapunov_strict_dissipation",
-    "H3QM.Palomar.discrete_grid_gap_collapse",
-    "H3QM.Palomar.lyapunov_ground_state_exact_zero",
     "H3QM.Palomar.metric_contraction_iterate_decay",
     "H3QM.Palomar.lyapunov_iterate_decay",
     "H3QM.Palomar.product_metric_contraction",
-    "H3QM.Palomar.discrete_infinite_horizon_freezing",
-    "H3QM.Palomar.discrete_grid_contraction_unique_fixed_point"
+    "H3QM.Palomar.discrete_grid_contraction_basin_coalescence",
+    "H3QM.Palomar.discrete_contraction_eventual_ground_state_collapse",
+    "H3QM.Palomar.discrete_contraction_eventual_infinite_freezing",
+    "H3QM.Palomar.discrete_grid_contraction_unique_fixed_point",
+    "H3QM.Palomar.discrete_contraction_master_stabilization"
   ],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],
