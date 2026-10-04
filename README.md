@@ -10,7 +10,7 @@
 [![Unproved Sorries](https://img.shields.io/badge/Unproved%20Sorries-0%20(100%25%20Closed)-brightgreen.svg)](#3-axiom-use-audit)
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](LICENSE)
 
-**Author**: Cosmo Chou (Independent Researcher, `cosmo@h3qm.org`, ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406))  
+**Author**: Cosmo Chou (Independent Researcher, `cosmo@h3qm.org` · `h3qm.org@gmail.com`, ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406))  
 **Classification**: High Energy Physics - Theory (`hep-th`), Mathematical Physics (`math.MP`), Dynamical Systems (`math.DS`), Logic in Computer Science (`cs.LO`)  
 **MSC 2020**: `81T13` (Yang-Mills and gauge theories), `37C25` (Fixed points), `81T25` (Lattice gauge theory), `54E35` (Metric spaces)  
 **Primary Formalized Source**: Cosmo Chou, *Discrete Topological Contraction Dynamics and Spectral Mass Gap Lower Bounds*, Zenodo (2026), [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921).  
@@ -43,11 +43,11 @@ To bridge continuous geometric field dynamics with the discrete constructive typ
 └───────────────────────────────────────┘                            └───────────────────────────────────────┘
 ```
 
-1. **Witness Oracle (外生證人線束)**:
+1. **Witness Oracle**:
    High-dimensional continuous analysis is decoupled by having an external, verified deterministic harness (`cap_verify_contraction.py` and Arb interval ball arithmetic) solve for exact rational witness certificates $w \in \mathbb{Q}$. Lean 4 then type-checks these witnesses in polynomial time, completely bypassing AI formalization hallucination.
-2. **Kernel Decidable Reflection (內核計算反思)**:
+2. **Kernel Decidable Reflection**:
    By establishing Cosmo Chou's Critical Dyadic Contraction Identity $(2^{-3})^8 = 2^{-24} = \epsilon_{\text{float32}}$, continuous $\epsilon$-$\delta$ bounds collapse into finite-step decidable equivalence on integer/rational metric domains. Proofs evaluate directly via the trusted Lean 4 kernel reduction (`decide`, `rfl`, `omega`).
-3. **Controls That Can Fail (可失敗負向門禁)**:
+3. **Controls That Can Fail**:
    Aligned with Matthew Schwartz's BootLoops 1.0 open-source testing methodology, our verification suite incorporates adversarial duality checks against parity-violating perturbations, mathematically guaranteeing that trivial vacuous truth (`False → P`) cannot pass.
 
 ---

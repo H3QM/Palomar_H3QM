@@ -1,6 +1,6 @@
 # H3QM Lean 4 形式化验证手册与国际标准手册（简体中文）
 
-**作者**：周全 (Cosmo Chou) 与 H3QM 研究基金会  
+**作者**：Cosmo Chou 与 H3QM 研究基金会  
 **版本**：v0.2.0 (2026 年 9 月)  
 **遵循标准**：Lean FRO / Mathlib 4 / Palomar Registry of Lean Verified Mathematics (ICARM)  
 **核心仓库**：`DiscussV4/formal_lean4/` 联动 `Palomar_H3QM`

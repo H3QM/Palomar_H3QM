@@ -302,7 +302,7 @@ With the highest mathematical and personal esteem,
 **Cosmo Chou**  
 Founder & Chief Scientist, H3QM Research Foundation  
 Author of *Equivalency Mathematics*  
-Email: `cosmo@h3qm.org` | ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406)  
+Email: `cosmo@h3qm.org` · `h3qm.org@gmail.com` | ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406)  
 
 *(Interactive formal Lean 4 verification and tooling assisted by Antigravity AI)*
 

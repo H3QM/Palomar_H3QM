@@ -299,10 +299,10 @@ H3QM CAP 架構絕非經驗啟發式工程，而是將當代多位菲爾茲獎�
 此致  
 最高學術敬意，
 
-**周全（Cosmo Chou）**  
+**Cosmo Chou**  
 H3QM 基礎科學研究基金會 創始人兼首席科學家  
 《等價數學》創立者  
-郵箱：`cosmo@h3qm.org` | ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406)  
+郵箱：`cosmo@h3qm.org` · `h3qm.org@gmail.com` | ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406)  
 
 *(形式化 Lean 4 代碼驗證與交互工具工程由 Antigravity AI 輔助)*
 
