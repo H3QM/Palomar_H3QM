@@ -54,7 +54,7 @@ $$(A = B) \simeq (A \simeq B)$$
    $$\text{Contraction}^{(8)} = \left(\frac{1}{8}\right)^8 = (2^{-3})^8 = 2^{-24} = \frac{1}{16,777,216} \approx 5.960464 \times 10^{-8}$$
    該值在代數上精確等於 IEEE 754 單精度浮點數 24-bit 尾數之極限下限 $\epsilon_{\text{float32}}$。
 
-當投影至離散整數符號流動 $\operatorname{sgn}(\nabla_{\text{topo}} E) \in \{-1, 0, +1\}$ 時，相對於目標吸引子的整數殘差：
+當投影至離散整數符號流動 $\mathrm{sgn}(\nabla_{\text{topo}} E) \in \{-1, 0, +1\}$ 時，相對於目標吸引子的整數殘差：
 $$R_8 = \lfloor 2^{24} \cdot S_8 \rfloor - 1 \equiv 0$$
 **在有限步內精確歸零（Exact 0 Residual）**。連續真空介質在第 8 步將奇異點徹底平滑吸收，能量耗散完全閉合。
 
@@ -135,7 +135,7 @@ H3QM CAP 架構絕非經驗啟發式工程，而是將當代多位菲爾茲獎�
 #### 3. 鄧煜（Yu Deng，2026 年菲爾茲獎）：隨機張量算子阻尼定理
 - **核心公式**：高頻非線性色散波系統在隨機張量算子平均下展現指數級阻尼：
   $$\mathbb{E}\left[ \| e^{-i t H_{\text{tensor}}} \psi \|_{H^s} \right] \le C e^{-\gamma t} \| \psi \|_{H^s}$$
-- **在 CAP 中的作用**：證明非線性相位奇異點周圍的微觀擾動不可能發散為混沌湍流，保證離散整數符號流動 $\operatorname{sgn}(\nabla E)$ 必定單調收斂至唯一固定點吸引子。
+- **在 CAP 中的作用**：證明非線性相位奇異點周圍的微觀擾動不可能發散為混沌湍流，保證離散整數符號流動 $\mathrm{sgn}(\nabla E)$ 必定單調收斂至唯一固定點吸引子。
 
 #### 4. 佩雷爾曼（Grigori Perelman，2006 年菲爾茲獎）：Ricci 流與 $\mathcal{W}$-熵泛函單調性
 - **核心公式**：非塌陷幾何流的單調作用量：

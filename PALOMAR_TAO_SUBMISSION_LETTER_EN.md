@@ -54,7 +54,7 @@ Why does our core theorem contract by exactly $\kappa = 2^{-3} = 1/8$?
    $$\text{Contraction}^{(8)} = \left(\frac{1}{8}\right)^8 = (2^{-3})^8 = 2^{-24} = \frac{1}{16,777,216} \approx 5.960464 \times 10^{-8}$$
    This matches identically the 24-bit mantissa precision floor $\epsilon_{\text{float32}}$ of IEEE 754 arithmetic.
 
-When projected onto discrete integer sign dynamics $\operatorname{sgn}(\nabla_{\text{topo}} E) \in \{-1, 0, +1\}$, the discrete integer residual against the target attractor:
+When projected onto discrete integer sign dynamics $\mathrm{sgn}(\nabla_{\text{topo}} E) \in \{-1, 0, +1\}$, the discrete integer residual against the target attractor:
 $$R_8 = \lfloor 2^{24} \cdot S_8 \rfloor - 1 \equiv 0$$
 **collapses to Exact 0 in finite time**. The continuous medium absorbs the singularity with zero residual energy leakage.
 
@@ -136,7 +136,7 @@ The H3QM CAP engine is not an isolated heuristic; it directly operationalizes an
 #### 3. Yu Deng (2026 Fields Medal): Random Tensor Operator Damping Theorem
 - **Theorem**: High-frequency non-linear dispersive wave systems exhibit uniform exponential damping under randomized tensor operator averaging:
   $$\mathbb{E}\left[ \| e^{-i t H_{\text{tensor}}} \psi \|_{H^s} \right] \le C e^{-\gamma t} \| \psi \|_{H^s}$$
-- **Role in CAP**: Proves that energy turbulence cannot accumulate at phase singularities, guaranteeing that the discrete sign flow $\operatorname{sgn}(\nabla E)$ converges strictly to the attractor without chaotic bifurcation.
+- **Role in CAP**: Proves that energy turbulence cannot accumulate at phase singularities, guaranteeing that the discrete sign flow $\mathrm{sgn}(\nabla E)$ converges strictly to the attractor without chaotic bifurcation.
 
 #### 4. Grigori Perelman (2006 Fields Medal): Ricci Flow with Surgery & $\mathcal{W}$-Entropy Monotonicity
 - **Formulation**: The monotonic entropy functional:
