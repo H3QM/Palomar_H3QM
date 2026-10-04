@@ -72,7 +72,8 @@ def product_dist {X Y : Type} (MX : MetricSpaceQ X) (MY : MetricSpaceQ Y)
   MX.dist p1.1 p2.1 + MY.dist p1.2 p2.2
 
 /--
-The geometric contraction ratio: κ = 2^(-3) = 1/8.
+The 3D Dyadic Calderón-Zygmund Harmonic Contraction Ratio: κ = 2^(-d) = 2^(-3) = 1/8 (d = 3).
+Represents the canonical volume scaling factor of 3D dyadic cubes in multiscale harmonic analysis.
 -/
 def kappa : ℚ := (1 : ℚ) / 8
 
@@ -122,10 +123,11 @@ theorem product_metric_contraction {X Y : Type}
     product_dist MX MY (TX p1.1, TY p1.2) (TX p2.1, TY p2.2) ≤ κ * product_dist MX MY p1 p2 := by sorry
 
 /--
-CHALLENGE THEOREM 3 (Finite-Time Basin Coalescence under Sufficient Hypotheses):
-On a discrete grid metric space with minimum point separation 1, under contraction ratio κ = 1/8,
-any two distinct initial states x, y with separation dist(x, y) < 16,777,216 eventually coalesce
-into the exact same dynamical state at step 8:
+CHALLENGE THEOREM 3 (Finite-Time Basin Coalescence under 3D Dyadic Harmonic Cascade):
+On a discrete grid metric space with minimum point separation 1, under 3D dyadic contraction ratio
+κ = 2^(-3) = 1/8, any two distinct initial states x, y with separation dist(x, y) < 16,777,216
+(the 8-octave Littlewood-Paley dyadic bandwidth: 2^24) eventually coalesce into the exact same dynamical state
+at step 8, saturating the float32 machine epsilon: (2^(-3))^8 = 2^(-24) = ε_float32:
     dist(x, y) < 16,777,216 → T^8(x) = T^8(y).
 -/
 theorem discrete_grid_contraction_basin_coalescence {X : Type}

@@ -73,7 +73,8 @@ def product_dist {X Y : Type} (MX : MetricSpaceQ X) (MY : MetricSpaceQ Y)
   MX.dist p1.1 p2.1 + MY.dist p1.2 p2.2
 
 /--
-The geometric contraction ratio: κ = 2^(-3) = 1/8.
+The 3D Dyadic Calderón-Zygmund Harmonic Contraction Ratio: κ = 2^(-d) = 2^(-3) = 1/8 (d = 3).
+Represents the canonical volume scaling factor of 3D dyadic cubes in multiscale harmonic analysis.
 -/
 def kappa : ℚ := (1 : ℚ) / 8
 
