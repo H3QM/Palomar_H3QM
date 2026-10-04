@@ -6,7 +6,7 @@ version: "v0.4"
 
 project:
   name: "palomar_h3qm"
-  description: "Formal verification in Lean 4 of discrete metric contraction dynamics, finite-time ground-state stabilization, non-trivial Wilson loop winding, and spectral mass gap lower bounds, formalizing Chou (2026, Zenodo 10.5281/zenodo.22928921)."
+  description: "Formal verification in Lean 4 of discrete rational metric contraction dynamics, finite-time basin coalescence, fixed-point uniqueness, and categorical lawful lens homeostasis, formalizing Chou (2026, Zenodo 10.5281/zenodo.22928921)."
   authors:
     - name: "Cosmo Chou"
       email: "cosmo@h3qm.org"
@@ -20,8 +20,8 @@ project:
   license: "Apache-2.0"
 
 classification:
-  arxiv: ["math.CA", "math.FA", "hep-th", "math.DS", "math.MP", "cs.LO"]
-  msc2020: ["42B35", "42C40", "81T13", "37C25", "81T25", "54E35"]
+  arxiv: ["math.DS", "math.FA", "cs.LO", "math.CT"]
+  msc2020: ["37C25", "54E35", "18C50", "47H10", "68Q60"]
 
 automation:
   methods:
@@ -34,57 +34,45 @@ review:
   notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 8 theorems verified under Lean 4 standard library axioms with zero added axioms and zero sorry."
 
 sources:
-  - title: "Discrete Topological Contraction Dynamics and Spectral Mass Gap Lower Bounds"
+  - title: "Discrete Topological Contraction Dynamics and Categorical Homeostasis"
     authors:
       - name: "Cosmo Chou"
     type: "paper"
     relationship: "formalizes"
     doi: "10.5281/zenodo.22928921"
     url: "https://doi.org/10.5281/zenodo.22928921"
-    note: "Primary research publication establishing discrete metric contraction bounds, eventual ground-state collapse, non-trivial Wilson loop topological winding, and spectral mass gap lower bounds."
+    note: "Primary research publication establishing discrete metric contraction bounds, finite-time coalescence, fixed-point uniqueness, and bidirectional lawful lens homeostasis."
     license: "Apache-2.0"
-  - title: "Real-Variable Methods, Orthogonality, and Oscillatory Integrals"
-    authors:
-      - name: "Terence Tao"
-    type: "book"
-    relationship: "background"
-    note: "Calderón-Zygmund dyadic cube multiscale decomposition (volume ratio kappa = 2^-3 = 1/8) and BMO bounded mean oscillation theory bridging continuous manifolds to discrete lattices."
-  - title: "Claude-Shaped Science (BootLoops 1.0)"
-    authors:
-      - name: "Matthew Schwartz et al."
-    type: "paper"
-    relationship: "background"
-    url: "https://github.com/BootLoops-ai/bootloops"
-    note: "Harvard open-source deterministic scientific harness and witness oracle paradigm for QFT multiloop reduction and ball arithmetic certification."
-  - title: "Quantum Yang-Mills Theory"
-    authors:
-      - name: "Arthur Jaffe"
-      - name: "Edward Witten"
-    type: "paper"
-    relationship: "background"
-    note: "Clay Mathematics Institute Millennium Prize Problems, 2000. Formulation of the existence and mass gap problem in non-Abelian quantum gauge theories."
-  - title: "Determination of the Spin-Parity of the X(2370) Glueball Candidate"
-    authors:
-      - name: "M. Ablikim et al. (BESIII Collaboration)"
-    type: "paper"
-    relationship: "background"
-    note: "Physical Review Letters, Vol. 132, 181901 (2024). Precision experimental determination of the lightest scalar/pseudoscalar pure gauge glueball state."
   - title: "Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales"
     authors:
       - name: "Stefan Banach"
     type: "paper"
     relationship: "background"
     note: "Fundamenta Mathematicae, Vol. 3, 1922, pp. 133-181. Foundational contraction mapping theorem on metric spaces."
+  - title: "Categories of Cybernetics"
+    authors:
+      - name: "David Spivak"
+      - name: "Jules Hedges"
+    type: "paper"
+    relationship: "background"
+    note: "Foundational theory of bidirectional lenses, state update homeostasis, and compositional dynamical systems in categorical cybernetics."
+  - title: "Real-Variable Methods, Orthogonality, and Oscillatory Integrals"
+    authors:
+      - name: "Terence Tao"
+    type: "book"
+    relationship: "background"
+    note: "Contextual motivation for 3D dyadic cube octave scaling ratio kappa = 2^-3 = 1/8 and Littlewood-Paley multiscale frequency analysis (external analytical context)."
 
 limitations:
-  - "The formalization operates on separated rational metric spaces (MetricSpaceQ) and discrete integer lattices. Eventual collapse, fixed-point lock-in, and infinite-horizon freezing are proved conditionally under the explicit sufficient hypotheses of 3D dyadic contraction ratio kappa = 2^-3 = 1/8 and initial displacement bound dist(x, Tx) < 16,777,216. In continuous metric spaces, linear contractions converge only asymptotically; here, the finite-time collapse at step 8 is a consequence of Calderon-Zygmund dyadic octave scaling saturating the float32 machine epsilon (2^-3)^8 = 2^-24 and collapsing below the discrete separation gap delta >= 1."
-  - "The mechanical verification operates under standard Lean 4 / Mathlib kernel foundations permitting standard core axioms [propext, Quot.sound, Classical.choice]. The proofs are constructive in the sense that they provide explicit finite step bounds (N = 8) and explicit rational witness values without non-constructive existence assumptions, adhering to the Harness-Assisted Decidable Reflection protocol aligned with BootLoops 1.0."
+  - "The formalization strictly operates on separated rational metric spaces (MetricSpaceQ) and discrete state spaces satisfying an explicit separation gap (IsDiscreteGrid). Finite-time coalescence at step 8, fixed-point stationarity, and forward orbit freezing are proved deductively from the explicit hypotheses kappa = 1/8 and initial distance < 16,777,216. The formalization does NOT formalize continuous Calderon-Zygmund dyadic cubes, Littlewood-Paley operators, or physical hardware IEEE 754 floating-point saturation; these concepts serve as external motivating background and physical analogies for the chosen numerical parameters."
+  - "No continuous Yang-Mills gauge field, spectral operator, or continuous-to-discrete homotopy mapping is formalized in Lean 4. The formalization proves discrete metric contraction and categorical lawful lens theorems. Physical gauge theory and glueball comparisons belong to external unproved motivation, not the formalized statements."
+  - "The Python verification script (cap_verify_contraction.py) is a standalone auxiliary arithmetic demonstration using Python's standard fractions.Fraction and float types. It does not import the Arb ball arithmetic library and does not generate Lean certificates. Lean verification is carried out independently by the Lean 4 kernel and Mathlib."
 
 entry_metadata:
-  title: "Formal Verification of Discrete Contraction Dynamics, Ground-State Stabilization, and Spectral Mass Gap Lower Bounds"
-  short_title: "Discrete Contraction and Spectral Mass Gap Lower Bounds"
-  category: "Harmonic Analysis / High Energy Theory / Discrete Dynamical Systems / Scientific Harness"
-  date: "2026-10-01"
+  title: "Formal Verification of Discrete Metric Contraction Dynamics, Fixed-Point Uniqueness, and Categorical Lawful Lenses"
+  short_title: "Discrete Metric Contraction and Categorical Lawful Lenses"
+  category: "Dynamical Systems / Metric Geometry / Categorical Cybernetics / Formal Verification"
+  date: "2026-10-04"
   status: "published"
   doi: "10.5281/zenodo.22928921"
   zenodo_url: "https://doi.org/10.5281/zenodo.22928921"
@@ -113,72 +101,81 @@ formalization:
       zero_axioms: true
 
     - name: "H3QM.Palomar.product_metric_contraction"
-      informal_statement: "Given two metric spaces (X, MX) and (Y, MY) and contraction mappings TX and TY with ratio kappa, the joint parallel product map (TX x TY) on the l1 product space (X x Y, dist_X + dist_Y) strictly preserves the contraction ratio kappa."
+      informal_statement: "Given two metric spaces (X, MX) and (Y, MY) and contraction mappings TX and TY with ratio kappa < 1, the joint parallel product map (TX x TY) on the l1 product space (X x Y, dist_X + dist_Y) is strictly a contraction with ratio kappa."
       proof_tactic: "ring and linarith on componentwise contraction bounds"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.discrete_grid_contraction_basin_coalescence"
-      informal_statement: "On a discrete grid metric space with point separation >= 1 and contraction ratio kappa = 1/8, any two distinct initial states x and y with initial distance strictly bounded by 16,777,216 eventually coalesce into the exact same dynamical state at step 8: dist(x, y) < 16,777,216 implies T^8(x) = T^8(y)."
+      informal_statement: "On a discrete grid metric space with point separation >= 1 and contraction ratio kappa = 1/8, any two initial states x and y with initial distance strictly bounded by 16,777,216 coalesce into the exact same state at step 8: dist(x, y) < 16,777,216 implies T^8(x) = T^8(y)."
       proof_tactic: "metric_contraction_iterate_decay at step 8 combined with discrete grid gap collapse"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.discrete_contraction_eventual_ground_state_collapse"
-      informal_statement: "On a discrete grid metric space with point separation >= 1 and contraction ratio kappa = 1/8, any initial state x with initial displacement V(x) < 16,777,216 eventually collapses to an exact stationary fixed point at step 8, with its Lyapunov energy vanishing identically to exact zero: T(T^8(x)) = T^8(x) and V(T^8(x)) = 0."
+      informal_statement: "On a discrete grid metric space with point separation >= 1 and contraction ratio kappa = 1/8, any initial state x with initial displacement V(x) < 16,777,216 collapses to an exact stationary fixed point at step 8, with its Lyapunov energy vanishing identically: T(T^8(x)) = T^8(x) and V(T^8(x)) = 0."
       proof_tactic: "orbit coalescence applied to (x, T(x)) with iterate commutation and metric identity of indiscernibles"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.discrete_contraction_master_stabilization"
-      informal_statement: "Master stabilization theorem unifying the complete dynamical evolution under sufficient hypotheses: for any initial state x with V(x) < 16,777,216 in a discrete grid under contraction ratio kappa = 1/8, the system reaches an exact stationary fixed point at step 8, its Lyapunov energy vanishes to exact zero, and its forward orbit freezes for all infinite future iterations: T(T^8(x)) = T^8(x), V(T^8(x)) = 0, and for all m, T^(8 + m)(x) = T^8(x)."
-      proof_tactic: "conjunction of eventual ground-state collapse and infinite-horizon forward induction"
+      informal_statement: "Master dynamical stabilization theorem: for any initial state x with V(x) < 16,777,216 in a discrete grid under contraction ratio kappa = 1/8, the system reaches an exact stationary fixed point at step 8, its Lyapunov energy vanishes, and its forward orbit freezes for all future iterations: T(T^8(x)) = T^8(x), V(T^8(x)) = 0, and for all m, T^(8 + m)(x) = T^8(x)."
+      proof_tactic: "conjunction of eventual ground-state collapse and forward orbit induction"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.wilson_loop_nontrivial_winding_ge_one"
-      informal_statement: "For any discrete Wilson loop with non-zero integer winding number (n != 0), its quadratic topological invariant satisfies n^2 >= 1."
-      proof_tactic: "omega case analysis with nlinarith"
+    - name: "H3QM.Palomar.discrete_contraction_fixed_point_uniqueness"
+      informal_statement: "On a discrete grid metric space with separation gap >= 1, any contraction mapping T with ratio kappa < 1 admits at most one fixed point: T(p1) = p1 and T(p2) = p2 implies p1 = p2."
+      proof_tactic: "proof by contradiction using separation gap and nlinarith on contraction bound"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.discrete_wilson_loop_mass_gap"
-      informal_statement: "For any discrete Wilson loop with non-trivial winding number (n != 0) under physical string tension sigma = 1615/1000 > 0, the minimal knot energy is strictly positive: E_knot(n, sigma) = (1/2) * sigma * n^2 > 0, establishing a rigorous strictly positive spectral mass gap Delta > 0."
-      proof_tactic: "exact_mod_cast on integer winding bound with positivity and nlinarith"
+    - name: "H3QM.Palomar.id_lens_is_lawful"
+      informal_statement: "The identity bidirectional lens idLens on any state space S satisfies the complete triad of Lawful Lens axioms in categorical cybernetics: GetPut (homeostasis), PutGet (observability), and PutPut (idempotent absorption)."
+      proof_tactic: "constructor and reflexivity"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.borromean_glueball_factor_exact"
-      informal_statement: "The Borromean 5-crossing vortex ring factor (5/2 + 2^(-5)) evaluates identically to the exact rational value 81 / 32 = 2.53125, aligning with the experimental scalar/pseudoscalar glueball X(2370) mass window of the BESIII Collaboration (PRL 2024)."
-      proof_tactic: "norm_num"
+    - name: "H3QM.Palomar.categorical_lens_roundtrip_homeostasis"
+      informal_statement: "For the lawful bidirectional lens idLens, updating a state with its current observation leaves the state strictly invariant: update s (view s) = s."
+      proof_tactic: "reflexivity"
       status: "proved"
       zero_axioms: true
 
   axioms_used: []  # Strictly zero additional custom axioms; 100% standard Lean 4 kernel.
 
 informal_description: |
-  This formalization provides a machine-checked proof in Lean 4 of the discrete dynamical systems, 3D dyadic
-  harmonic analysis, and topological spectral mass gap theorems published in Chou (2026, Zenodo 10.5281/zenodo.22928921).
+  This formalization provides a machine-checked proof in Lean 4 of discrete metric contraction dynamics,
+  finite-time basin coalescence, fixed-point uniqueness, and categorical lawful lens homeostasis,
+  formalizing Chou (2026, Zenodo 10.5281/zenodo.22928921).
 
-  The research investigates two deeply connected problems of mathematical physics and multiscale harmonic analysis:
-  1. The qualitative mechanics of discrete versus continuous contraction mappings bridged by Calderón-Zygmund dyadic analysis.
-     In 3D Euclidean space (d = 3), subdividing a dyadic cube yields 2^3 = 8 children cubes, establishing the canonical volume
-     contraction ratio kappa = 2^(-d) = 2^(-3) = 1/8. In continuous metric spaces, linear contractions converge only asymptotically.
-     By contrast, across an 8-octave Littlewood-Paley dyadic frequency cascade, the cumulative contraction reaches:
-         Contraction^(8) = (1/8)^8 = (2^-3)^8 = 2^-24 = epsilon_float32
-     saturating the full 24-bit mantissa of IEEE 754 float32 precision. On discrete metric grids with positive separation gap
-     delta >= 1, this dyadic contraction forces initial displacements V(x) < 16,777,216 to collapse to an exact stationary fixed point
-     T(T^8(x)) = T^8(x) at step 8 with Exact 0 residual (V(T^8(x)) = 0) and infinite-horizon forward orbit freezing:
-     for all m in N, T^(8 + m)(x) = T^8(x).
-  2. The Yang-Mills Spectral Mass Gap Lower Bound on 3D manifolds (Jaffe & Witten, Clay Millennium Problem, 2000).
-     Grounded in the Witness Oracle and Decidable Reflection protocol (aligned with BootLoops 1.0, Harvard), continuous gauge field
-     integrals are homomorphically mapped onto discrete Wilson loops W(C) parameterized by quantized integer winding numbers n in Z.
-     We prove constructively that any non-trivial topological winding (n != 0) satisfies n^2 >= 1. Under non-zero physical string
-     tension sigma = 1615/1000 > 0, the minimal discrete knot energy functional E_knot(n, sigma) = (1/2) * sigma * n^2 enforces:
-         Delta = E_knot(n, sigma) >= (1/2) * sigma > 0,
-     rigorously establishing a strictly positive spectral mass gap Delta > 0 for all non-vacuum excitations.
-     We further formalize the exact Borromean 5-crossing vortex ring factor (5/2 + 2^(-5) = 81/32 = 2.53125), which scales the proton
-     mass to the scalar/pseudoscalar glueball state X(2370) discovered by the BESIII Collaboration (Phys. Rev. Lett. 132, 181901, 2024).
+  The formalized results address the dynamics of contraction mappings on discrete and separated rational metric spaces:
+  1. Discrete Metric Contraction Dynamics:
+     On a separated rational metric space (X, dist) with an explicit discrete separation gap (dist(x, y) >= 1 for x != y),
+     we prove that any mapping T satisfying the contraction bound dist(T(x), T(y)) <= kappa * dist(x, y) with kappa = 1/8
+     forces any pair of states with initial distance dist(x, y) < 16,777,216 to coalesce into identical states at step 8:
+     T^8(x) = T^8(y).
+     As a direct consequence, the orbital Lyapunov functional V(x) = dist(x, T(x)) vanishes identically at step 8, the state
+     becomes an exact stationary fixed point T(T^8(x)) = T^8(x), and the forward orbit freezes for all infinite future iterations:
+     T^(8 + m)(x) = T^8(x) for all m in N.
+  2. Fixed-Point Uniqueness on Discrete Metric Spaces:
+     We prove that on any discrete grid metric space with separation gap >= 1, a contraction mapping with ratio kappa < 1
+     can admit at most one fixed point: if T(p1) = p1 and T(p2) = p2, then p1 = p2.
+  3. Strict Contraction on Product Metric Spaces:
+     We formalize the l1 product metric space and prove that the parallel product of two contraction mappings with ratio
+     kappa < 1 strictly preserves the contraction ratio kappa.
+  4. Categorical Cybernetics and Lawful Lenses:
+     We formalize bidirectional lenses (view, update) between state spaces and observation spaces in the sense of Spivak and
+     Hedges. We prove that the identity bidirectional lens satisfies the complete triad of Lawful Lens axioms:
+     GetPut (homeostasis), PutGet (observability), and PutPut (idempotent absorption), ensuring exact roundtrip state conservation.
+
+  Analytical Context and Demarcation:
+  - The ratio kappa = 1/8 and threshold 16,777,216 are motivated by 3D dyadic cube multiscale decomposition (volume ratio 2^-3 = 1/8)
+    and 8-octave Littlewood-Paley cascades ((1/8)^8 = 2^-24, which aligns numerically with float32 machine epsilon). These connections
+    provide external analytical motivation and numerical applications; they are not derived within Lean 4 from continuous dyadic cubes.
+  - No continuous Yang-Mills gauge field, continuous PDE spectral operator, or continuous-to-discrete homotopy map is formalized.
+  - The auxiliary Python script (cap_verify_contraction.py) demonstrates rational and floating-point calculations using standard Python;
+    it does not use the Arb library and does not generate Lean certificates. Lean verification is self-contained.
 
   Axiom-Use Audit:
   Every theorem in this submission is verified by the Lean 4 kernel and NanoDa under the standard Lean 4 configuration permitting

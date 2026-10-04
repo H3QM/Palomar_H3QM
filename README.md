@@ -1,128 +1,92 @@
-# Palomar_H3QM: Discrete Contraction Dynamics & Spectral Mass Gap Lower Bounds
+# Palomar_H3QM: Discrete Metric Contraction Dynamics, Fixed-Point Uniqueness & Categorical Lawful Lenses
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22928921.svg)](https://doi.org/10.5281/zenodo.22928921)
 [![CI](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml/badge.svg)](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml)
 [![Lean 4](https://img.shields.io/badge/Lean%204-v4.35.0--rc2-blue.svg)](https://github.com/leanprover/lean4)
-[![Decidable Reflection](https://img.shields.io/badge/Lean%204-Decidable%20Reflection-blueviolet.svg)](#-harness-assisted-decidable-reflection--witness-oracle-protocol)
-[![Witness Oracle](https://img.shields.io/badge/Witness%20Oracle-Arb%20Ball%20Harness-orange.svg)](#-harness-assisted-decidable-reflection--witness-oracle-protocol)
-[![BootLoops Aligned](https://img.shields.io/badge/Harness-BootLoops%201.0%20Aligned-brightgreen.svg)](https://github.com/BootLoops-ai/bootloops)
+[![Decidable Reflection](https://img.shields.io/badge/Lean%204-Decidable%20Reflection-blueviolet.svg)](#3-axiom-use-audit)
 [![Axioms Used](https://img.shields.io/badge/Axioms%20Added-0%20(Strictly%20Zero)-brightgreen.svg)](#3-axiom-use-audit)
 [![Unproved Sorries](https://img.shields.io/badge/Unproved%20Sorries-0%20(100%25%20Closed)-brightgreen.svg)](#3-axiom-use-audit)
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](LICENSE)
 
 **Author**: Cosmo Chou (Independent Researcher, `cosmo@h3qm.org` · `h3qm.org@gmail.com`, ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406))  
-**Classification**: High Energy Physics - Theory (`hep-th`), Mathematical Physics (`math.MP`), Dynamical Systems (`math.DS`), Logic in Computer Science (`cs.LO`)  
-**MSC 2020**: `81T13` (Yang-Mills and gauge theories), `37C25` (Fixed points), `81T25` (Lattice gauge theory), `54E35` (Metric spaces)  
-**Primary Formalized Source**: Cosmo Chou, *Discrete Topological Contraction Dynamics and Spectral Mass Gap Lower Bounds*, Zenodo (2026), [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921).  
+**Classification**: Dynamical Systems (`math.DS`), Functional Analysis (`math.FA`), Logic in Computer Science (`cs.LO`), Category Theory (`math.CT`)  
+**MSC 2020**: `37C25` (Fixed points), `54E35` (Metric spaces), `18C50` (Categorical semantics), `47H10` (Fixed-point theorems), `68Q60` (Specification and verification of programs)  
+**Primary Formalized Source**: Cosmo Chou, *Discrete Topological Contraction Dynamics and Categorical Homeostasis*, Zenodo (2026), [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921).  
 **Live Production Gateways**: [h3qm.com/math](https://h3qm.com/math/#tab-papers) · [h3qm.com/physics](https://h3qm.com/physics/)
 
 ---
 
 ## 1. Overview & Research Scope
 
-This repository provides a machine-checked, constructive formalization in **Lean 4** of discrete metric contraction dynamics, finite-time ground-state stabilization, non-trivial Wilson loop winding, and spectral mass gap lower bounds, formalizing Chou (2026, [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921)).
+This repository provides a machine-checked, constructive formalization in **Lean 4** of discrete metric contraction dynamics, finite-time basin coalescence, fixed-point uniqueness on separated discrete metric spaces, and categorical lawful lens homeostasis, formalizing Chou (2026, [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921)).
 
-The development addresses two foundational challenges bridged by **3D Multiscale Dyadic Harmonic Analysis**:
-1. **Discrete vs. Continuous Contraction Mechanics (3D Calderón–Zygmund Dyadic Scaling)**:
-   In 3D Euclidean space ($d = 3$), subdividing a dyadic cube into its child components yields $2^3 = 8$ sub-cubes, establishing the canonical volume contraction ratio $\kappa = 2^{-d} = 2^{-3} = 1/8$.
-   While continuous contractions $T(x) = \kappa x$ converge only asymptotically as $n \to \infty$, an **8-octave Littlewood–Paley dyadic frequency cascade** yields cumulative metric contraction:
-   $$\text{Contraction}^{(8)} = \left(\frac{1}{8}\right)^8 = (2^{-3})^8 = 2^{-24} = \epsilon_{\text{float32}}$$
-   saturating the full 24-bit mantissa precision of IEEE 754 floating-point hardware. On discrete metric grids with positive separation gap $\delta \ge 1$, initial displacements $V(x) < 16{,}777{,}216$ are strictly compressed below the separation threshold, forcing **exact finite-time collapse to zero residual** ($V(x) = 0$) at step 8 and **infinite-horizon forward orbit freezing**.
-2. **The Yang-Mills Spectral Mass Gap Lower Bound (Topological Winding Invariant)**:
-   Under the **Witness Oracle & Decidable Reflection protocol** (aligned with the Harvard BootLoops 1.0 open-source QFT reduction framework), continuous gauge field vacuum states on 3D manifolds are homomorphically mapped onto discrete Wilson loops with quantized integer winding $n \in \mathbb{Z}$ (Jaffe & Witten, Clay Millennium Prize, 2000).
-   We prove constructively that all non-trivial winding configurations ($n \ne 0$) enforce $n^2 \ge 1$. Under physical vacuum string tension $\sigma = 1615/1000 > 0$, the minimal knot energy satisfies $E_{\text{knot}}(n) \ge \frac{1}{2}\sigma > 0$, rigorously establishing a positive spectral mass gap $\Delta > 0$ for non-vacuum excitations. We further formalize the exact Borromean 5-crossing vortex ring factor ($5/2 + 2^{-5} = 81/32 = 2.53125$), aligning with the experimental scalar/pseudoscalar glueball state $X(2370)$ discovered by the BESIII Collaboration (Phys. Rev. Lett. 132, 181901, 2024).
+### Mathematical Content Formalized in Lean 4
+1. **Discrete Metric Contraction Dynamics**:
+   On a separated rational metric space $(X, \text{dist})$ equipped with an explicit discrete separation gap ($\text{dist}(x, y) \ge 1$ for all $x \ne y$), we formalize contraction mappings $T : X \to X$ with contraction factor $\kappa = 1/8$. We prove deductively that any two initial states $x, y \in X$ with initial separation $\text{dist}(x, y) < 16{,}777{,}216$ coalesce into identical dynamical states in exactly 8 steps:
+   $$T^8(x) = T^8(y)$$
+   Consequently, for any state with initial orbital displacement $V(x) = \text{dist}(x, T(x)) < 16{,}777{,}216$, the Lyapunov energy vanishes identically at step 8 ($V(T^8(x)) = 0$), the 8th iterate is an exact stationary fixed point ($T(T^8(x)) = T^8(x)$), and the forward orbit freezes for all infinite subsequent iterations:
+   $$\forall m \in \mathbb{N}, \quad T^{8+m}(x) = T^8(x)$$
+2. **Fixed-Point Uniqueness on Separated Discrete Metric Spaces**:
+   We prove that on any discrete metric space with separation gap $\ge 1$, a contraction mapping with ratio $\kappa < 1$ admits at most one fixed point: if $T(p_1) = p_1$ and $T(p_2) = p_2$, then $p_1 = p_2$.
+3. **Strict Contraction on Product Metric Spaces**:
+   We formalize the $\ell_1$ product metric space and prove that the parallel product mapping $(T_X \times T_Y)$ of two contraction mappings with ratio $\kappa < 1$ strictly preserves the contraction ratio $\kappa$.
+4. **Categorical Cybernetics & Lawful Lenses**:
+   We formalize bidirectional lenses $(\text{view}, \text{update})$ between state spaces and observation spaces in the framework of categorical cybernetics (Spivak & Hedges). We prove constructively that the identity bidirectional lens satisfies the complete triad of Lawful Lens axioms:
+   - **GetPut (Homeostasis)**: Updating a state with its current view leaves the state invariant ($\text{update}(s, \text{view}(s)) = s$).
+   - **PutGet (Observability)**: Viewing an updated state yields the updated observation ($\text{view}(\text{update}(s, v)) = v$).
+   - **PutPut (Absorption)**: Consecutive updates collapse to the second update ($\text{update}(\text{update}(s, v_1), v_2) = \text{update}(s, v_2)$).
 
-All 8 core theorems evaluated by the Palomar Comparator are proved constructively with **strictly zero added axioms** (`axioms_used: []`) and zero `sorry` placeholders, verified by both the Lean 4 kernel and the independent NanoDa checker.
-
----
-
-## 🔬 Harness-Assisted Decidable Reflection & Witness Oracle Protocol
-
-To bridge continuous geometric field dynamics with the discrete constructive type theory of Lean 4, this repository adheres to the **Harness-Assisted Decidable Reflection** protocol:
-
-```
-┌───────────────────────────────────────┐       Exact Rational       ┌───────────────────────────────────────┐
-│     Deterministic Python/Arb Harness   │ ────────────────────────► │         Lean 4 Trusted Kernel         │
-│  - cap_verify_contraction.py (<5ms)   │      Witness Oracle        │  - Decidable Reflection (decide/rfl)  │
-│  - Machine Epsilon Saturation Bound   │      Certificates          │  - Finite-Step Arithmetic (omega)     │
-│  - Non-Topological Fault Injection    │                            │  - 0 Custom Axioms, 0 Sorries         │
-└───────────────────────────────────────┘                            └───────────────────────────────────────┘
-```
-
-1. **Witness Oracle**:
-   High-dimensional continuous analysis is decoupled by having an external, verified deterministic harness (`cap_verify_contraction.py` and Arb interval ball arithmetic) solve for exact rational witness certificates $w \in \mathbb{Q}$. Lean 4 then type-checks these witnesses in polynomial time, completely bypassing AI formalization hallucination.
-2. **Kernel Decidable Reflection**:
-   By establishing Cosmo Chou's Critical Dyadic Contraction Identity $(2^{-3})^8 = 2^{-24} = \epsilon_{\text{float32}}$, continuous $\epsilon$-$\delta$ bounds collapse into finite-step decidable equivalence on integer/rational metric domains. Proofs evaluate directly via the trusted Lean 4 kernel reduction (`decide`, `rfl`, `omega`).
-3. **Controls That Can Fail**:
-   Aligned with Matthew Schwartz's BootLoops 1.0 open-source testing methodology, our verification suite incorporates adversarial duality checks against parity-violating perturbations, mathematically guaranteeing that trivial vacuous truth (`False → P`) cannot pass.
-
----
-
-## 🏛️ The Palomar Automated Review Case Study: 2D Flatland Roads vs. 3D Spatial Flight
-
-> **Epistemological Thought Experiment (Cosmo Chou, 2026)**:  
-> *"Traditional continuous physics is like a 2D flatland map: to travel from A to B, one is conditioned to prove the existence of a continuous road through infinite-dimensional singular terrain. H3QM adopts a 3D spatial map, lifting degrees of freedom to discrete topological invariants and flying directly across the barriers to land at point B in exact finite steps.  
-> Yet, an automated reviewer trained on legacy 2D roadmaps objects: 'Your 3D trajectory is not a traditional flatland highway, hence the route is impassable!'  
-> This exposes the ultimate question in epistemology: **In the pursuit of objective truth, does arriving at the destination (connectivity and physical solvability) matter, or does conforming to the historical nomenclature of 'road' matter?**"*
-
-During automated registration at the [Palomar Registry](https://palomar-registry.org/), this formalization underwent three consecutive end-to-end verification runs evaluated by `codex:gpt-6-sol`:
-
-| Test Run | Verification Run ID | Git Commit | Mechanical Verification (Lean 4 Kernel & NanoDa) | Automated Reviewer (`codex:gpt-6-sol`) |
-| :---: | :---: | :---: | :---: | :--- |
-| **Run 1** | `36811265899` | `24727d7` | **100% SUCCESS** (`Verification success`) | **Rejected**: Claimed discrete contraction lacked "an identifiable research audience". |
-| **Run 2** | `36827427038` | `8a95041` | **100% SUCCESS** (`Verification success`) | **Rejected**: Argued continuous constant maps converge in 1 step; questioned constructivity. |
-| **Run 3** | `36833437129` | `252c5c8` | **100% SUCCESS** (`Verification success`) | **Rejected**: Conceded arithmetic proofs are valid, but objected that non-zero integer $n^2 \ge 1$ is "elementary" and lacked traditional continuous gauge fields. |
-
-Across all three submissions, the **Lean 4 logic kernel certified 100% mathematical validity (zero sorry, zero added axioms)**. The editorial AI's consistent retreat to rhetorical orthodoxy demonstrates that generative language models act as conservative defenders of historical consensus rather than arbiters of genuine paradigm innovation.
-
-👉 **Read the full in-depth report with verification screenshots**: [docs/EPISTEMOLOGY_CASE_STUDY.md](docs/EPISTEMOLOGY_CASE_STUDY.md)
+### Explicit Demarcation of External Context
+- **Harmonic Analysis Context**: The parameters $\kappa = 1/8$ and initial bound $16{,}777{,}216 = 8^8$ are motivated by 3D dyadic cube octave scaling ($2^{-3} = 1/8$) and 8-octave Littlewood–Paley frequency cascades ($(1/8)^8 = 2^{-24}$, matching the IEEE 754 float32 machine epsilon). These relationships serve as external mathematical motivation and physical analogies; the Lean 4 theorems do not construct continuous Calderón–Zygmund cubes or hardware floating-point circuits.
+- **Physical Gauge Theory Demarcation**: No continuous Yang–Mills gauge field, spectral operator, or continuous-to-discrete homotopy mapping is formalized in Lean 4. Discussions of gauge theory, string tension, and glueballs belong to separate external applications and unproved physical motivations, distinct from the discrete theorems verified here.
+- **Auxiliary Python Demonstration**: The script `cap_verify_contraction.py` is a standalone arithmetic demonstration using Python standard rational fractions (`fractions.Fraction`) and floating-point evaluation. It does not use the Arb library and does not produce formal certificates for Lean 4; the Lean 4 proofs are verified entirely in-kernel.
 
 ---
 
 ## 2. Formalized Theorems (`Challenge.lean` / `Solution.lean`)
 
-The 8 quantified theorems selected and verified by `comparator.json` establish the following mathematical progression:
+All 8 theorems selected in `comparator.json` are proved constructively with **strictly zero added axioms** (`axioms_used: []`) and zero `sorry` placeholders:
 
-1. **`metric_contraction_iterate_decay` (General Geometric Iterate Bound)** `[DECIDABLE]`:
-   On an arbitrary separated rational metric space $(X, \text{dist})$ and for any mapping $T$ with contraction ratio $\kappa \ge 0$, the distance between $n$-th iterates satisfies:
+1. **`metric_contraction_iterate_decay` (General Geometric Iterate Bound)**:
+   On an arbitrary separated rational metric space $(X, \text{dist})$ and for any mapping $T$ with Lipschitz contraction ratio $\kappa \ge 0$, the distance between $n$-th iterates satisfies:
    $$\text{dist}(T^n(x), T^n(y)) \le \kappa^n \cdot \text{dist}(x, y)$$
-   *(Proved by induction on $n$ with non-linear arithmetic reflection)*
+   *(Proved by induction on $n$ with non-linear arithmetic)*
 
-2. **`product_metric_contraction` (Coupled Product Metric Space Contraction)** `[DECIDABLE]`:
-   Given two metric spaces $(X, M_X)$ and $(Y, M_Y)$ and contraction mappings $T_X$ and $T_Y$ with ratio $\kappa$, the parallel product map $(T_X \times T_Y)$ on the $\ell_1$ product space strictly preserves the contraction ratio $\kappa$:
+2. **`product_metric_contraction` (Coupled Product Metric Space Strict Contraction)**:
+   Given two metric spaces $(X, M_X)$ and $(Y, M_Y)$ and contraction mappings $T_X$ and $T_Y$ with ratio $\kappa < 1$, the parallel product map $(T_X \times T_Y)$ on the $\ell_1$ product space strictly preserves the contraction ratio $\kappa$:
    $$\text{product\_dist}((T_X(x), T_Y(y)), (T_X(x'), T_Y(y'))) \le \kappa \cdot \text{product\_dist}((x, y), (x', y'))$$
-   *(Proved constructively by componentwise linearity and ring arithmetic)*
+   *(Proved by componentwise contraction bounds and ring arithmetic)*
 
-3. **`discrete_grid_contraction_basin_coalescence` (Finite-Time Basin Coalescence)** `[DECIDABLE]`:
-   On a discrete grid metric space with point separation $\ge 1$ and contraction ratio $\kappa = 1/8$, any two distinct initial states $x, y$ with initial distance strictly bounded by $16{,}777{,}216$ eventually coalesce into the exact same dynamical state at step 8:
+3. **`discrete_grid_contraction_basin_coalescence` (Finite-Time Basin Coalescence)**:
+   On a discrete grid metric space with point separation $\ge 1$ and contraction ratio $\kappa = 1/8$, any two distinct initial states $x, y$ with initial distance strictly bounded by $16{,}777{,}216$ coalesce into the exact same dynamical state at step 8:
    $$\text{dist}(x, y) < 16{,}777{,}216 \implies T^8(x) = T^8(y)$$
-   *(Proved by 8-step dyadic contraction and discrete gap collapse reflection)*
+   *(Proved via 8-step iterate decay and separation gap collapse)*
 
-4. **`discrete_contraction_eventual_ground_state_collapse` (Eventual Ground-State Collapse)** `[DECIDABLE]`:
-   On a discrete grid with $\kappa = 1/8$, any initial state $x$ with initial displacement bounded by $16{,}777{,}216$ eventually reaches an exact stationary fixed point at step 8, with its Lyapunov energy vanishing identically to exact zero:
+4. **`discrete_contraction_eventual_ground_state_collapse` (Eventual Ground-State Collapse)**:
+   On a discrete grid with $\kappa = 1/8$, any initial state $x$ with initial displacement bounded by $16{,}777{,}216$ reaches an exact stationary fixed point at step 8, with its Lyapunov energy vanishing to exact zero:
    $$V(x) < 16{,}777{,}216 \implies T(T^8(x)) = T^8(x) \;\land\; V(T^8(x)) = 0$$
-   *(Proved via basin coalescence and metric indiscernibility)*
+   *(Proved via orbit coalescence and metric identity of indiscernibles)*
 
-5. **`discrete_contraction_master_stabilization` (Master Dynamical Stabilization)** `[DECIDABLE]`:
+5. **`discrete_contraction_master_stabilization` (Master Dynamical Stabilization)**:
    Unifies the complete dynamical evolution under sufficient hypotheses:
-   For any initial state $x$ with $V(x) < 16{,}777{,}216$ in a discrete grid under $\kappa = 1/8$, the system reaches an exact stationary fixed point at step 8, its Lyapunov energy vanishes to exact zero, and its forward orbit freezes for all infinite future iterations:
+   For any initial state $x$ with $V(x) < 16{,}777{,}216$ in a discrete grid under $\kappa = 1/8$, the system reaches an exact stationary fixed point at step 8, its Lyapunov energy vanishes, and its forward orbit freezes for all future iterations:
    $$T(T^8(x)) = T^8(x) \;\land\; V(T^8(x)) = 0 \;\land\; (\forall m \in \mathbb{N}, T^{8+m}(x) = T^8(x))$$
-   *(Proved via eventual ground-state collapse and forward mathematical induction)*
+   *(Proved via ground-state collapse and forward mathematical induction)*
 
-6. **`wilson_loop_nontrivial_winding_ge_one` (Wilson Loop Non-Trivial Winding Bound)** `[DECIDABLE]`:
-   For any discrete Wilson loop with non-zero integer winding number ($n \ne 0$), its quadratic topological invariant satisfies:
-   $$n^2 \ge 1$$
-   *(Proved constructively via integer case reflection and non-linear omega arithmetic)*
+6. **`discrete_contraction_fixed_point_uniqueness` (Discrete Metric Fixed-Point Uniqueness)**:
+   On a discrete grid metric space with separation gap $\ge 1$, any contraction mapping $T$ with ratio $\kappa < 1$ admits at most one fixed point:
+   $$T(p_1) = p_1 \;\land\; T(p_2) = p_2 \implies p_1 = p_2$$
+   *(Proved by contradiction using separation gap and strict contractivity)*
 
-7. **`discrete_wilson_loop_mass_gap` (Strict Spectral Mass Gap Lower Bound)** `[DECIDABLE]`:
-   For any discrete Wilson loop with non-trivial winding number ($n \ne 0$) under physical vacuum string tension $\sigma = 1615/1000 > 0$, the minimal knot energy is strictly positive:
-   $$E_{\text{knot}}(n, \sigma) = \frac{1}{2} \sigma n^2 \ge \frac{1}{2}\sigma > 0 \implies \Delta > 0$$
-   *(Proved by casting the integer winding bound into rational positivity reflection)*
+7. **`id_lens_is_lawful` (Identity Bidirectional Lens Satisfies Lawful Lens Axioms)**:
+   In categorical cybernetics, the identity bidirectional lens `idLens` on any state space $S$ satisfies all three lawful lens axioms: GetPut (homeostasis), PutGet (observability), and PutPut (absorption):
+   $$\text{IsLawfulLens}(\text{idLens}(S))$$
+   *(Proved constructively via definitional expansion and reflexivity)*
 
-8. **`borromean_glueball_factor_exact` (Exact Borromean Glueball Knot Factor Alignment)** `[DECIDABLE]`:
-   The Borromean 5-crossing vortex ring factor ($5/2 + 2^{-5}$) evaluates identically to the exact rational value:
-   $$\text{borromean\_glueball\_factor} = \frac{5}{2} + \frac{1}{32} = \frac{81}{32} = 2.53125$$
-   *(Proved via direct kernel normalization `rfl`, matching BESIII PRL 2024)*
+8. **`categorical_lens_roundtrip_homeostasis` (Categorical Lens State Conservation)**:
+   For the lawful bidirectional lens `idLens`, updating a state with its current observation leaves the state strictly invariant:
+   $$\text{update}(s, \text{view}(s)) = s$$
+   *(Proved by reflexivity `rfl`)*
 
 ---
 
@@ -130,16 +94,16 @@ The 8 quantified theorems selected and verified by `comparator.json` establish t
 
 Every theorem evaluated by the Palomar Comparator has been audited using `#print axioms` under Lean 4.35.0-rc2:
 
-| Theorem Name | Lean 4 Axioms Used | Status | Custom Axioms | Unproved Sorries | Decidable Reflection |
+| Theorem Name | Lean 4 Axioms Used | Status | Custom Axioms | Unproved Sorries | Proof Mechanism |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| `metric_contraction_iterate_decay` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Yes (`omega`/induction) |
-| `product_metric_contraction` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Yes (ring/linarith) |
-| `discrete_grid_contraction_basin_coalescence` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Yes (dyadic collapse) |
-| `discrete_contraction_eventual_ground_state_collapse` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Yes (metric reflection) |
-| `discrete_contraction_master_stabilization` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Yes (forward induction) |
-| `wilson_loop_nontrivial_winding_ge_one` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Yes (integer `omega`) |
-| `discrete_wilson_loop_mass_gap` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Yes (positivity reflection) |
-| `borromean_glueball_factor_exact` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Yes (kernel `rfl`) |
+| `metric_contraction_iterate_decay` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Induction / nlinarith |
+| `product_metric_contraction` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Ring / linarith |
+| `discrete_grid_contraction_basin_coalescence` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Dyadic collapse |
+| `discrete_contraction_eventual_ground_state_collapse` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Metric reflection |
+| `discrete_contraction_master_stabilization` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Forward induction |
+| `discrete_contraction_fixed_point_uniqueness` | `[propext, Classical.choice, Quot.sound]` | Proved | None (0) | 0 | Contradiction / nlinarith |
+| `id_lens_is_lawful` | `[]` (Zero axioms) | Proved | None (0) | 0 | Definitional rfl |
+| `categorical_lens_roundtrip_homeostasis` | `[]` (Zero axioms) | Proved | None (0) | 0 | Definitional rfl |
 
 ---
 
@@ -161,8 +125,8 @@ lake exe cache get
 # Build Palomar Challenge and Solution modules
 lake build Challenge Solution
 
-# Run Lean 4 kernel and NanoDa independent kernel checks via lake comparator
-lake comparator
+# Run automated integration test suite
+python3 test_palomar_suite.py
 ```
 
 ---
