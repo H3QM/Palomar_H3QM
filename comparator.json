@@ -4,12 +4,12 @@
   "theorem_names": [
     "H3QM.Palomar.metric_contraction_iterate_decay",
     "H3QM.Palomar.product_metric_contraction",
-    "H3QM.Palomar.discrete_grid_contraction_basin_coalescence",
-    "H3QM.Palomar.discrete_contraction_eventual_ground_state_collapse",
-    "H3QM.Palomar.discrete_contraction_master_stabilization",
+    "H3QM.Palomar.discrete_contraction_general_coalescence",
+    "H3QM.Palomar.discrete_contraction_general_fixed_point_lock",
     "H3QM.Palomar.discrete_contraction_fixed_point_uniqueness",
-    "H3QM.Palomar.id_lens_is_lawful",
-    "H3QM.Palomar.categorical_lens_roundtrip_homeostasis"
+    "H3QM.Palomar.dyadic_octave_coalescence_corollary",
+    "H3QM.Palomar.lens_comp_is_lawful",
+    "H3QM.Palomar.lens_comp_assoc"
   ],
   "definition_names": [],
   "permitted_axioms": ["propext", "Quot.sound", "Classical.choice"],

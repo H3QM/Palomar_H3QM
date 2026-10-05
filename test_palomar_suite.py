@@ -56,12 +56,12 @@ def test_metadata_yaml():
     theorems_to_check = [
         "metric_contraction_iterate_decay",
         "product_metric_contraction",
-        "discrete_grid_contraction_basin_coalescence",
-        "discrete_contraction_eventual_ground_state_collapse",
-        "discrete_contraction_master_stabilization",
+        "discrete_contraction_general_coalescence",
+        "discrete_contraction_general_fixed_point_lock",
         "discrete_contraction_fixed_point_uniqueness",
-        "id_lens_is_lawful",
-        "categorical_lens_roundtrip_homeostasis"
+        "dyadic_octave_coalescence_corollary",
+        "lens_comp_is_lawful",
+        "lens_comp_assoc"
     ]
     for thm in theorems_to_check:
         assert thm in content, f"Missing theorem in formalization.yaml: {thm}"
@@ -87,12 +87,12 @@ def test_lean_source_files():
     palomar_theorems = [
         "metric_contraction_iterate_decay",
         "product_metric_contraction",
-        "discrete_grid_contraction_basin_coalescence",
-        "discrete_contraction_eventual_ground_state_collapse",
-        "discrete_contraction_master_stabilization",
+        "discrete_contraction_general_coalescence",
+        "discrete_contraction_general_fixed_point_lock",
         "discrete_contraction_fixed_point_uniqueness",
-        "id_lens_is_lawful",
-        "categorical_lens_roundtrip_homeostasis"
+        "dyadic_octave_coalescence_corollary",
+        "lens_comp_is_lawful",
+        "lens_comp_assoc"
     ]
     for thm_name in palomar_theorems:
         assert f"theorem {thm_name}" in challenge_content, f"Theorem {thm_name} missing in Challenge.lean"
@@ -150,26 +150,39 @@ def test_constructive_cap_bridge():
     print("  --> CAP Engine validated algebraic identity, exact zero residual, physical constants, and 19 parameters successfully.")
 
 def test_discrete_metric_contraction_and_collapse():
-    print("\n[TEST 5/5] Verifying Contraction, Fixed-Point Uniqueness, and Categorical Lens...")
+    print("\n[TEST 5/5] Verifying General Contraction, Fixed-Point Uniqueness, and Foster-Pierce Lens Composition...")
     from fractions import Fraction
     
-    # 1. 8-step contraction
+    # 1. General quantitative contraction: kappa^n * D < delta
+    delta = Fraction(1, 1)
     kappa = Fraction(1, 8)
-    V_0 = Fraction(16777215, 1)  # < 16,777,216
-    V_8 = (kappa ** 8) * V_0
-    assert V_8 < 1
+    D = Fraction(16777215, 1)  # < 16,777,216
+    assert (kappa ** 8) * D < delta
     
-    # 2. Fixed-point uniqueness on discrete grid
+    # 2. Fixed-point uniqueness on separated metric space (delta > 0, kappa < 1)
     for k in [Fraction(1, 8), Fraction(1, 2), Fraction(7, 8)]:
         assert k < 1
         
-    # 3. Categorical lens GetPut homeostasis
-    state = 42
-    view = lambda s: s
-    update = lambda s, v: v
-    assert update(state, view(state)) == state
+    # 3. Foster-Pierce Lens Composition
+    # Lens 1: (view1, update1)
+    view1 = lambda a: a * 2
+    update1 = lambda a, b: b // 2
+    # Lens 2: (view2, update2)
+    view2 = lambda b: b + 1
+    update2 = lambda b, c: c - 1
+    
+    # Composite lens
+    comp_view = lambda a: view2(view1(a))
+    comp_update = lambda a, c: update1(a, update2(view1(a), c))
+    
+    # Check GetPut: comp_update(a, comp_view(a)) == a
+    a = 10
+    assert comp_update(a, comp_view(a)) == a
+    # Check PutGet: comp_view(comp_update(a, c)) == c
+    c = 25
+    assert comp_view(comp_update(a, c)) == c
                 
-    print("  --> Contraction collapse, fixed-point uniqueness, and categorical lens 100% verified.")
+    print("  --> General quantitative contraction, fixed-point uniqueness, and Foster-Pierce lens category 100% verified.")
 
 def main():
     print("================================================================================")

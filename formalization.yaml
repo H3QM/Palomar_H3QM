@@ -6,7 +6,7 @@ version: "v0.4"
 
 project:
   name: "palomar_h3qm"
-  description: "Formal verification in Lean 4 of discrete rational metric contraction dynamics, finite-time basin coalescence, fixed-point uniqueness, and categorical lawful lens homeostasis, formalizing Chou (2026, Zenodo 10.5281/zenodo.22928921)."
+  description: "Formal verification in Lean 4 of quantitative discrete metric contraction dynamics, general finite-time basin coalescence, fixed-point uniqueness on separated metric spaces, and the Foster-Pierce theorem on the category of lawful bidirectional lenses."
   authors:
     - name: "Cosmo Chou"
       email: "cosmo@h3qm.org"
@@ -31,7 +31,7 @@ automation:
 
 review:
   status: "self-assessed"
-  notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 8 theorems verified under Lean 4 standard library axioms with zero added axioms and zero sorry."
+  notes: "Formal verification certified by Lean 4 kernel and NanoDa; all 8 theorems verified under Lean 4 standard library axioms with zero added custom axioms and zero sorry."
 
 sources:
   - title: "Discrete Topological Contraction Dynamics and Categorical Homeostasis"
@@ -43,36 +43,41 @@ sources:
     url: "https://doi.org/10.5281/zenodo.22928921"
     note: "Primary research publication establishing discrete metric contraction bounds, finite-time coalescence, fixed-point uniqueness, and bidirectional lawful lens homeostasis."
     license: "Apache-2.0"
-  - title: "Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales"
+  - title: "A Combinator Framework for Bidirectional Tree Transformations"
     authors:
-      - name: "Stefan Banach"
+      - name: "J. Nathan Foster"
+      - name: "Michael B. Greenwald"
+      - name: "Jonathan T. Moore"
+      - name: "Benjamin C. Pierce"
+      - name: "Alan Schmitt"
     type: "paper"
     relationship: "background"
-    note: "Fundamenta Mathematicae, Vol. 3, 1922, pp. 133-181. Foundational contraction mapping theorem on metric spaces."
+    note: "ACM Transactions on Programming Languages and Systems (TOPLAS), 2007. Foundational theory of lawful bidirectional lenses and lens composition."
   - title: "Categories of Cybernetics"
     authors:
       - name: "David Spivak"
       - name: "Jules Hedges"
     type: "paper"
     relationship: "background"
-    note: "Foundational theory of bidirectional lenses, state update homeostasis, and compositional dynamical systems in categorical cybernetics."
-  - title: "Real-Variable Methods, Orthogonality, and Oscillatory Integrals"
+    note: "Foundational categorical semantics of bidirectional lenses, composition, and state update dynamics in categorical cybernetics."
+  - title: "Sur les opérations dans les ensembles abstraits et leur application aux équations intégrales"
     authors:
-      - name: "Terence Tao"
-    type: "book"
+      - name: "Stefan Banach"
+    type: "paper"
     relationship: "background"
-    note: "Contextual motivation for 3D dyadic cube octave scaling ratio kappa = 2^-3 = 1/8 and Littlewood-Paley multiscale frequency analysis (external analytical context)."
+    note: "Fundamenta Mathematicae, Vol. 3, 1922, pp. 133-181. Foundational contraction mapping theorem on metric spaces."
 
 limitations:
-  - "The formalization strictly operates on separated rational metric spaces (MetricSpaceQ) and discrete state spaces satisfying an explicit separation gap (IsDiscreteGrid). Finite-time coalescence at step 8, fixed-point stationarity, and forward orbit freezing are proved deductively from the explicit hypotheses kappa = 1/8 and initial distance < 16,777,216. The formalization does NOT formalize continuous Calderon-Zygmund dyadic cubes, Littlewood-Paley operators, or physical hardware IEEE 754 floating-point saturation; these concepts serve as external motivating background and physical analogies for the chosen numerical parameters."
-  - "No continuous Yang-Mills gauge field, spectral operator, or continuous-to-discrete homotopy mapping is formalized in Lean 4. The formalization proves discrete metric contraction and categorical lawful lens theorems. Physical gauge theory and glueball comparisons belong to external unproved motivation, not the formalized statements."
-  - "The Python verification script (cap_verify_contraction.py) is a standalone auxiliary arithmetic demonstration using Python's standard fractions.Fraction and float types. It does not import the Arb ball arithmetic library and does not generate Lean certificates. Lean verification is carried out independently by the Lean 4 kernel and Mathlib."
+  - "The formalization operates within standard Lean 4 / Mathlib classical foundations permitting the standard core axioms [propext, Quot.sound, Classical.choice]. Strictly zero domain-specific custom axioms and zero unproved sorry placeholders are used. The categorical lens theorems hold constructively, while the metric inequality proofs utilize Mathlib's standard classical tactics."
+  - "The parameter kappa = 1/8 and threshold 16,777,216 in the dyadic corollary are motivated by 3D dyadic cube octave scaling (2^-3 = 1/8) and 8-octave Littlewood-Paley cascades ((1/8)^8 = 2^-24, which aligns numerically with the unit roundoff u = 2^-24 of IEEE 754 float32 precision, half of float32 machine epsilon eps_mach = 2^-23). These analytical and numerical connections are external motivations and analogies; the formalization does not model hardware floating-point circuits or continuous PDE wavelets."
+  - "No continuous Yang-Mills gauge field, spectral operator, or continuous-to-discrete homotopy mapping is formalized in Lean 4. The formalization proves general discrete metric contraction dynamics and categorical lens composition theorems."
+  - "The Python verification script (cap_verify_contraction.py) is a standalone auxiliary arithmetic demonstration using Python's standard fractions.Fraction and float types. It does not import the Arb library and does not generate Lean certificates. Lean verification is carried out independently by the Lean 4 kernel and Mathlib."
 
 entry_metadata:
-  title: "Formal Verification of Discrete Metric Contraction Dynamics, Fixed-Point Uniqueness, and Categorical Lawful Lenses"
-  short_title: "Discrete Metric Contraction and Categorical Lawful Lenses"
+  title: "Formal Verification of Quantitative Discrete Metric Contraction Dynamics, Fixed-Point Uniqueness, and the Category of Lawful Lenses"
+  short_title: "Discrete Metric Contraction and the Category of Lawful Lenses"
   category: "Dynamical Systems / Metric Geometry / Categorical Cybernetics / Formal Verification"
-  date: "2026-10-04"
+  date: "2026-10-05"
   status: "published"
   doi: "10.5281/zenodo.22928921"
   zenodo_url: "https://doi.org/10.5281/zenodo.22928921"
@@ -95,7 +100,7 @@ formalization:
   
   theorems:
     - name: "H3QM.Palomar.metric_contraction_iterate_decay"
-      informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio kappa >= 0, the distance between n-th iterates satisfies the geometric bound: dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y)."
+      informal_statement: "On an arbitrary separated rational metric space (X, dist) and for any mapping T with Lipschitz ratio kappa >= 0, the distance between n-th iterates satisfies the geometric bound: dist(T^n(x), T^n(y)) <= kappa^n * dist(x, y)."
       proof_tactic: "induction n with nlinarith"
       status: "proved"
       zero_axioms: true
@@ -106,73 +111,81 @@ formalization:
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.discrete_grid_contraction_basin_coalescence"
-      informal_statement: "On a discrete grid metric space with point separation >= 1 and contraction ratio kappa = 1/8, any two initial states x and y with initial distance strictly bounded by 16,777,216 coalesce into the exact same state at step 8: dist(x, y) < 16,777,216 implies T^8(x) = T^8(y)."
-      proof_tactic: "metric_contraction_iterate_decay at step 8 combined with discrete grid gap collapse"
+    - name: "H3QM.Palomar.discrete_contraction_general_coalescence"
+      informal_statement: "On any separated metric space with positive separation gap delta > 0, for any contraction mapping T with ratio kappa, whenever an iteration index n satisfies the quantitative criterion kappa^n * dist(x, y) < delta, the dynamical iterates coalesce identically at step n: T^n(x) = T^n(y)."
+      proof_tactic: "metric_contraction_iterate_decay combined with separation gap collapse"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.discrete_contraction_eventual_ground_state_collapse"
-      informal_statement: "On a discrete grid metric space with point separation >= 1 and contraction ratio kappa = 1/8, any initial state x with initial displacement V(x) < 16,777,216 collapses to an exact stationary fixed point at step 8, with its Lyapunov energy vanishing identically: T(T^8(x)) = T^8(x) and V(T^8(x)) = 0."
-      proof_tactic: "orbit coalescence applied to (x, T(x)) with iterate commutation and metric identity of indiscernibles"
-      status: "proved"
-      zero_axioms: true
-
-    - name: "H3QM.Palomar.discrete_contraction_master_stabilization"
-      informal_statement: "Master dynamical stabilization theorem: for any initial state x with V(x) < 16,777,216 in a discrete grid under contraction ratio kappa = 1/8, the system reaches an exact stationary fixed point at step 8, its Lyapunov energy vanishes, and its forward orbit freezes for all future iterations: T(T^8(x)) = T^8(x), V(T^8(x)) = 0, and for all m, T^(8 + m)(x) = T^8(x)."
-      proof_tactic: "conjunction of eventual ground-state collapse and forward orbit induction"
+    - name: "H3QM.Palomar.discrete_contraction_general_fixed_point_lock"
+      informal_statement: "On any separated metric space with positive separation gap delta > 0, whenever an iteration index n satisfies kappa^n * V(x) < delta for initial displacement V(x) = dist(x, T(x)), the state collapses to an exact stationary fixed point at step n, its Lyapunov energy vanishes, and its forward orbit freezes for all future iterations: T(T^n(x)) = T^n(x), V(T^n(x)) = 0, and for all m, T^(n + m)(x) = T^n(x)."
+      proof_tactic: "general coalescence applied to (x, T(x)) with iterate commutation and forward orbit induction"
       status: "proved"
       zero_axioms: true
 
     - name: "H3QM.Palomar.discrete_contraction_fixed_point_uniqueness"
-      informal_statement: "On a discrete grid metric space with separation gap >= 1, any contraction mapping T with ratio kappa < 1 admits at most one fixed point: T(p1) = p1 and T(p2) = p2 implies p1 = p2."
+      informal_statement: "On any metric space with positive separation gap delta > 0, any contraction mapping T with ratio kappa < 1 admits at most one fixed point: T(p1) = p1 and T(p2) = p2 implies p1 = p2."
       proof_tactic: "proof by contradiction using separation gap and nlinarith on contraction bound"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.id_lens_is_lawful"
-      informal_statement: "The identity bidirectional lens idLens on any state space S satisfies the complete triad of Lawful Lens axioms in categorical cybernetics: GetPut (homeostasis), PutGet (observability), and PutPut (idempotent absorption)."
-      proof_tactic: "constructor and reflexivity"
+    - name: "H3QM.Palomar.dyadic_octave_coalescence_corollary"
+      informal_statement: "Specializing to unit separation gap delta = 1, 3D dyadic scaling ratio kappa = 1/8, and initial separation bounded by 16,777,216: exactly n = 8 steps are sufficient to guarantee identical dynamical coalescence: dist(x, y) < 16,777,216 implies T^8(x) = T^8(y)."
+      proof_tactic: "application of general discrete coalescence theorem with dyadic 8-step power evaluation"
       status: "proved"
       zero_axioms: true
 
-    - name: "H3QM.Palomar.categorical_lens_roundtrip_homeostasis"
-      informal_statement: "For the lawful bidirectional lens idLens, updating a state with its current observation leaves the state strictly invariant: update s (view s) = s."
-      proof_tactic: "reflexivity"
+    - name: "H3QM.Palomar.lens_comp_is_lawful"
+      informal_statement: "The Foster-Pierce Theorem: sequential composition of lawful bidirectional lenses is lawful. If l1 : Lens A B and l2 : Lens B C satisfy the three lawful lens axioms (GetPut homeostasis, PutGet observability, PutPut idempotent absorption), then their sequential composition (l1 ; l2) strictly satisfies all three axioms."
+      proof_tactic: "constructor and equational rewriting using component lens laws"
+      status: "proved"
+      zero_axioms: true
+
+    - name: "H3QM.Palomar.lens_comp_assoc"
+      informal_statement: "Associativity of bidirectional lens composition: for any three lenses l1, l2, l3, (l1 ; l2) ; l3 and l1 ; (l2 ; l3) have identical view and update semantics, establishing that lawful bidirectional lenses form a well-defined Category Lens."
+      proof_tactic: "constructor and definitional reflexivity"
       status: "proved"
       zero_axioms: true
 
   axioms_used: []  # Strictly zero additional custom axioms; 100% standard Lean 4 kernel.
 
 informal_description: |
-  This formalization provides a machine-checked proof in Lean 4 of discrete metric contraction dynamics,
-  finite-time basin coalescence, fixed-point uniqueness, and categorical lawful lens homeostasis,
-  formalizing Chou (2026, Zenodo 10.5281/zenodo.22928921).
+  This formalization provides a machine-checked proof in Lean 4 of the quantitative theory of discrete metric
+  contraction dynamics, finite-time basin coalescence, fixed-point uniqueness on separated metric spaces, and
+  the Foster-Pierce theorem on the category of lawful bidirectional lenses, formalizing Chou (2026, Zenodo 10.5281/zenodo.22928921).
 
-  The formalized results address the dynamics of contraction mappings on discrete and separated rational metric spaces:
-  1. Discrete Metric Contraction Dynamics:
-     On a separated rational metric space (X, dist) with an explicit discrete separation gap (dist(x, y) >= 1 for x != y),
-     we prove that any mapping T satisfying the contraction bound dist(T(x), T(y)) <= kappa * dist(x, y) with kappa = 1/8
-     forces any pair of states with initial distance dist(x, y) < 16,777,216 to coalesce into identical states at step 8:
-     T^8(x) = T^8(y).
-     As a direct consequence, the orbital Lyapunov functional V(x) = dist(x, T(x)) vanishes identically at step 8, the state
-     becomes an exact stationary fixed point T(T^8(x)) = T^8(x), and the forward orbit freezes for all infinite future iterations:
-     T^(8 + m)(x) = T^8(x) for all m in N.
-  2. Fixed-Point Uniqueness on Discrete Metric Spaces:
-     We prove that on any discrete grid metric space with separation gap >= 1, a contraction mapping with ratio kappa < 1
-     can admit at most one fixed point: if T(p1) = p1 and T(p2) = p2, then p1 = p2.
-  3. Strict Contraction on Product Metric Spaces:
-     We formalize the l1 product metric space and prove that the parallel product of two contraction mappings with ratio
-     kappa < 1 strictly preserves the contraction ratio kappa.
-  4. Categorical Cybernetics and Lawful Lenses:
-     We formalize bidirectional lenses (view, update) between state spaces and observation spaces in the sense of Spivak and
-     Hedges. We prove that the identity bidirectional lens satisfies the complete triad of Lawful Lens axioms:
-     GetPut (homeostasis), PutGet (observability), and PutPut (idempotent absorption), ensuring exact roundtrip state conservation.
+  The formalized results establish two interconnected developments in metric dynamical systems and category theory:
+  1. Quantitative Discrete Metric Contraction Dynamics:
+     On an arbitrary separated rational metric space (X, dist) with an explicit positive separation gap
+     (dist(x, y) >= delta > 0 for all x != y), we prove that any mapping T satisfying the contraction bound
+     dist(T(x), T(y)) <= kappa * dist(x, y) with kappa < 1 forces any pair of states with initial distance
+     dist(x, y) to coalesce into identical dynamical states at step n whenever kappa^n * dist(x, y) < delta:
+         T^n(x) = T^n(y).
+     As a quantitative consequence, for any initial state with displacement V(x) = dist(x, T(x)) satisfying
+     kappa^n * V(x) < delta, the state collapses to an exact stationary fixed point T(T^n(x)) = T^n(x), its
+     Lyapunov displacement vanishes identically (V(T^n(x)) = 0), and its forward orbit freezes for all infinite
+     future iterations:
+         forall m in N, T^(n + m)(x) = T^n(x).
+     We further prove that on any such separated metric space, a contraction mapping with ratio kappa < 1 admits
+     at most one fixed point: if T(p1) = p1 and T(p2) = p2, then p1 = p2.
+     As a concrete multiscale corollary, specializing to the 3D dyadic scaling ratio kappa = 1/8, unit separation
+     gap delta = 1, and initial separation bounded by 16,777,216, exactly n = 8 steps are sufficient to achieve
+     identical coalescence: T^8(x) = T^8(y).
+  2. The Category of Lawful Bidirectional Lenses (Foster-Pierce Theorem):
+     In categorical cybernetics and bidirectional programming (Foster et al., TOPLAS 2007; Spivak 2019),
+     we formalize bidirectional lenses (view, update) between state spaces and observation spaces.
+     We prove constructively that sequential composition of lawful lenses preserves all three lawful lens axioms:
+         - GetPut (Homeostasis): update(s, view(s)) = s
+         - PutGet (Observability): view(update(s, v)) = v
+         - PutPut (Idempotent Absorption): update(update(s, v1), v2) = update(s, v2)
+     Furthermore, we prove that lens composition is strictly associative, establishing that lawful bidirectional
+     lenses form a well-defined Category Lens.
 
   Analytical Context and Demarcation:
   - The ratio kappa = 1/8 and threshold 16,777,216 are motivated by 3D dyadic cube multiscale decomposition (volume ratio 2^-3 = 1/8)
-    and 8-octave Littlewood-Paley cascades ((1/8)^8 = 2^-24, which aligns numerically with float32 machine epsilon). These connections
-    provide external analytical motivation and numerical applications; they are not derived within Lean 4 from continuous dyadic cubes.
+    and 8-octave Littlewood-Paley cascades ((1/8)^8 = 2^-24, which aligns numerically with the unit roundoff u = 2^-24 of
+    IEEE 754 float32 precision, half of float32 machine epsilon eps_mach = 2^-23). These connections provide external analytical
+    motivation and numerical applications; they are not derived within Lean 4 from continuous dyadic cubes.
   - No continuous Yang-Mills gauge field, continuous PDE spectral operator, or continuous-to-discrete homotopy map is formalized.
   - The auxiliary Python script (cap_verify_contraction.py) demonstrates rational and floating-point calculations using standard Python;
     it does not use the Arb library and does not generate Lean certificates. Lean verification is self-contained.

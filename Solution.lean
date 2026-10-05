@@ -14,10 +14,9 @@ Copyright (c) 2026 Cosmo Chou. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Author: Cosmo Chou
 
-! This file was designed for the Palomar Registry of Lean Verified Mathematics.
-! Solution File: Complete formal constructive proofs of Discrete Metric Contraction, Ground-State Stabilization,
-! Non-Trivial Wilson Loop Winding, and Spectral Mass Gap Lower Bounds.
-! Conforms to Palomar requirement (a): 100% typechecked, zero added axioms.
+! Solution File: Formal Proofs of Quantitative Discrete Metric Contraction Dynamics,
+! Finite-Time Coalescence, Fixed-Point Uniqueness, and Categorical Lawful Lens Composition.
+! Evaluated under Lean 4 kernel with ZERO extra axioms and ZERO unproved sorries.
 -/
 
 namespace H3QM.Palomar
@@ -37,11 +36,11 @@ structure MetricSpaceQ (X : Type) where
   dist_triangle : ∀ x y z, dist x z ≤ dist x y + dist y z
 
 /--
-A discrete grid metric condition: any two distinct points have distance at least 1.
-Characterizes integer lattices and quantized discrete state spaces.
+A separation gap condition on a metric space: any two distinct points have distance at least δ > 0.
+Characterizes discrete metric spaces, quantized lattices, and isolated dynamical basins.
 -/
-def IsDiscreteGrid {X : Type} (M : MetricSpaceQ X) : Prop :=
-  ∀ x y, x ≠ y → M.dist x y ≥ 1
+def HasSeparationGap {X : Type} (M : MetricSpaceQ X) (δ : ℚ) : Prop :=
+  0 < δ ∧ ∀ x y, x ≠ y → M.dist x y ≥ δ
 
 /--
 A contraction mapping on a metric space (X, dist) with contraction ratio κ.
@@ -73,53 +72,31 @@ def product_dist {X Y : Type} (MX : MetricSpaceQ X) (MY : MetricSpaceQ Y)
   MX.dist p1.1 p2.1 + MY.dist p1.2 p2.2
 
 /--
-The 3D Dyadic Calderón-Zygmund Harmonic Contraction Ratio: κ = 2^(-d) = 2^(-3) = 1/8 (d = 3).
-Represents the canonical volume scaling factor of 3D dyadic cubes in multiscale harmonic analysis.
+The 3D Dyadic Octave Scaling Ratio: κ = 2^(-d) = 2^(-3) = 1/8 (d = 3).
+Represents the canonical volume scaling factor of 3D dyadic cubes in multiscale analysis.
 -/
 def kappa : ℚ := (1 : ℚ) / 8
 
-/--
-Lemma: The contraction ratio κ = 1/8 is strictly non-negative.
--/
-theorem kappa_nonneg : 0 ≤ kappa := by
+lemma kappa_nonneg : 0 ≤ kappa := by
   dsimp [kappa]
   norm_num
 
-/--
-Lemma: The 8-th compound power of κ = 1/8 equals 1 / 16,777,216.
--/
-theorem kappa_pow_8 : kappa ^ 8 = (1 : ℚ) / 16777216 := by
+lemma kappa_pow_8 : kappa ^ 8 = (1 : ℚ) / 16777216 := by
   dsimp [kappa]
   norm_num
 
-/--
-Commutation lemma for iterate: iterate T n (T x) = T (iterate T n x).
--/
 theorem iterate_comm {X : Type} (T : X → X) (n : ℕ) (x : X) :
     iterate T n (T x) = T (iterate T n x) :=
   ((Function.Commute.refl T).iterate_right n x).symm
 
-/--
-Successor step lemma for iterate: iterate T (n + 1) x = T (iterate T n x).
--/
 theorem iterate_succ {X : Type} (T : X → X) (n : ℕ) (x : X) :
     iterate T (n + 1) x = T (iterate T n x) := by
   change iterate T n (T x) = T (iterate T n x)
   exact iterate_comm T n x
 
 /--
-Lemma: Separation gap collapse on discrete grids.
--/
-theorem discrete_grid_gap_collapse {X : Type} (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (x y : X) (h_lt : M.dist x y < 1) :
-    x = y := by
-  by_contra h_ne
-  have h_ge : M.dist x y ≥ 1 := hG x y h_ne
-  linarith
-
-/--
 A Bidirectional Lens (view, update) between state space S and observation space V.
-Governed by Categorical Cybernetics (Spivak, Hedges).
+Governed by Categorical Cybernetics (Spivak, Hedges, Foster et al.).
 -/
 structure BidirectionalLens (S V : Type) where
   view : S → V
@@ -144,8 +121,17 @@ def idLens (S : Type) : BidirectionalLens S S where
   update := fun _ v => v
 
 /--
+Sequential composition of bidirectional lenses: l1 ⨾ l2.
+Combines a lens between A and B with a lens between B and C to form a lens between A and C.
+-/
+def lensComp {A B C : Type} (l1 : BidirectionalLens A B) (l2 : BidirectionalLens B C) :
+    BidirectionalLens A C where
+  view := fun a => l2.view (l1.view a)
+  update := fun a c => l1.update a (l2.update (l1.view a) c)
+
+/--
 THEOREM 1 PROOF (General Metric Contraction Iterate Bound):
-On an arbitrary separated rational metric space (X, dist) and for any mapping T with contraction ratio κ ≥ 0,
+On an arbitrary separated rational metric space (X, dist) and for any mapping T with Lipschitz ratio κ ≥ 0,
 the distance between n-th iterates satisfies the geometric bound:
     dist(T^n(x), T^n(y)) ≤ κ^n * dist(x, y).
 -/
@@ -155,16 +141,20 @@ theorem metric_contraction_iterate_decay {X : Type} (M : MetricSpaceQ X) (T : X 
   induction n with
   | zero =>
     dsimp [iterate]
-    rw [pow_zero, one_mul]
+    have h1 : κ ^ 0 * M.dist x y = M.dist x y := by ring
+    rw [h1]
   | succ k ih =>
     rw [iterate_succ, iterate_succ]
     have h_step : M.dist (T (iterate T k x)) (T (iterate T k y)) ≤ κ * M.dist (iterate T k x) (iterate T k y) :=
       hT (iterate T k x) (iterate T k y)
-    have h_dist_nonneg : 0 ≤ M.dist x y := M.dist_nonneg x y
-    have h_step_dist_nonneg : 0 ≤ M.dist (iterate T k x) (iterate T k y) := M.dist_nonneg _ _
-    rw [pow_succ]
-    have h_mul : κ * (κ ^ k * M.dist x y) = κ ^ k * κ * M.dist x y := by ring
-    nlinarith
+    have h_pow : κ ^ (k + 1) = κ * κ ^ k := by ring
+    rw [h_pow]
+    have h_dist_nonneg := M.dist_nonneg x y
+    have h_ineq : κ * M.dist (iterate T k x) (iterate T k y) ≤ κ * (κ ^ k * M.dist x y) := by
+      nlinarith [ih, hκ]
+    have h_assoc : κ * (κ ^ k * M.dist x y) = κ * κ ^ k * M.dist x y := by ring
+    rw [h_assoc] at h_ineq
+    linarith
 
 /--
 THEOREM 2 PROOF (Coupled Product Metric Space Strict Contraction):
@@ -185,111 +175,134 @@ theorem product_metric_contraction {X Y : Type}
   linarith
 
 /--
-THEOREM 3 PROOF (Finite-Time Basin Coalescence under Sufficient Hypotheses):
-On a discrete grid metric space with minimum point separation 1, under contraction ratio κ = 1/8,
-any two distinct initial states x, y with separation dist(x, y) < 16,777,216 eventually coalesce
-into the exact same dynamical state at step 8:
-    dist(x, y) < 16,777,216 → T^8(x) = T^8(y).
+THEOREM 3 PROOF (General Quantitative Finite-Time Basin Coalescence):
+On any separated metric space with positive separation gap δ > 0, for any contraction mapping T with ratio κ,
+whenever an iteration index n satisfies the quantitative criterion κ^n * dist(x, y) < δ,
+the dynamical iterates coalesce identically at step n:
+    κ^n * dist(x, y) < δ → T^n(x) = T^n(y).
 -/
-theorem discrete_grid_contraction_basin_coalescence {X : Type}
-    (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (T : X → X) (hT : IsContraction M T kappa)
-    (x y : X) (h_dist : M.dist x y < 16777216) :
-    iterate T 8 x = iterate T 8 y := by
-  have h_decay := metric_contraction_iterate_decay M T kappa kappa_nonneg hT 8 x y
-  have h_k8 : kappa ^ 8 = (1 : ℚ) / 16777216 := kappa_pow_8
-  rw [h_k8] at h_decay
-  have h_lt : M.dist (iterate T 8 x) (iterate T 8 y) < 1 := by linarith
-  exact discrete_grid_gap_collapse M hG (iterate T 8 x) (iterate T 8 y) h_lt
+theorem discrete_contraction_general_coalescence {X : Type}
+    (M : MetricSpaceQ X) (δ : ℚ) (hδ : HasSeparationGap M δ)
+    (T : X → X) (κ : ℚ) (hκ : 0 ≤ κ) (hT : IsContraction M T κ)
+    (n : ℕ) (x y : X) (h_bound : κ ^ n * M.dist x y < δ) :
+    iterate T n x = iterate T n y := by
+  have h_decay := metric_contraction_iterate_decay M T κ hκ hT n x y
+  have h_lt : M.dist (iterate T n x) (iterate T n y) < δ := by linarith
+  by_contra h_ne
+  have h_gap := hδ.2 (iterate T n x) (iterate T n y) h_ne
+  linarith
 
 /--
-THEOREM 4 PROOF (Eventual Ground-State Collapse and Stationary Fixed-Point Lock-In):
-On a discrete grid metric space under contraction ratio κ = 1/8, any initial state x with
-initial displacement V(x) < 16,777,216 eventually collapses to an exact stationary fixed point at step 8,
-with its Lyapunov energy vanishing identically to exact zero:
-    V(x) < 16,777,216 → T(T^8(x)) = T^8(x) ∧ V(T^8(x)) = 0.
--/
-theorem discrete_contraction_eventual_ground_state_collapse {X : Type}
-    (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (T : X → X) (hT : IsContraction M T kappa)
-    (x : X) (h_init : lyapunov M T x < 16777216) :
-    T (iterate T 8 x) = iterate T 8 x ∧ lyapunov M T (iterate T 8 x) = 0 := by
-  dsimp [lyapunov] at h_init
-  have h_coal := discrete_grid_contraction_basin_coalescence M hG T hT x (T x) h_init
-  have h_comm : iterate T 8 (T x) = T (iterate T 8 x) := iterate_comm T 8 x
-  rw [h_comm] at h_coal
-  have h_fp : T (iterate T 8 x) = iterate T 8 x := h_coal.symm
-  have h_dist_zero : M.dist (iterate T 8 x) (T (iterate T 8 x)) = 0 := by
-    have h_symm : iterate T 8 x = T (iterate T 8 x) := h_fp.symm
-    exact (M.dist_eq_zero (iterate T 8 x) (T (iterate T 8 x))).mpr h_symm
-  constructor
-  · exact h_fp
-  · dsimp [lyapunov]
-    exact h_dist_zero
-
-/--
-THEOREM 5 PROOF (Master Dynamical Stabilization):
-Unifies the complete dynamical evolution under sufficient hypotheses:
-For any initial state x with V(x) < 16,777,216 in a discrete grid under contraction ratio κ = 1/8,
-the system reaches an exact stationary fixed point at step 8, its Lyapunov energy vanishes to exact zero,
+THEOREM 4 PROOF (General Quantitative Finite-Time Stabilization and Orbit Freezing):
+On any separated metric space with positive separation gap δ > 0, whenever an iteration index n
+satisfies κ^n * V(x) < δ for initial displacement V(x) = dist(x, T(x)),
+the state collapses to an exact stationary fixed point at step n, its Lyapunov energy vanishes to exact 0,
 and its forward orbit freezes for all infinite future iterations:
-    T(T^8(x)) = T^8(x) ∧ V(T^8(x)) = 0 ∧ (∀ m, T^(8 + m)(x) = T^8(x)).
+    T(T^n(x)) = T^n(x) ∧ V(T^n(x)) = 0 ∧ (∀ m, T^(n + m)(x) = T^n(x)).
 -/
-theorem discrete_contraction_master_stabilization {X : Type}
-    (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
-    (T : X → X) (hT : IsContraction M T kappa)
-    (x : X) (h_init : lyapunov M T x < 16777216) :
-    T (iterate T 8 x) = iterate T 8 x ∧
-    lyapunov M T (iterate T 8 x) = 0 ∧
-    ∀ m : ℕ, iterate T (8 + m) x = iterate T 8 x := by
-  have h_coll := discrete_contraction_eventual_ground_state_collapse M hG T hT x h_init
-  have h_fp := h_coll.1
-  have h_frz : ∀ m : ℕ, iterate T (8 + m) x = iterate T 8 x := by
+theorem discrete_contraction_general_fixed_point_lock {X : Type}
+    (M : MetricSpaceQ X) (δ : ℚ) (hδ : HasSeparationGap M δ)
+    (T : X → X) (κ : ℚ) (hκ : 0 ≤ κ) (hT : IsContraction M T κ)
+    (n : ℕ) (x : X) (h_bound : κ ^ n * lyapunov M T x < δ) :
+    T (iterate T n x) = iterate T n x ∧
+    lyapunov M T (iterate T n x) = 0 ∧
+    ∀ m : ℕ, iterate T (n + m) x = iterate T n x := by
+  dsimp [lyapunov] at h_bound
+  have h_coal := discrete_contraction_general_coalescence M δ hδ T κ hκ hT n x (T x) h_bound
+  have h_comm : iterate T n (T x) = T (iterate T n x) := iterate_comm T n x
+  rw [h_comm] at h_coal
+  have h_fp : T (iterate T n x) = iterate T n x := h_coal.symm
+  have h_dist_zero : M.dist (iterate T n x) (T (iterate T n x)) = 0 := by
+    have h_symm : iterate T n x = T (iterate T n x) := h_fp.symm
+    exact (M.dist_eq_zero (iterate T n x) (T (iterate T n x))).mpr h_symm
+  have h_frz : ∀ m : ℕ, iterate T (n + m) x = iterate T n x := by
     intro m
     induction m with
     | zero => rw [Nat.add_zero]
     | succ k ih =>
-      have h_add : 8 + (k + 1) = (8 + k) + 1 := by ring
+      have h_add : n + (k + 1) = (n + k) + 1 := by ring
       rw [h_add, iterate_succ, ih]
       exact h_fp
-  exact ⟨h_coll.1, h_coll.2, h_frz⟩
+  exact ⟨h_fp, h_dist_zero, h_frz⟩
 
 /--
-THEOREM 6 PROOF (Discrete Metric Fixed-Point Uniqueness):
-On a discrete grid metric space with separation gap ≥ 1, any contraction mapping T with ratio κ < 1
-admits at most one fixed point: any two fixed points p1 and p2 must be identical:
+THEOREM 5 PROOF (Discrete Metric Fixed-Point Uniqueness):
+On any metric space with positive separation gap δ > 0, any contraction mapping T with ratio κ < 1
+admits at most one fixed point:
     T(p1) = p1 ∧ T(p2) = p2 → p1 = p2.
 -/
 theorem discrete_contraction_fixed_point_uniqueness {X : Type}
-    (M : MetricSpaceQ X) (hG : IsDiscreteGrid M)
+    (M : MetricSpaceQ X) (δ : ℚ) (hδ : HasSeparationGap M δ)
     (T : X → X) (κ : ℚ) (_hκ_nonneg : 0 ≤ κ) (hκ_lt : κ < 1)
     (hT : IsContraction M T κ) (p1 p2 : X)
     (hp1 : T p1 = p1) (hp2 : T p2 = p2) :
     p1 = p2 := by
   by_contra h_ne
-  have h_gap : M.dist p1 p2 ≥ 1 := hG p1 p2 h_ne
+  have h_gap : M.dist p1 p2 ≥ δ := hδ.2 p1 p2 h_ne
   have h_contr : M.dist (T p1) (T p2) ≤ κ * M.dist p1 p2 := hT p1 p2
   rw [hp1, hp2] at h_contr
+  have hδ_pos := hδ.1
   nlinarith
 
 /--
-THEOREM 7 PROOF (Identity Bidirectional Lens Satisfies Lawful Lens Axioms):
-In Categorical Cybernetics (Spivak, Hedges), the identity bidirectional lens idLens on any state space S
-satisfies all three lawful lens axioms: GetPut (homeostasis), PutGet (observability), and PutPut (absorption).
+THEOREM 6 PROOF (Dyadic Octave 8-Step Coalescence Corollary):
+Specializing to unit separation gap δ = 1, 3D dyadic scaling ratio κ = 1/8, and initial separation bounded by
+16,777,216: exactly n = 8 steps are sufficient to guarantee identical coalescence:
+    dist(x, y) < 16,777,216 → T^8(x) = T^8(y).
 -/
-theorem id_lens_is_lawful (S : Type) :
-    IsLawfulLens (idLens S) := by
-  refine ⟨fun _ => rfl, fun _ _ => rfl, fun _ _ _ => rfl⟩
+theorem dyadic_octave_coalescence_corollary {X : Type}
+    (M : MetricSpaceQ X) (hG : HasSeparationGap M 1)
+    (T : X → X) (hT : IsContraction M T kappa)
+    (x y : X) (h_dist : M.dist x y < 16777216) :
+    iterate T 8 x = iterate T 8 y := by
+  have h_k8 : kappa ^ 8 = (1 : ℚ) / 16777216 := kappa_pow_8
+  have h_bound : kappa ^ 8 * M.dist x y < 1 := by
+    rw [h_k8]
+    linarith
+  exact discrete_contraction_general_coalescence M 1 hG T kappa kappa_nonneg hT 8 x y h_bound
 
 /--
-THEOREM 8 PROOF (Categorical Lens State Conservation and Roundtrip Homeostasis):
-For the lawful bidirectional lens idLens, updating a state with its current observation leaves the state
-strictly invariant:
-    update s (view s) = s.
+THEOREM 7 PROOF (Foster–Pierce Theorem: Lawfulness of Sequential Lens Composition):
+In Categorical Cybernetics and Bidirectional Transformations (Foster, Pierce et al., TOPLAS 2007; Spivak 2019),
+if l1 : Lens A B and l2 : Lens B C are lawful bidirectional lenses,
+their sequential composition (l1 ⨾ l2) strictly satisfies all three lawful lens axioms:
+GetPut (homeostasis), PutGet (observability), and PutPut (idempotent absorption).
 -/
-theorem categorical_lens_roundtrip_homeostasis (S : Type) (s : S) :
-    (idLens S).update s ((idLens S).view s) = s := by
-  rfl
+theorem lens_comp_is_lawful {A B C : Type}
+    (l1 : BidirectionalLens A B) (l2 : BidirectionalLens B C)
+    (h1 : IsLawfulLens l1) (h2 : IsLawfulLens l2) :
+    IsLawfulLens (lensComp l1 l2) := by
+  rcases h1 with ⟨h1_getput, h1_putget, h1_putput⟩
+  rcases h2 with ⟨h2_getput, h2_putget, h2_putput⟩
+  refine ⟨?_, ?_, ?_⟩
+  · intro a
+    dsimp [lensComp]
+    rw [h2_getput (l1.view a)]
+    exact h1_getput a
+  · intro a c
+    dsimp [lensComp]
+    rw [h1_putget a (l2.update (l1.view a) c)]
+    exact h2_putget (l1.view a) c
+  · intro a c1 c2
+    dsimp [lensComp]
+    rw [h1_putget a (l2.update (l1.view a) c1)]
+    rw [h2_putput (l1.view a) c1 c2]
+    rw [h1_putput a (l2.update (l1.view a) c1) (l2.update (l1.view a) c2)]
+
+/--
+THEOREM 8 PROOF (Associativity of Bidirectional Lens Composition):
+Sequential composition of bidirectional lenses is strictly associative:
+for any three lenses l1, l2, l3, (l1 ⨾ l2) ⨾ l3 and l1 ⨾ (l2 ⨾ l3) have identical view and update semantics,
+establishing that lawful bidirectional lenses form a well-defined Category Lens.
+-/
+theorem lens_comp_assoc {A B C D : Type}
+    (l1 : BidirectionalLens A B) (l2 : BidirectionalLens B C) (l3 : BidirectionalLens C D) :
+    (lensComp (lensComp l1 l2) l3).view = (lensComp l1 (lensComp l2 l3)).view ∧
+    ∀ a d, (lensComp (lensComp l1 l2) l3).update a d = (lensComp l1 (lensComp l2 l3)).update a d := by
+  constructor
+  · rfl
+  · intro a d
+    rfl
 
 end H3QM.Palomar
 
