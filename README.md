@@ -1,4 +1,4 @@
-# Palomar_H3QM: Quantitative Discrete Metric Contraction Dynamics & the Category of Lawful Lenses
+# Palomar_H3QM: Foster–Pierce Lawful Lens Composition & Quantitative Discrete Metric Contraction Dynamics
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22928921.svg)](https://doi.org/10.5281/zenodo.22928921)
 [![CI](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml/badge.svg)](https://github.com/H3QM/Palomar_H3QM/actions/workflows/lean_verify.yml)
@@ -8,37 +8,39 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](LICENSE)
 
 **Author**: Cosmo Chou (Independent Researcher, `cosmo@h3qm.org` · `h3qm.org@gmail.com`, ORCID: [0009-0006-5048-1406](https://orcid.org/0009-0006-5048-1406))  
-**Classification**: Dynamical Systems (`math.DS`), Functional Analysis (`math.FA`), Logic in Computer Science (`cs.LO`), Category Theory (`math.CT`)  
-**MSC 2020**: `37C25` (Fixed points), `54E35` (Metric spaces), `18C50` (Categorical semantics), `47H10` (Fixed-point theorems), `68Q60` (Specification and verification of programs)  
-**Primary Formalized Source**: Cosmo Chou, *Discrete Topological Contraction Dynamics and Categorical Homeostasis*, Zenodo (2026), [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921).  
+**Classification**: Logic in Computer Science (`cs.LO`), Category Theory (`math.CT`), Dynamical Systems (`math.DS`), Functional Analysis (`math.FA`)  
+**MSC 2020**: `68Q55` (Semantics of programming languages), `18C50` (Categorical semantics), `37C25` (Fixed points), `54E35` (Metric spaces), `68N30` (Mathematical aspects of software specification)  
+**Primary Formalized Sources**:  
+1. J. Nathan Foster, Michael B. Greenwald, Jonathan T. Moore, Benjamin C. Pierce, Alan Schmitt, *A Combinator Framework for Bidirectional Tree Transformations*, ACM Transactions on Programming Languages and Systems (TOPLAS), Vol. 29, No. 3, Article 17 (2007), [DOI: 10.1145/1232420.1232424](https://doi.org/10.1145/1232420.1232424).  
+2. Cosmo Chou, *Discrete Topological Contraction Dynamics and Categorical Homeostasis*, Zenodo (2026), [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921).  
 **Live Production Gateways**: [h3qm.com/math](https://h3qm.com/math/#tab-papers) · [h3qm.com/physics](https://h3qm.com/physics/)
 
 ---
 
 ## 1. Overview & Research Scope
 
-This repository provides a machine-checked formalization in **Lean 4** of the quantitative theory of discrete metric contraction dynamics, general finite-time basin coalescence on separated metric spaces, and the categorical foundations of bidirectional transformations, formalizing Chou (2026, [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921)).
+This repository provides a machine-checked formalization in **Lean 4** of the Foster–Pierce lawful bidirectional lens composition theorem (ACM TOPLAS 2007) establishing the category of bidirectional lenses, together with the quantitative theory of discrete metric contraction dynamics and finite-time basin coalescence (Chou 2026, [DOI: 10.5281/zenodo.22928921](https://doi.org/10.5281/zenodo.22928921)).
 
 ### Mathematical Content Formalized in Lean 4
-1. **Quantitative Discrete Metric Contraction Dynamics**:
+1. **The Category of Lawful Bidirectional Lenses (Foster–Pierce Theorem)**:
+   In bidirectional programming and categorical cybernetics (Foster et al., TOPLAS 2007, Theorem 3.1; Spivak 2019), bidirectional lenses $(\text{view}, \text{update})$ maintain consistency between state spaces and observational views.
+   We formalize bidirectional lenses and prove constructively that sequential composition of lawful lenses $(l_1 \circ l_2)$ strictly preserves all three lawful lens axioms:
+   - **GetPut (Homeostasis)**: Updating a state with its current view leaves the state invariant ($\text{update}(s, \text{view}(s)) = s$).
+   - **PutGet (Observability)**: Viewing an updated state yields the updated observation ($\text{view}(\text{update}(s, v)) = v$).
+   - **PutPut (Absorption)**: Consecutive updates collapse to the second update ($\text{update}(\text{update}(s, v_1), v_2) = \text{update}(s, v_2)$).
+   Furthermore, we prove that sequential composition is strictly associative, establishing that lawful bidirectional lenses form a well-defined Category $\mathbf{Lens}$.
+2. **Quantitative Discrete Metric Contraction Dynamics**:
    On an arbitrary separated rational metric space $(X, \text{dist})$ equipped with an explicit positive separation gap ($\text{dist}(x, y) \ge \delta > 0$ for all $x \ne y$), we formalize contraction mappings $T : X \to X$ with contraction factor $\kappa < 1$.
    We prove the **General Quantitative Coalescence Theorem**: whenever an iteration index $n$ satisfies the quantitative criterion $\kappa^n \cdot \text{dist}(x, y) < \delta$, the dynamical iterates coalesce identically at step $n$:
    $$T^n(x) = T^n(y)$$
    Consequently, for any state with initial orbital displacement $V(x) = \text{dist}(x, T(x))$ satisfying $\kappa^n \cdot V(x) < \delta$, the Lyapunov displacement energy vanishes identically at step $n$ ($V(T^n(x)) = 0$), the $n$-th iterate is an exact stationary fixed point ($T(T^n(x)) = T^n(x)$), and the forward orbit freezes for all infinite subsequent iterations:
    $$\forall m \in \mathbb{N}, \quad T^{n+m}(x) = T^n(x)$$
-2. **Fixed-Point Uniqueness on Separated Metric Spaces**:
+3. **Fixed-Point Uniqueness on Separated Metric Spaces**:
    We prove that on any metric space with positive separation gap $\delta > 0$, a contraction mapping with ratio $\kappa < 1$ admits at most one fixed point: if $T(p_1) = p_1$ and $T(p_2) = p_2$, then $p_1 = p_2$.
-3. **Strict Contraction on Product Metric Spaces**:
+4. **Strict Contraction on Product Metric Spaces**:
    We formalize the $\ell_1$ product metric space and prove that the parallel product mapping $(T_X \times T_Y)$ of two contraction mappings with ratio $\kappa < 1$ strictly preserves the contraction ratio $\kappa$.
-4. **Dyadic Octave Scaling Corollary**:
-   As a concrete multiscale corollary, specializing to the 3D dyadic scaling ratio $\kappa = 1/8$, unit separation gap $\delta = 1$, and initial separation bounded by $16{,}777{,}216$, exactly $n = 8$ steps saturate the bound $\kappa^8 \cdot \text{dist}(x, y) < 1$, guaranteeing identical coalescence and orbit freezing in at most 8 steps.
-5. **The Category of Lawful Bidirectional Lenses (Foster–Pierce Theorem)**:
-   In categorical cybernetics and bidirectional programming (Foster, Greenwald, Moore, Pierce, Schmitt, TOPLAS 2007; Spivak 2019), we formalize bidirectional lenses $(\text{view}, \text{update})$ between state spaces and observation spaces.
-   We prove constructively that sequential composition of lawful lenses $(l_1 \circ l_2)$ strictly preserves all three lawful lens axioms:
-   - **GetPut (Homeostasis)**: Updating a state with its current view leaves the state invariant ($\text{update}(s, \text{view}(s)) = s$).
-   - **PutGet (Observability)**: Viewing an updated state yields the updated observation ($\text{view}(\text{update}(s, v)) = v$).
-   - **PutPut (Absorption)**: Consecutive updates collapse to the second update ($\text{update}(\text{update}(s, v_1), v_2) = \text{update}(s, v_2)$).
-   Furthermore, we prove that sequential composition is strictly associative, establishing that lawful bidirectional lenses form a well-defined Category $\mathbf{Lens}$.
+5. **Dyadic Octave Scaling Corollary**:
+   Specializing to the 3D dyadic scaling ratio $\kappa = 1/8$, unit separation gap $\delta = 1$, and initial separation bounded by $16{,}777{,}216$, exactly $n = 8$ steps guarantee identical dynamical basin coalescence: $T^8(x) = T^8(y)$. (Orbit freezing is established separately in Theorem 4 under an initial displacement bound).
 
 ### Explicit Demarcation of External Context
 - **Analytical & Computational Motivation**: The parameter $\kappa = 1/8$ and bound $16{,}777{,}216 = 8^8$ in the dyadic corollary are motivated by 3D dyadic cube octave scaling ($2^{-3} = 1/8$) and 8-octave Littlewood–Paley frequency cascades ($(1/8)^8 = 2^{-24}$, which aligns numerically with the unit roundoff $\mathbf{u} = 2^{-24}$ of IEEE 754 float32 precision, half of machine epsilon $\epsilon_{\text{mach}} = 2^{-23}$). These connections serve as external mathematical motivation and physical analogies; the Lean 4 theorems do not construct continuous Calderón–Zygmund cubes or hardware floating-point circuits.
@@ -71,12 +73,12 @@ All 8 theorems selected in `comparator.json` are proved with **strictly zero add
    On any metric space with positive separation gap $\delta > 0$, any contraction mapping $T$ with ratio $\kappa < 1$ admits at most one fixed point:
    $$T(p_1) = p_1 \;\land\; T(p_2) = p_2 \implies p_1 = p_2$$
 
-6. **`dyadic_octave_coalescence_corollary` (Dyadic Octave 8-Step Coalescence Corollary)**:
-   Specializing to unit separation gap $\delta = 1$, 3D dyadic scaling ratio $\kappa = 1/8$, and initial separation bounded by $16{,}777{,}216$: exactly $n = 8$ steps guarantee identical dynamical coalescence:
+6. **`dyadic_octave_coalescence_corollary` (Dyadic Octave 8-Step Basin Coalescence Corollary)**:
+   Specializing to unit separation gap $\delta = 1$, 3D dyadic scaling ratio $\kappa = 1/8$, and initial separation bounded by $16{,}777{,}216$: exactly $n = 8$ steps guarantee identical dynamical basin coalescence:
    $$\text{dist}(x, y) < 16{,}777{,}216 \implies T^8(x) = T^8(y)$$
 
 7. **`lens_comp_is_lawful` (Foster–Pierce Theorem: Lawfulness of Sequential Lens Composition)**:
-   In categorical cybernetics, if $l_1 : \text{Lens}(A, B)$ and $l_2 : \text{Lens}(B, C)$ are lawful bidirectional lenses, their sequential composition $(l_1 \circ l_2)$ strictly satisfies all three lawful lens axioms:
+   Formalizing Theorem 3.1 of Foster et al. (ACM TOPLAS 2007): if $l_1 : \text{Lens}(A, B)$ and $l_2 : \text{Lens}(B, C)$ are lawful bidirectional lenses, their sequential composition $(l_1 \circ l_2)$ strictly satisfies all three lawful lens axioms:
    $$\text{IsLawfulLens}(l_1 \circ l_2)$$
 
 8. **`lens_comp_assoc` (Associativity of Bidirectional Lens Composition)**:
